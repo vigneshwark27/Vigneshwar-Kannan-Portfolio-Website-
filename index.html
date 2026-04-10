@@ -122,7 +122,13 @@ h2 em{font-style:italic;color:var(--gold)}
 
 <!-- FIGMA POPUP --> 
 <div id="figmaPopup" class="figma-popup">
-  <div class="figma-container">
+  <div class="figma-header">
+    <h3 id="figmaTitle"></h3>
+    <button onclick="closeFigma()">✕</button>
+  </div>
+
+  <div id="figmaFrameContainer" class="figma-frame"></div>
+</div>
 
     <!-- TOP BAR -->
     <div class="figma-topbar">
@@ -217,38 +223,38 @@ h2 em{font-style:italic;color:var(--gold)}
 }
 
 function openFigmaBtn(e, btn){
+  e.preventDefault();
   e.stopPropagation();
 
   const card = btn.closest('.project-card');
   const figmaUrl = card.dataset.figma;
 
-  if(!figmaUrl || figmaUrl.includes("YOUR_FILE")){
-    alert("Add your Figma link first");
+  const popup = document.getElementById("figmaPopup");
+  const frameContainer = document.getElementById("figmaFrameContainer");
+  const title = document.getElementById("figmaTitle");
+
+  if(!figmaUrl){
+    alert("No Figma prototype added");
     return;
   }
 
-  const popup = document.getElementById("figmaPopup");
-  const frame = document.getElementById("figmaFrame");
-  const title = document.getElementById("figmaTitle");
-  const openBtn = document.getElementById("figmaOpenNew");
+  // 🔥 Inject full iframe (this is the key difference)
+  frameContainer.innerHTML = `
+    <iframe 
+      src="${figmaUrl}" 
+      style="width:100%; height:100%; border:none;" 
+      allowfullscreen>
+    </iframe>
+  `;
 
-  title.innerText = card.dataset.title || "Live Prototype";
-  frame.src = figmaUrl;
-  openBtn.href = figmaUrl.replace("embed?embed_host=share&url=", "");
+  title.innerText = card.dataset.title;
 
   popup.classList.add("active");
 }
-
 /* CLOSE */
 function closeFigma(){
-  const popup = document.getElementById("figmaPopup");
-  const frame = document.getElementById("figmaFrame");
-
-  popup.classList.remove("active");
-
-  setTimeout(()=>{
-    frame.src = ""; // stop loading
-  },300);
+  document.getElementById("figmaPopup").classList.remove("active");
+  document.getElementById("figmaFrameContainer").innerHTML = "";
 }
 
 /* CLICK OUTSIDE CLOSE */
@@ -545,7 +551,7 @@ footer{padding:2rem 3rem;display:flex;justify-content:space-between;align-items:
     <div class="project-card featured reveal"
       data-title="Designing Wireframes for My Gen-Z Clothing Brand"
       data-year="2024" data-role="UX Designer (Personal Project)" data-duration="1 Week" data-platform="E-Commerce / Web"
-      data-figma="https://www.figma.com/proto/9QxhmIwIwpRSoKGVRpOVF9/vicky?node-id=24-3&node-type=canvas&t=mMk7qYnCQKGDUqIL-1&scaling=contain&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=24%3A3"
+      data-figma="https://embed.figma.com/proto/9QxhmIwIwpRSoKGVRpOVF9/vicky?node-id=24-3&starting-point-node-id=24%3A3&embed-host=share"
       data-pdf=""
       data-kpi1-num="1 wk" data-kpi1-lbl="End-to-end delivery"
       data-kpi2-num="Gen-Z" data-kpi2-lbl="Target audience"
