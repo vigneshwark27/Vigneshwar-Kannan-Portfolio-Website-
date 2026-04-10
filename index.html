@@ -227,17 +227,32 @@ function openFigmaBtn(e, btn){
   e.stopPropagation();
 
   const card = btn.closest('.project-card');
-  const figmaUrl = card.dataset.figma;
+  const protoLink = card.dataset.figma;
 
   const popup = document.getElementById("figmaPopup");
-  const frameContainer = document.getElementById("figmaFrameContainer");
+  const container = document.getElementById("figmaFrameContainer");
   const title = document.getElementById("figmaTitle");
 
-  if(!figmaUrl){
+  if(!protoLink){
     alert("No Figma prototype added");
     return;
   }
 
+  // 🔥 THIS IS THE MAGIC FIX
+  const embedUrl = "https://www.figma.com/embed?embed_host=share&url=" + encodeURIComponent(protoLink);
+
+  container.innerHTML = `
+    <iframe 
+      src="${embedUrl}" 
+      style="width:100%; height:100%; border:none;" 
+      allowfullscreen>
+    </iframe>
+  `;
+
+  title.innerText = card.dataset.title;
+
+  popup.classList.add("active");
+}
   // 🔥 Inject full iframe (this is the key difference)
   frameContainer.innerHTML = `
     <iframe 
