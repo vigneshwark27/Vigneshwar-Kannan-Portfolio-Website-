@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Vigneshwar — Product Manager Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0e0d0b;--bg2:#141310;--bg3:#1a1916;--bg4:#201f1c;
+  --cream:#f0ead8;--cream-dim:#a89f8a;--cream-faint:rgba(240,234,216,0.06);
+  --gold:#c9a84c;--gold-dim:#7a6330;--gold-faint:rgba(201,168,76,0.12);
+  --border:rgba(201,168,76,0.18);--border-soft:rgba(240,234,216,0.07);
+  --font-d:'Cormorant Garamond',Georgia,serif;--font-b:'DM Sans',sans-serif;
+  --ease:cubic-bezier(0.25,0.46,0.45,0.94);
+  --ease-bounce:cubic-bezier(0.34,1.56,0.64,1);
+}
+html{scroll-behavior:smooth;cursor:none}
+body{background:var(--bg);color:var(--cream);font-family:var(--font-b);font-weight:300;font-size:16px;line-height:1.7;overflow-x:hidden;cursor:none}
+a,button{cursor:none}
+
+/* ─── CUSTOM CURSOR ─── */
+#cursor{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width 0.2s var(--ease),height 0.2s var(--ease),background 0.2s,opacity 0.2s;mix-blend-mode:difference}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform 0.12s var(--ease),width 0.25s var(--ease),height 0.25s var(--ease),border-color 0.2s,opacity 0.2s}
+body:has(a:hover) #cursor,body:has(button:hover) #cursor{width:6px;height:6px}
+body:has(a:hover) #cursor-ring,body:has(button:hover) #cursor-ring{width:52px;height:52px;border-color:var(--gold)}
+body:has(.project-card:hover) #cursor{width:56px;height:56px;background:rgba(201,168,76,0.15)}
+body:has(.project-card:hover) #cursor-ring{opacity:0}
+
+/* ─── SCROLL PROGRESS ─── */
+#progress{position:fixed;top:0;left:0;height:2px;background:var(--gold);z-index:999;width:0%;transition:width 0.1s linear}
+
+/* ─── NAV ─── */
+nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:1.4rem 3rem;transition:background 0.4s,backdrop-filter 0.4s}
+nav.scrolled{background:rgba(14,13,11,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border-soft)}
+.nav-logo{font-family:var(--font-d);font-size:1.35rem;font-weight:300;letter-spacing:0.04em;color:var(--cream);text-decoration:none;transition:color 0.2s}
+.nav-logo span{color:var(--gold)}
+.nav-logo:hover{color:var(--gold)}
+.nav-links{display:flex;gap:2.5rem;align-items:center}
+.nav-links a{color:var(--cream-dim);text-decoration:none;font-size:0.75rem;letter-spacing:0.14em;text-transform:uppercase;transition:color 0.2s;position:relative;padding-bottom:2px}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--gold);transition:width 0.3s var(--ease)}
+.nav-links a:hover{color:var(--gold)}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%}
+.nav-links a.active{color:var(--cream)}
+.nav-cta{padding:0.55rem 1.4rem;border:1px solid var(--border);color:var(--cream);font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;transition:all 0.25s}
+.nav-cta:hover{background:var(--gold);border-color:var(--gold);color:#0e0d0b}
+
+/* ─── HERO ─── */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:8rem 3rem 4rem;gap:4rem;position:relative;overflow:hidden}
+.hero-grain{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
+.hero-glow{position:absolute;top:10%;right:-5%;width:55vw;height:55vw;background:radial-gradient(circle,rgba(201,168,76,0.05) 0%,transparent 65%);pointer-events:none;animation:glowPulse 6s ease-in-out infinite alternate}
+@keyframes glowPulse{from{transform:scale(1)}to{transform:scale(1.12)}}
+.hero-text{max-width:560px;position:relative;z-index:1}
+.hero-eyebrow{font-size:0.7rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--gold);margin-bottom:1.4rem;display:flex;align-items:center;gap:0.8rem;opacity:0;animation:fadeSlideUp 0.7s 0.2s var(--ease) forwards}
+.hero-eyebrow::before{content:'';display:block;width:0;height:1px;background:var(--gold);animation:expandLine 0.6s 0.5s var(--ease) forwards}
+@keyframes expandLine{to{width:40px}}
+h1{font-family:var(--font-d);font-size:clamp(2.8rem,5.5vw,5.2rem);font-weight:300;line-height:1.06;letter-spacing:-0.01em;margin-bottom:1.5rem;color:var(--cream);opacity:0;animation:fadeSlideUp 0.8s 0.35s var(--ease) forwards}
+h1 em{font-style:italic;color:var(--gold)}
+.hero-desc{font-size:0.95rem;color:var(--cream-dim);max-width:460px;line-height:1.9;margin-bottom:2.5rem;opacity:0;animation:fadeSlideUp 0.8s 0.5s var(--ease) forwards}
+.hero-cta{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:fadeSlideUp 0.8s 0.65s var(--ease) forwards}
+.btn-primary{display:inline-flex;align-items:center;gap:0.6rem;padding:0.9rem 2.2rem;background:var(--gold);color:#0e0d0b;font-family:var(--font-b);font-size:0.75rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:none;transition:all 0.3s var(--ease);position:relative;overflow:hidden}
+.btn-primary::before{content:'';position:absolute;inset:0;background:#fff;transform:translateX(-100%) skewX(-15deg);transition:transform 0.35s var(--ease)}
+.btn-primary:hover::before{transform:translateX(110%) skewX(-15deg)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(201,168,76,0.25)}
+.btn-secondary{display:inline-flex;align-items:center;gap:0.6rem;padding:0.9rem 2.2rem;background:transparent;color:var(--cream);font-family:var(--font-b);font-size:0.75rem;font-weight:400;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border:1px solid var(--border-soft);transition:all 0.3s var(--ease)}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+.hero-contact{display:flex;gap:2rem;flex-wrap:wrap;margin-top:2rem;opacity:0;animation:fadeSlideUp 0.8s 0.8s var(--ease) forwards}
+.hero-contact a{font-size:0.75rem;color:var(--cream-dim);text-decoration:none;letter-spacing:0.06em;display:flex;align-items:center;gap:0.5rem;transition:color 0.2s}
+.hero-contact a:hover{color:var(--gold)}
+.contact-dot{width:3px;height:3px;border-radius:50%;background:var(--gold);display:inline-block}
+
+/* hero image */
+.hero-image{position:relative;display:flex;align-items:center;justify-content:center;z-index:1;opacity:0;animation:fadeSlideUp 1s 0.4s var(--ease) forwards}
+.hero-photo-frame{width:360px;height:440px;position:relative}
+.hero-photo-frame::before{content:'';position:absolute;top:-14px;right:-14px;width:100%;height:100%;border:1px solid var(--gold-dim);z-index:0;transition:transform 0.4s var(--ease)}
+.hero-photo-frame:hover::before{transform:translate(4px,4px)}
+.hero-photo{width:100%;height:100%;object-fit:cover;position:relative;z-index:1;filter:grayscale(20%);transition:filter 0.4s}
+.hero-photo:hover{filter:grayscale(0%)}
+.hero-photo-placeholder{width:100%;height:100%;background:var(--bg3);border:1px solid var(--border-soft);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.75rem;position:relative;z-index:1;color:var(--cream-dim);font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase}
+.hero-photo-placeholder svg{opacity:0.2}
+.scroll-hint{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.5rem;opacity:0;animation:fadeSlideUp 0.8s 1.2s var(--ease) forwards}
+.scroll-hint span{font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-dim)}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollLine 1.5s 1.5s ease-in-out infinite}
+@keyframes scrollLine{0%,100%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}99%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeSlideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(32px);transition:opacity 0.7s var(--ease),transform 0.7s var(--ease)}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:0.1s}
+.reveal-delay-2{transition-delay:0.2s}
+.reveal-delay-3{transition-delay:0.3s}
+
+/* ─── DIVIDER ─── */
+.divider{width:100%;height:1px;background:var(--border-soft)}
+
+/* ─── SECTION BASE ─── */
+section{padding:7rem 3rem}
+.section-label{font-size:0.65rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:flex;align-items:center;gap:0.8rem}
+.section-label::before{content:'';display:block;width:24px;height:1px;background:var(--gold)}
+h2{font-family:var(--font-d);font-size:clamp(2rem,3.8vw,3.2rem);font-weight:300;line-height:1.12;margin-bottom:0.6rem;color:var(--cream)}
+h2 em{font-style:italic;color:var(--gold)}
+
+/* ─── ABOUT ─── */
+.about-inner{display:grid;grid-template-columns:1fr 1.5fr;gap:6rem;align-items:start;max-width:1100px;margin:0 auto}
+.about-sticky{position:sticky;top:6rem}
+.about-body p{color:var(--cream-dim);font-size:0.97rem;line-height:1.9;margin-bottom:1.4rem}
+.about-body p strong{color:var(--cream);font-weight:400}
+.skills-wrap{margin-top:2.5rem}
+.skills-label{font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}
+.skills-grid{display:flex;flex-wrap:wrap;gap:0.45rem}
+.skill-tag{padding:0.38rem 0.9rem;border:1px solid var(--border-soft);font-size:0.72rem;letter-spacing:0.07em;color:var(--cream-dim);transition:all 0.25s var(--ease);cursor:default;position:relative;overflow:hidden}
+.skill-tag::before{content:'';position:absolute;inset:0;background:var(--gold-faint);transform:scaleX(0);transform-origin:left;transition:transform 0.3s var(--ease)}
+.skill-tag:hover::before{transform:scaleX(1)}
+.skill-tag:hover{border-color:var(--gold);color:var(--cream);transform:translateY(-1px)}
+
+/* ─── PROJECTS ─── */
+.projects-section{background:var(--bg2)}
+.projects-header{display:flex;justify-content:space-between;align-items:flex-end;max-width:1100px;margin:0 auto 3.5rem;flex-wrap:wrap;gap:1.5rem}
+.projects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3px;max-width:1100px;margin:0 auto}
+
+/* card */
+.project-card{background:var(--bg3);overflow:hidden;display:flex;flex-direction:column;position:relative;transition:transform 0.4s var(--ease),box-shadow 0.4s var(--ease)}
+.project-card:hover{transform:translateY(-4px);box-shadow:0 24px 48px rgba(0,0,0,0.4)}
+
+/* image */
+.project-img-wrap{width:100%;height:270px;overflow:hidden;position:relative;background:var(--bg4)}
+.project-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.6s var(--ease),filter 0.4s;filter:grayscale(10%)}
+.project-card:hover .project-img{transform:scale(1.06);filter:grayscale(0%)}
+
+/* hover overlay — action buttons appear on hover */
+.card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(14,13,11,0.97) 0%,rgba(14,13,11,0.3) 60%,transparent 100%);opacity:0;transition:opacity 0.35s var(--ease);display:flex;flex-direction:column;justify-content:flex-end;padding:1.6rem}
+.project-card:hover .card-overlay{opacity:1}
+.overlay-actions{display:flex;gap:0.5rem;flex-wrap:wrap;transform:translateY(12px);transition:transform 0.35s 0.05s var(--ease)}
+.project-card:hover .overlay-actions{transform:translateY(0)}
+.ov-btn{display:inline-flex;align-items:center;gap:0.35rem;padding:0.5rem 1.1rem;font-family:var(--font-b);font-size:0.68rem;font-weight:400;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.22s;border:1px solid rgba(240,234,216,0.25);background:rgba(14,13,11,0.7);color:var(--cream);backdrop-filter:blur(4px);white-space:nowrap}
+.ov-btn:hover{background:var(--gold);border-color:var(--gold);color:#0e0d0b}
+.ov-btn.ov-primary{background:var(--gold);border-color:var(--gold);color:#0e0d0b}
+.ov-btn.ov-primary:hover{background:#e0bb5c}
+.ov-btn svg{width:11px;height:11px;flex-shrink:0}
+.ov-btn.ov-disabled{opacity:0.35;cursor:not-allowed;pointer-events:none}
+
+/* card info */
+.project-info{padding:1.6rem 1.8rem 1.6rem;flex:1;display:flex;flex-direction:column}
+.project-tags{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.8rem}
+.project-tag{font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-dim);padding:0.18rem 0.5rem}
+.project-title{font-family:var(--font-d);font-size:1.45rem;font-weight:300;color:var(--cream);margin-bottom:0.5rem;line-height:1.2;transition:color 0.2s}
+.project-card:hover .project-title{color:var(--gold)}
+.project-desc{font-size:0.84rem;color:var(--cream-dim);line-height:1.75;flex:1;margin-bottom:1.2rem}
+.project-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border-soft);padding-top:1rem}
+.project-year{font-size:0.68rem;color:var(--cream-dim);letter-spacing:0.1em}
+.project-hint{font-size:0.65rem;color:var(--cream-dim);letter-spacing:0.1em;text-transform:uppercase;opacity:0;transition:opacity 0.3s}
+.project-card:hover .project-hint{opacity:1}
+
+/* featured */
+.project-card.featured{grid-column:span 2;display:grid;grid-template-columns:1.1fr 1fr;flex-direction:unset}
+.project-card.featured .project-img-wrap{height:100%;min-height:380px}
+.project-card.featured .project-info{padding:2.5rem;justify-content:center}
+.project-card.featured .project-title{font-size:1.9rem}
+.project-card.featured .card-overlay{flex-direction:row;align-items:flex-end;justify-content:flex-start}
+
+/* ─── EXPERIENCE ─── */
+.experience-list{max-width:800px;margin:0 auto}
+.exp-item{display:grid;grid-template-columns:180px 1fr;gap:3rem;padding:2.2rem 0;border-bottom:1px solid var(--border-soft);transition:background 0.2s}
+.exp-item:first-child{border-top:1px solid var(--border-soft)}
+.exp-item:hover{background:var(--cream-faint)}
+.exp-year{font-size:0.75rem;color:var(--cream-dim);letter-spacing:0.08em;padding-top:0.3rem}
+.exp-role{font-family:var(--font-d);font-size:1.25rem;font-weight:300;color:var(--cream);margin-bottom:0.25rem}
+.exp-co{font-size:0.72rem;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.7rem}
+.exp-desc{font-size:0.85rem;color:var(--cream-dim);line-height:1.78}
+
+/* ─── CERTIFICATIONS ─── */
+.cert-section{background:var(--bg2)}
+.cert-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;max-width:1100px;margin:0 auto}
+.cert-card{background:var(--bg3);padding:1.5rem 1.6rem;transition:background 0.25s,transform 0.25s var(--ease);position:relative;overflow:hidden}
+.cert-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);transform:scaleY(0);transform-origin:bottom;transition:transform 0.3s var(--ease)}
+.cert-card:hover::before{transform:scaleY(1)}
+.cert-card:hover{background:var(--bg4);transform:translateX(3px)}
+.cert-org{font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem}
+.cert-name{font-family:var(--font-d);font-size:1rem;font-weight:300;color:var(--cream);line-height:1.3;margin-bottom:1rem}
+.cert-btn{font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--cream-dim);background:transparent;border:1px solid var(--border-soft);padding:0.3rem 0.8rem;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:0.3rem;text-decoration:none}
+.cert-btn:hover{border-color:var(--gold);color:var(--gold)}
+.cert-btn svg{width:9px;height:9px}
+
+/* ─── CONTACT ─── */
+.contact-section{text-align:center;padding:8rem 3rem;position:relative;overflow:hidden}
+.contact-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(201,168,76,0.04) 0%,transparent 70%)}
+.contact-section h2{margin:1rem 0 1.5rem}
+.contact-section p{color:var(--cream-dim);max-width:420px;margin:0 auto 3rem;font-size:0.95rem}
+.contact-links{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+
+/* ─── FOOTER ─── */
+footer{padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border-soft);font-size:0.72rem;color:var(--cream-dim);letter-spacing:0.06em}
+
+/* ─── MODALS ─── */
+.modal-bd{position:fixed;inset:0;z-index:500;background:rgba(6,5,4,0);backdrop-filter:blur(0px);pointer-events:none;display:flex;align-items:flex-end;justify-content:center;padding:0;transition:background 0.35s,backdrop-filter 0.35s}
+.modal-bd.open{background:rgba(6,5,4,0.88);backdrop-filter:blur(8px);pointer-events:all}
+.modal{background:var(--bg2);border:1px solid var(--border);border-bottom:none;width:100%;max-width:900px;display:flex;flex-direction:column;position:relative;max-height:92vh;transform:translateY(100%);transition:transform 0.45s var(--ease)}
+.modal-bd.open .modal{transform:translateY(0)}
+.modal-drag{width:40px;height:3px;background:var(--border);border-radius:2px;margin:0.75rem auto 0;flex-shrink:0}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.6rem;border-bottom:1px solid var(--border-soft);flex-shrink:0;gap:1rem}
+.modal-head-left{display:flex;align-items:center;gap:0.7rem;min-width:0}
+.modal-badge{font-size:0.58rem;letter-spacing:0.16em;text-transform:uppercase;padding:0.2rem 0.6rem;border:1px solid var(--gold-dim);color:var(--gold);flex-shrink:0}
+.modal-ttl{font-family:var(--font-d);font-size:1.05rem;font-weight:300;color:var(--cream);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.modal-head-right{display:flex;align-items:center;gap:0.5rem;flex-shrink:0}
+.modal-x{width:30px;height:30px;border:1px solid var(--border-soft);background:transparent;color:var(--cream-dim);cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;border-radius:0}
+.modal-x:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-faint)}
+.modal-body{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0}
+.modal-foot{display:flex;gap:0.5rem;padding:0.85rem 1.5rem;border-top:1px solid var(--border-soft);flex-shrink:0;flex-wrap:wrap;align-items:center}
+.modal-foot-note{font-size:0.65rem;color:var(--cream-dim);letter-spacing:0.06em;margin-left:auto}
+
+/* case study scroll */
+.cs-scroll{flex:1;overflow-y:auto;padding:0;scroll-behavior:smooth}
+.cs-scroll::-webkit-scrollbar{width:3px}
+.cs-scroll::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:2px}
+.cs-cover{width:100%;height:260px;object-fit:cover;display:block}
+.cs-cover-ph{width:100%;height:180px;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:rgba(240,234,216,0.2);font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;border-bottom:1px solid var(--border-soft)}
+.cs-content{padding:2rem 2.2rem 2.5rem}
+.cs-meta{display:flex;gap:0;margin-bottom:2rem;border:1px solid var(--border-soft)}
+.cs-mi{flex:1;padding:0.9rem 1rem;border-right:1px solid var(--border-soft)}
+.cs-mi:last-child{border-right:none}
+.cs-mi label{font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:0.3rem}
+.cs-mi span{font-size:0.83rem;color:var(--cream-dim)}
+.cs-sec{margin-bottom:1.8rem;padding-bottom:1.8rem;border-bottom:1px solid var(--border-soft)}
+.cs-sec:last-child{border-bottom:none;margin-bottom:0}
+.cs-sec h3{font-family:var(--font-d);font-size:1.3rem;font-weight:300;color:var(--cream);margin-bottom:0.6rem}
+.cs-sec p{font-size:0.87rem;color:var(--cream-dim);line-height:1.82}
+.cs-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:1rem;background:var(--border-soft)}
+.cs-kpi{background:var(--bg3);padding:1.2rem;text-align:center}
+.cs-kpi-num{font-family:var(--font-d);font-size:2rem;color:var(--gold);font-weight:300;display:block;line-height:1}
+.cs-kpi-lbl{font-size:0.65rem;color:var(--cream-dim);letter-spacing:0.08em;display:block;margin-top:0.3rem}
+.cs-tools{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.7rem}
+.cs-tool-tag{font-size:0.63rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-dim);padding:0.2rem 0.55rem}
+
+/* embed frames */
+.embed-frame{flex:1;border:none;width:100%;min-height:480px;display:block}
+.embed-ph{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;min-height:380px;color:var(--cream-dim);text-align:center;padding:2.5rem}
+.embed-ph svg{opacity:0.18}
+.embed-ph p{font-size:0.85rem;max-width:300px;line-height:1.7}
+.embed-ph code{font-size:0.72rem;color:var(--gold);opacity:0.75}
+
+/* footer action buttons */
+.fact{display:inline-flex;align-items:center;gap:0.32rem;padding:0.45rem 1rem;font-family:var(--font-b);font-size:0.67rem;font-weight:400;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.22s;border:1px solid var(--border-soft);background:transparent;color:var(--cream-dim);white-space:nowrap;text-decoration:none}
+.fact:hover{border-color:var(--gold);color:var(--gold)}
+.fact.fact-primary{background:var(--gold);color:#0e0d0b;border-color:var(--gold)}
+.fact.fact-primary:hover{background:#e0bb5c}
+.fact.fact-dim{opacity:0.35;pointer-events:none}
+.fact svg{width:10px;height:10px;flex-shrink:0}
+
+/* ─── TOAST ─── */
+#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(12px);background:var(--bg3);border:1px solid var(--border);color:var(--cream-dim);font-size:0.75rem;letter-spacing:0.08em;padding:0.65rem 1.4rem;z-index:9000;opacity:0;transition:all 0.3s var(--ease);pointer-events:none;white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ─── MOBILE ─── */
+@media(max-width:820px){
+  html,body{cursor:auto}
+  #cursor,#cursor-ring{display:none}
+  nav{padding:1.1rem 1.5rem}
+  .nav-links .nav-cta{display:none}
+  .hero{grid-template-columns:1fr;padding:7rem 1.5rem 4rem;gap:2.5rem}
+  .hero-image{display:none}
+  section{padding:5rem 1.5rem}
+  .about-inner{grid-template-columns:1fr;gap:3rem}
+  .about-sticky{position:static}
+  .projects-grid{grid-template-columns:1fr}
+  .project-card.featured{grid-column:span 1;grid-template-columns:1fr}
+  .project-card.featured .project-img-wrap{height:240px}
+  .exp-item{grid-template-columns:1fr;gap:0.3rem;padding:1.8rem 0}
+  .cert-grid{grid-template-columns:1fr 1fr}
+  .projects-header{flex-direction:column;align-items:flex-start}
+  footer{flex-direction:column;gap:0.8rem;text-align:center}
+  .cs-kpis{grid-template-columns:1fr}
+  .cs-meta{flex-wrap:wrap}
+  .cs-mi{flex:0 0 50%;border-bottom:1px solid var(--border-soft)}
+  .modal{max-height:95vh}
+}
+@media(max-width:480px){
+  .cert-grid{grid-template-columns:1fr}
+  .nav-links{gap:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Scroll progress -->
+<div id="progress"></div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav id="nav">
+  <a href="#home" class="nav-logo">Vicky<span>.</span></a>
+  <div class="nav-links">
+    <a href="#about" class="nav-link">About</a>
+    <a href="#projects" class="nav-link">Work</a>
+    <a href="#experience" class="nav-link">Experience</a>
+    <a href="#certifications" class="nav-link">Certs</a>
+    <a href="mailto:vigneshwark27@gmail.com" class="nav-cta">Hire Me</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="home">
+  <div class="hero-grain"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-text">
+    <div class="hero-eyebrow">Aspiring Product Manager</div>
+    <h1>Building products that solve <em>real</em> problems</h1>
+    <p class="hero-desc">Hands-on SaaS experience with Zoho CRM &amp; Commerce. Grounded in product discovery, user research, and Agile — driven by curiosity to create meaningful impact.</p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M6 1v10M1 6l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        View Work
+      </a>
+      <a href="mailto:vigneshwark27@gmail.com" class="btn-secondary">Say Hello →</a>
+    </div>
+    <div class="hero-contact">
+      <a href="mailto:vigneshwark27@gmail.com"><span class="contact-dot"></span>vigneshwark27@gmail.com</a>
+      <a href="https://linkedin.com/in/vigneshwarkannan" target="_blank"><span class="contact-dot"></span>LinkedIn</a>
+      <a href="tel:+919345627899"><span class="contact-dot"></span>+91 93456 27899</a>
+    </div>
+  </div>
+  <div class="hero-image">
+    <div class="hero-photo-frame">
+      <!-- ✏️ Replace with: <img class="hero-photo" src="your-photo.jpg" alt="Vigneshwar"> -->
+      <div class="hero-photo-placeholder">
+        <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><circle cx="26" cy="20" r="10" stroke="#f0ead8" stroke-width="1.2"/><path d="M6 46c0-11.05 8.95-20 20-20s20 8.95 20 20" stroke="#f0ead8" stroke-width="1.2"/></svg>
+        <span>Add Your Photo</span>
+        <span style="font-size:0.6rem;opacity:0.4">Replace placeholder with img tag</span>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ ABOUT ═══ -->
+<section id="about">
+  <div class="about-inner">
+    <div class="about-sticky reveal">
+      <div class="section-label">About Me</div>
+      <h2>Hey, I'm <em>Vicky</em></h2>
+      <p style="margin-top:1rem;font-size:0.85rem;color:var(--cream-dim);line-height:1.8">Bengaluru, India · Open to opportunities</p>
+    </div>
+    <div class="about-body">
+      <p class="reveal reveal-delay-1">I'm <strong>Vigneshwar</strong> — an aspiring Product Manager with hands-on experience in SaaS environments, implementing and supporting <strong>Zoho CRM and Zoho Commerce</strong> across real customer use cases.</p>
+      <p class="reveal reveal-delay-2">With a strong foundation in product discovery, user research, and Agile methodologies, I collaborate with stakeholders to translate business needs into clear product requirements and user stories. I've developed a deep understanding of user workflows and real-world product challenges.</p>
+      <p class="reveal reveal-delay-3">I'm driven by curiosity to build products that solve meaningful problems — and I enjoy working in cross-functional teams to deliver intuitive, user-centric solutions.</p>
+      <div class="skills-wrap reveal">
+        <div class="skills-label">Skills &amp; Tools</div>
+        <div class="skills-grid">
+          <span class="skill-tag">User Research</span>
+          <span class="skill-tag">Market Analysis</span>
+          <span class="skill-tag">Product Strategy</span>
+          <span class="skill-tag">Agile / Scrum</span>
+          <span class="skill-tag">UI / UX</span>
+          <span class="skill-tag">Wireframing</span>
+          <span class="skill-tag">Figma</span>
+          <span class="skill-tag">Product Roadmapping</span>
+          <span class="skill-tag">Stakeholder Management</span>
+          <span class="skill-tag">Behaviour Analytics</span>
+          <span class="skill-tag">Retention Strategies</span>
+          <span class="skill-tag">Power BI</span>
+          <span class="skill-tag">SQL</span>
+          <span class="skill-tag">Semrush</span>
+          <span class="skill-tag">Google Analytics</span>
+          <span class="skill-tag">MixPanel</span>
+          <span class="skill-tag">Zoho CRM</span>
+          <span class="skill-tag">SDLC</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ PROJECTS ═══ -->
+<section id="projects" class="projects-section">
+  <div class="projects-header reveal">
+    <div>
+      <div class="section-label">Selected Work</div>
+      <h2>Projects &amp; <em>Case Studies</em></h2>
+    </div>
+    <p style="font-size:0.8rem;color:var(--cream-dim);max-width:260px;text-align:right;line-height:1.65">Hover over each project to access case study, Figma, and PDF.</p>
+  </div>
+
+  <div class="projects-grid">
+
+    <!-- ── GEN-Z CLOTHING BRAND (FEATURED) ── -->
+    <div class="project-card featured reveal"
+      data-title="Designing Wireframes for My Gen-Z Clothing Brand"
+      data-year="2024" data-role="UX Designer (Personal Project)" data-duration="1 Week" data-platform="E-Commerce / Web"
+      data-figma="https://www.figma.com/proto/9QxhmIwIwpRSoKGVRpOVF9/vicky?node-id=24-3&node-type=canvas&t=mMk7qYnCQKGDUqIL-1&scaling=contain&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=24%3A3"
+      data-pdf=""
+      data-kpi1-num="1 wk" data-kpi1-lbl="End-to-end delivery"
+      data-kpi2-num="Gen-Z" data-kpi2-lbl="Target audience"
+      data-kpi3-num="E2E" data-kpi3-lbl="Wireframes to prototype"
+      data-overview="Conceptualized and designed wireframes for my own Gen Z-focused clothing brand, incorporating bold aesthetics, seamless user journeys, and interactive features to reflect the preferences of the target audience."
+      data-problem="Gen-Z shoppers expect bold, fast, and visually rich e-commerce experiences. Most clothing brand UIs fail to match the visual language and interaction expectations of this demographic, leading to poor engagement and drop-offs."
+      data-research="Conducted competitive analysis of Gen-Z fashion brands (Zara, H&amp;M, SHEIN). Studied interaction patterns, visual hierarchy preferences, and mobile shopping behaviour common in the 18–24 age group."
+      data-solution="Designed a full set of wireframes and an interactive Figma prototype covering home, product listings, PDP, cart, and checkout — using bold typography, full-bleed imagery, and streamlined navigation suited to mobile-first Gen-Z users."
+      data-tools="Figma,Notion"
+      data-cs-img="cover-genz.webp">
+      <div class="project-img-wrap">
+        <img class="project-img" src="cover-genz.webp" alt="Gen-Z Clothing Brand"/>
+        <div class="card-overlay">
+          <div class="overlay-actions">
+            <button class="ov-btn ov-primary" onclick="openCS(event,this)">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M1 6h10M6 1l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Case Study
+            </button>
+            <button class="ov-btn" onclick="openFigmaBtn(event,this)">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M4 1h4v3.5H4zM4 4.5a2 2 0 0 0 0 4V4.5zM4 8.5a2 2 0 1 0 4 0 2 2 0 0 0-4 0zM8 1a2 2 0 0 1 0 3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Live Prototype
+            </button>
+            <button class="ov-btn ov-disabled" title="No PDF for this project">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M2 1h6l2 2v8H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 1v3h3M4 6h4M4 8h2" stroke-linecap="round"/></svg>
+              No PDF
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="project-info">
+        <div class="project-tags">
+          <span class="project-tag">UI / UX</span>
+          <span class="project-tag">Wireframing</span>
+          <span class="project-tag">E-Commerce</span>
+          <span class="project-tag">Figma Prototype</span>
+        </div>
+        <div class="project-title">Designing Wireframes for My Gen-Z Clothing Brand</div>
+        <p class="project-desc">End-to-end wireframes and interactive Figma prototype for a Gen Z fashion brand — bold aesthetics, streamlined user journeys, and mobile-first interaction design.</p>
+        <div class="project-footer">
+          <span class="project-year">2024 · 1 Week · Personal Project</span>
+          <span class="project-hint">Hover to explore →</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── OLA UX ── -->
+    <div class="project-card reveal reveal-delay-1"
+      data-title="Improving UX for Tier 2/3 Cities — Ola App"
+      data-year="2024" data-role="UX Researcher + Designer (Personal)" data-duration="1 Week" data-platform="Mobile / Android + iOS"
+      data-figma=""
+      data-pdf="https://drive.google.com/file/d/1UO1ij-67LFEumMwNrRplr2s9BjuseMkR/preview"
+      data-kpi1-num="Tier 2/3" data-kpi1-lbl="Target city segment"
+      data-kpi2-num="UX" data-kpi2-lbl="Booking flow simplified"
+      data-kpi3-num="1 wk" data-kpi3-lbl="Research to proposal"
+      data-overview="Enhanced the Ola app's UX for tier 2/3 cities by simplifying the ride-booking process, improving location accuracy, and optimizing features for better accessibility — creating a more seamless experience for users in these regions."
+      data-problem="Users in tier 2/3 cities face unique friction: poor GPS in poorly mapped areas, complex UI overwhelming less tech-savvy users, language barriers, and unreliable connectivity reducing app performance."
+      data-research="Analysed Play Store reviews from tier 2/3 city users, identified recurring pain points around location accuracy, UI complexity, and driver communication. Used Google Forms for targeted user surveys."
+      data-solution="Proposed UX improvements: simplified one-tap booking flow, offline-capable location confirmation, regional language support, and a redesigned driver ETA screen with clearer visual hierarchy for diverse literacy levels."
+      data-tools="Figma,Notion,Google Forms"
+      data-cs-img="cover-ola.webp">
+      <div class="project-img-wrap">
+        <img class="project-img" src="cover-ola.webp" alt="Ola UX Improvement"/>
+        <div class="card-overlay">
+          <div class="overlay-actions">
+            <button class="ov-btn ov-primary" onclick="openCS(event,this)">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M1 6h10M6 1l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Case Study
+            </button>
+            <button class="ov-btn ov-disabled" title="No Figma for this project">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M4 1h4v3.5H4zM4 4.5a2 2 0 0 0 0 4V4.5zM4 8.5a2 2 0 1 0 4 0 2 2 0 0 0-4 0zM8 1a2 2 0 0 1 0 3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              No Figma
+            </button>
+            <button class="ov-btn" onclick="openPDFBtn(event,this)">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M2 1h6l2 2v8H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 1v3h3M4 6h4M4 8h2" stroke-linecap="round"/></svg>
+              View PDF
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="project-info">
+        <div class="project-tags">
+          <span class="project-tag">UX Research</span>
+          <span class="project-tag">Market Analysis</span>
+          <span class="project-tag">Mobile</span>
+        </div>
+        <div class="project-title">Improving UX for Tier 2/3 Cities — Ola App</div>
+        <p class="project-desc">Simplified ride-booking, improved location accuracy, and optimised accessibility for non-metro users — making Ola more inclusive across India's tier 2/3 cities.</p>
+        <div class="project-footer">
+          <span class="project-year">2024 · 1 Week · Personal Project</span>
+          <span class="project-hint">Hover to explore →</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── AMBITIONBOX ── -->
+    <div class="project-card reveal reveal-delay-2"
+      data-title="Enhancing User Retention by 25% — AmbitionBox App"
+      data-year="2024" data-role="Product Analyst + Designer (Personal)" data-duration="2 Weeks" data-platform="Mobile + Web"
+      data-figma=""
+      data-pdf="https://drive.google.com/file/d/1gZb3Y2EqE2lltr2TbtfzZG0XfyM329Aa/preview"
+      data-kpi1-num="25%" data-kpi1-lbl="Target retention lift"
+      data-kpi2-num="6 mo" data-kpi2-lbl="Proposed roadmap"
+      data-kpi3-num="2 wks" data-kpi3-lbl="Research to strategy"
+      data-overview="Designed a 6-month retention strategy for AmbitionBox by implementing personalised recommendations, streamlining the UI, and introducing engaging features — targeting a 25% lift in returning users."
+      data-problem="AmbitionBox faced declining retention as job seekers used the app for initial research but didn't return after their job search ended. The platform lacked personalisation and re-engagement hooks."
+      data-research="Applied behaviour analytics to understand drop-off patterns. Used Semrush for competitive benchmarking against Glassdoor and LinkedIn. Identified that 60%+ of users left after viewing just 3 company reviews."
+      data-solution="Proposed 6-month retention roadmap: personalised company recommendations, a salary tracker for repeat visits, gamified profile completion, weekly job market digest emails, and a revamped onboarding flow to reduce time-to-value."
+      data-tools="Notion,Google Forms,Semrush,Figma"
+      data-cs-img="cover-ambitionbox.webp">
+      <div class="project-img-wrap">
+        <img class="project-img" src="cover-ambitionbox.webp" alt="AmbitionBox Retention Strategy"/>
+        <div class="card-overlay">
+          <div class="overlay-actions">
+            <button class="ov-btn ov-primary" onclick="openCS(event,this)">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M1 6h10M6 1l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Case Study
+            </button>
+            <button class="ov-btn ov-disabled" title="No Figma for this project">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M4 1h4v3.5H4zM4 4.5a2 2 0 0 0 0 4V4.5zM4 8.5a2 2 0 1 0 4 0 2 2 0 0 0-4 0zM8 1a2 2 0 0 1 0 3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              No Figma
+            </button>
+            <button class="ov-btn" onclick="openPDFBtn(event,this)">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M2 1h6l2 2v8H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 1v3h3M4 6h4M4 8h2" stroke-linecap="round"/></svg>
+              View PDF
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="project-info">
+        <div class="project-tags">
+          <span class="project-tag">Behaviour Analytics</span>
+          <span class="project-tag">Retention Strategy</span>
+          <span class="project-tag">Personalisation</span>
+        </div>
+        <div class="project-title">Enhancing User Retention by 25% — AmbitionBox</div>
+        <p class="project-desc">6-month retention strategy using personalised recommendations, UI streamlining, and new engagement loops — targeting a 25% uplift in returning AmbitionBox users.</p>
+        <div class="project-footer">
+          <span class="project-year">2024 · 2 Weeks · Personal Project</span>
+          <span class="project-hint">Hover to explore →</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ EXPERIENCE ═══ -->
+<section id="experience">
+  <div style="max-width:800px;margin:0 auto 3rem">
+    <div class="section-label reveal">Career</div>
+    <h2 class="reveal">Where I've <em>worked</em></h2>
+  </div>
+  <div class="experience-list">
+    <div class="exp-item reveal">
+      <div class="exp-year">2023 — Present</div>
+      <div>
+        <div class="exp-role">SaaS Product Implementation</div>
+        <div class="exp-co">Zoho · Full-time</div>
+        <p class="exp-desc">Implemented and supported Zoho CRM and Zoho Commerce across real customer use cases. Collaborated with stakeholders to translate business needs into clear product requirements and user stories. Developed deep understanding of user workflows, product behaviour, and real-world customer challenges.</p>
+      </div>
+    </div>
+    <!-- ✏️ Add more exp-item blocks here -->
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ CERTIFICATIONS ═══ -->
+<section id="certifications" class="cert-section">
+  <div style="max-width:1100px;margin:0 auto 3rem">
+    <div class="section-label reveal">Learning</div>
+    <h2 class="reveal">Certifications &amp; <em>Courses</em></h2>
+  </div>
+  <div class="cert-grid">
+    <div class="cert-card reveal">
+      <div class="cert-org">Philanthropy University</div>
+      <div class="cert-name">Fundamentals of Project Management</div>
+      <button class="cert-btn" onclick="openCertModal('PhilanthropyUniversity_FundamentalsofProjectManagement.pdf','Fundamentals of Project Management')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M2 1h6l2 2v8H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 1v3h3M4 6h4M4 8h2" stroke-linecap="round"/></svg>
+        View Certificate
+      </button>
+    </div>
+    <div class="cert-card reveal reveal-delay-1">
+      <div class="cert-org">Hello PM Bootcamp</div>
+      <div class="cert-name">Product Management Fundamentals Bootcamp</div>
+      <button class="cert-btn" onclick="openCertModal('Hello_PM_bootcamp.pdf','PM Fundamentals Bootcamp')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M2 1h6l2 2v8H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 1v3h3M4 6h4M4 8h2" stroke-linecap="round"/></svg>
+        View Certificate
+      </button>
+    </div>
+    <div class="cert-card reveal reveal-delay-2">
+      <div class="cert-org">LinkedIn Learning</div>
+      <div class="cert-name">Project Management Foundations</div>
+      <button class="cert-btn" onclick="openCertModal('CertificateOfCompletion_Project_Management_Foundations_Requirements_(1).pdf','Project Management Foundations')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M2 1h6l2 2v8H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 1v3h3M4 6h4M4 8h2" stroke-linecap="round"/></svg>
+        View Certificate
+      </button>
+    </div>
+    <div class="cert-card reveal">
+      <div class="cert-org">Electronic Arts × Forage</div>
+      <div class="cert-name">Product Management Job Simulation</div>
+      <button class="cert-btn" onclick="openCertModal('5genWYpfo5b57G7yv_Electronic_Arts_X3hmrNXi4MbmM5nJK_1720582624206_completion_certificate.pdf','EA PM Simulation')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M2 1h6l2 2v8H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 1v3h3M4 6h4M4 8h2" stroke-linecap="round"/></svg>
+        View Certificate
+      </button>
+    </div>
+    <div class="cert-card reveal reveal-delay-1">
+      <div class="cert-org">Atlassian University</div>
+      <div class="cert-name">Fundamentals of Jira</div>
+      <button class="cert-btn" onclick="openCertModal('Jira_Fundamentals___Atlassian.pdf','Jira Fundamentals')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M2 1h6l2 2v8H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 1v3h3M4 6h4M4 8h2" stroke-linecap="round"/></svg>
+        View Certificate
+      </button>
+    </div>
+    <div class="cert-card reveal reveal-delay-2">
+      <div class="cert-org">LinkedIn Learning</div>
+      <div class="cert-name">Agile Requirements Foundations</div>
+      <button class="cert-btn" onclick="openCertModal('CertificateOfCompletion_Agile_Requirements_Foundations_(1).pdf','Agile Requirements Foundations')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M2 1h6l2 2v8H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 1v3h3M4 6h4M4 8h2" stroke-linecap="round"/></svg>
+        View Certificate
+      </button>
+    </div>
+    <div class="cert-card reveal">
+      <div class="cert-org">Atlassian University</div>
+      <div class="cert-name">Beginner's Guide to Agile in Jira</div>
+      <button class="cert-btn" onclick="openCertModal('agile_in_jira_by_atlassian.pdf','Agile in Jira')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M2 1h6l2 2v8H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 1v3h3M4 6h4M4 8h2" stroke-linecap="round"/></svg>
+        View Certificate
+      </button>
+    </div>
+    <div class="cert-card reveal reveal-delay-1">
+      <div class="cert-org">Google</div>
+      <div class="cert-name">Google Analytics for Beginners</div>
+      <button class="cert-btn" onclick="openCertModal('google_analytics_for_beginners.pdf','Google Analytics')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M2 1h6l2 2v8H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 1v3h3M4 6h4M4 8h2" stroke-linecap="round"/></svg>
+        View Certificate
+      </button>
+    </div>
+    <div class="cert-card reveal reveal-delay-2">
+      <div class="cert-org">Product School</div>
+      <div class="cert-name">Product Roadmapping Micro-Certification</div>
+      <button class="cert-btn" onclick="openCertModal('certificate-of-completion-for-product-roadmapping-micro-certification.pdf','Product Roadmapping')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M2 1h6l2 2v8H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 1v3h3M4 6h4M4 8h2" stroke-linecap="round"/></svg>
+        View Certificate
+      </button>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact" class="contact-section">
+  <div class="section-label reveal" style="justify-content:center">Get In Touch</div>
+  <h2 class="reveal">Let's build something <em>together</em></h2>
+  <p class="reveal">Open to PM roles, internships, and interesting conversations. I'd love to chat.</p>
+  <div class="contact-links reveal">
+    <a href="mailto:vigneshwark27@gmail.com" class="btn-primary">vigneshwark27@gmail.com</a>
+    <a href="https://linkedin.com/in/vigneshwarkannan" class="btn-secondary" target="_blank">LinkedIn ↗</a>
+    <a href="tel:+919345627899" class="btn-secondary">+91 93456 27899</a>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Vigneshwar Kannan</span>
+  <span>Designed with intention ✦</span>
+</footer>
+
+<!-- ═══ MODAL: CASE STUDY ═══ -->
+<div class="modal-bd" id="m-cs">
+  <div class="modal" style="max-width:860px">
+    <div class="modal-drag"></div>
+    <div class="modal-head">
+      <div class="modal-head-left">
+        <span class="modal-badge">Case Study</span>
+        <span class="modal-ttl" id="cs-ttl">—</span>
+      </div>
+      <div class="modal-head-right">
+        <button class="modal-x" onclick="modalClose('m-cs')">✕</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="cs-scroll" id="cs-body"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="fact" id="cs-figma-btn">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12" style="width:10px;height:10px"><path d="M4 1h4v3.5H4zM4 4.5a2 2 0 0 0 0 4V4.5zM4 8.5a2 2 0 1 0 4 0 2 2 0 0 0-4 0zM8 1a2 2 0 0 1 0 3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Open Figma
+      </button>
+      <button class="fact" id="cs-pdf-btn">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12" style="width:10px;height:10px"><path d="M2 1h6l2 2v8H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 1v3h3M4 6h4M4 8h2" stroke-linecap="round"/></svg>
+        View PDF
+      </button>
+      <span class="modal-foot-note">Press Esc or click outside to close</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: FIGMA ═══ -->
+<div class="modal-bd" id="m-figma">
+  <div class="modal" style="max-width:1080px;height:90vh">
+    <div class="modal-drag"></div>
+    <div class="modal-head">
+      <div class="modal-head-left">
+        <span class="modal-badge">Figma Prototype</span>
+        <span class="modal-ttl" id="figma-ttl">—</span>
+      </div>
+      <div class="modal-head-right">
+        <a id="figma-ext" href="#" target="_blank" class="fact">Open in Figma ↗</a>
+        <button class="modal-x" onclick="modalClose('m-figma')">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" id="figma-body"></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: PDF ═══ -->
+<div class="modal-bd" id="m-pdf">
+  <div class="modal" style="max-width:900px;height:90vh">
+    <div class="modal-drag"></div>
+    <div class="modal-head">
+      <div class="modal-head-left">
+        <span class="modal-badge">PDF</span>
+        <span class="modal-ttl" id="pdf-ttl">—</span>
+      </div>
+      <div class="modal-head-right">
+        <a id="pdf-ext" href="#" target="_blank" class="fact">Open in Drive ↗</a>
+        <button class="modal-x" onclick="modalClose('m-pdf')">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" id="pdf-body"></div>
+  </div>
+</div>
+
+<script>
+/* ── CURSOR ── */
+const cur=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function animRing(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);})();
+
+/* ── SCROLL PROGRESS + NAV ── */
+const prog=document.getElementById('progress');
+const navEl=document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  const st=window.scrollY,dh=document.documentElement.scrollHeight-window.innerHeight;
+  prog.style.width=(st/dh*100)+'%';
+  navEl.classList.toggle('scrolled',st>60);
+  // active nav link
+  document.querySelectorAll('section[id]').forEach(sec=>{
+    const top=sec.offsetTop-120,bot=top+sec.offsetHeight;
+    const link=document.querySelector('.nav-link[href="#'+sec.id+'"]');
+    if(link) link.classList.toggle('active',st>=top&&st<bot);
+  });
+},{passive:true});
+
+/* ── REVEAL ON SCROLL ── */
+const revObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');revObs.unobserve(e.target);}}),{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
+
+/* ── MODAL SYSTEM ── */
+function modalOpen(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
+function modalClose(id){
+  const bd=document.getElementById(id);
+  bd.classList.remove('open');
+  document.body.style.overflow='';
+  // clear iframes after transition
+  setTimeout(()=>{
+    if(id==='m-figma'){const b=document.getElementById('figma-body');if(b)b.innerHTML='';}
+    if(id==='m-pdf'){const b=document.getElementById('pdf-body');if(b)b.innerHTML='';}
+  },450);
+}
+// close on backdrop click
+document.querySelectorAll('.modal-bd').forEach(bd=>{bd.addEventListener('click',e=>{if(e.target===bd)modalClose(bd.id);});});
+// close on Escape
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-bd.open').forEach(bd=>modalClose(bd.id));});
+
+/* ── GET CARD DATA ── */
+function getCard(btn){return btn.closest('.project-card');}
+
+/* ── TOAST ── */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+/* ── CASE STUDY ── */
+function openCS(e,btn){
+  e.stopPropagation();
+  const c=getCard(btn),d=c.dataset;
+  document.getElementById('cs-ttl').textContent=d.title;
+  const imgHtml=d.csImg?`<img class="cs-cover" src="${d.csImg}" alt="${d.title}">`:`<div class="cs-cover-ph">Project cover image</div>`;
+  const toolsHtml=(d.tools||'').split(',').filter(t=>t.trim()).map(t=>`<span class="cs-tool-tag">${t.trim()}</span>`).join('');
+  document.getElementById('cs-body').innerHTML=`
+    ${imgHtml}
+    <div class="cs-content">
+      <div class="cs-meta">
+        <div class="cs-mi"><label>Role</label><span>${d.role||'—'}</span></div>
+        <div class="cs-mi"><label>Duration</label><span>${d.duration||'—'}</span></div>
+        <div class="cs-mi"><label>Platform</label><span>${d.platform||'—'}</span></div>
+        <div class="cs-mi"><label>Year</label><span>${d.year||'—'}</span></div>
+      </div>
+      <div class="cs-sec"><h3>Overview</h3><p>${d.overview||'—'}</p></div>
+      <div class="cs-sec"><h3>The Problem</h3><p>${d.problem||'—'}</p></div>
+      <div class="cs-sec"><h3>Research &amp; Discovery</h3><p>${d.research||'—'}</p></div>
+      <div class="cs-sec"><h3>Design Solution</h3><p>${d.solution||'—'}</p></div>
+      <div class="cs-sec"><h3>Outcomes &amp; Impact</h3>
+        <div class="cs-kpis">
+          <div class="cs-kpi"><span class="cs-kpi-num">${d['kpi1Num']||'—'}</span><span class="cs-kpi-lbl">${d['kpi1Lbl']||'Metric'}</span></div>
+          <div class="cs-kpi"><span class="cs-kpi-num">${d['kpi2Num']||'—'}</span><span class="cs-kpi-lbl">${d['kpi2Lbl']||'Metric'}</span></div>
+          <div class="cs-kpi"><span class="cs-kpi-num">${d['kpi3Num']||'—'}</span><span class="cs-kpi-lbl">${d['kpi3Lbl']||'Metric'}</span></div>
+        </div>
+      </div>
+      ${toolsHtml?`<div class="cs-sec"><h3>Tools Used</h3><div class="cs-tools">${toolsHtml}</div></div>`:''}
+    </div>`;
+  // wire footer buttons
+  const hasFigma=!!(d.figma&&d.figma.trim());
+  const hasPDF=!!(d.pdf&&d.pdf.trim());
+  const fb=document.getElementById('cs-figma-btn');
+  const pb=document.getElementById('cs-pdf-btn');
+  if(hasFigma){fb.classList.remove('fact-dim');fb.onclick=()=>{modalClose('m-cs');setTimeout(()=>openFigmaFromCard(c),460);};}
+  else{fb.classList.add('fact-dim');fb.onclick=()=>showToast('No Figma file for this project');}
+  if(hasPDF){pb.classList.remove('fact-dim');pb.onclick=()=>{modalClose('m-cs');setTimeout(()=>openPDFFromCard(c),460);};}
+  else{pb.classList.add('fact-dim');pb.onclick=()=>showToast('No PDF for this project');}
+  modalOpen('m-cs');
+}
+
+/* ── FIGMA ── */
+function openFigmaFromCard(c){
+  const d=c.dataset;
+  const hasFigma=!!(d.figma&&d.figma.trim());
+  document.getElementById('figma-ttl').textContent=d.title;
+  document.getElementById('figma-ext').href=d.figma||'#';
+  if(hasFigma){
+    const isProto=d.figma.includes('/proto/');
+    const embedUrl=isProto
+      ? d.figma.replace('figma.com/proto','figma.com/embed').split('?')[0]+'?embed-host=share&'+d.figma.split('?')[1]
+      : 'https://www.figma.com/embed?embed_host=share&url='+encodeURIComponent(d.figma);
+    document.getElementById('figma-body').innerHTML=`<iframe class="embed-frame" src="${embedUrl}" allowfullscreen></iframe>`;
+  } else {
+    document.getElementById('figma-body').innerHTML=`<div class="embed-ph"><svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 48 48"><rect x="17" y="3" width="9" height="14" rx="4.5"/><rect x="17" y="17" width="9" height="14"/><rect x="17" y="31" width="9" height="14" rx="4.5"/><rect x="26" y="3" width="9" height="14" rx="4.5"/><circle cx="30.5" cy="24" r="4.5"/></svg><p>No Figma file is linked to this project yet.</p></div>`;
+  }
+  modalOpen('m-figma');
+}
+function openFigmaBtn(e,btn){e.stopPropagation();openFigmaFromCard(getCard(btn));}
+
+/* ── PDF ── */
+function openPDFFromCard(c){
+  const d=c.dataset;
+  const hasPDF=!!(d.pdf&&d.pdf.trim());
+  document.getElementById('pdf-ttl').textContent=d.title;
+  document.getElementById('pdf-ext').href=(d.pdf||'#').replace('/preview','/view');
+  if(hasPDF){
+    document.getElementById('pdf-body').innerHTML=`<iframe class="embed-frame" style="background:#fff" src="${d.pdf}" title="${d.title}"></iframe>`;
+  } else {
+    document.getElementById('pdf-body').innerHTML=`<div class="embed-ph"><svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 48 48"><path d="M10 4h20l10 10v30H10z"/><path d="M30 4v10h10"/><path d="M16 24h16M16 31h10"/></svg><p>No PDF is linked to this project yet.</p></div>`;
+  }
+  modalOpen('m-pdf');
+}
+function openPDFBtn(e,btn){e.stopPropagation();openPDFFromCard(getCard(btn));}
+
+/* ── CERT PDF ── */
+function openCertModal(path,name){
+  document.getElementById('pdf-ttl').textContent=name;
+  document.getElementById('pdf-ext').href=path;
+  document.getElementById('pdf-body').innerHTML=`<iframe class="embed-frame" style="background:#fff" src="${path}" title="${name}"></iframe>`;
+  modalOpen('m-pdf');
+}
+</script>
+</body>
+</html>
