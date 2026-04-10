@@ -120,6 +120,151 @@ h2 em{font-style:italic;color:var(--gold)}
 .projects-header{display:flex;justify-content:space-between;align-items:flex-end;max-width:1100px;margin:0 auto 3.5rem;flex-wrap:wrap;gap:1.5rem}
 .projects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3px;max-width:1100px;margin:0 auto}
 
+<!-- FIGMA POPUP --> 
+<div id="figmaPopup" class="figma-popup">
+  <div class="figma-container">
+
+    <!-- TOP BAR -->
+    <div class="figma-topbar">
+      <span id="figmaTitle">Prototype</span>
+      <div class="figma-actions">
+        <a id="figmaOpenNew" target="_blank">Open ↗</a>
+        <button onclick="closeFigma()">✕</button>
+      </div>
+    </div>
+
+    <!-- EMBED -->
+    <iframe id="figmaFrame"></iframe>
+
+  </div>
+</div>
+
+/* BACKDROP */
+.figma-popup{
+  position:fixed;
+  inset:0;
+  background:rgba(10,10,10,0.85);
+  backdrop-filter: blur(14px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:all .4s cubic-bezier(.22,.61,.36,1);
+  z-index:999;
+}
+
+/* OPEN STATE */
+.figma-popup.active{
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* CONTAINER */
+.figma-container{
+  width:90%;
+  height:85%;
+  background:#111;
+  border-radius:16px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  transform:scale(.96);
+  transition:all .4s cubic-bezier(.22,.61,.36,1);
+}
+
+/* SCALE ANIMATION */
+.figma-popup.active .figma-container{
+  transform:scale(1);
+}
+
+/* TOP BAR */
+.figma-topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 20px;
+  background:#0f0f10;
+  border-bottom:1px solid #222;
+  font-size:14px;
+}
+
+.figma-actions{
+  display:flex;
+  gap:15px;
+  align-items:center;
+}
+
+.figma-actions a{
+  text-decoration:none;
+  color:#aaa;
+}
+
+.figma-actions button{
+  background:none;
+  border:none;
+  color:#aaa;
+  font-size:18px;
+  cursor:pointer;
+}
+
+/* IFRAME */
+#figmaFrame{
+  flex:1;
+  width:100%;
+  border:none;
+  background:#1e1e1e;
+}
+
+function openFigmaBtn(e, btn){
+  e.stopPropagation();
+
+  const card = btn.closest('.project-card');
+  const figmaUrl = card.dataset.figma;
+
+  if(!figmaUrl || figmaUrl.includes("YOUR_FILE")){
+    alert("Add your Figma link first");
+    return;
+  }
+
+  const popup = document.getElementById("figmaPopup");
+  const frame = document.getElementById("figmaFrame");
+  const title = document.getElementById("figmaTitle");
+  const openBtn = document.getElementById("figmaOpenNew");
+
+  title.innerText = card.dataset.title || "Live Prototype";
+  frame.src = figmaUrl;
+  openBtn.href = figmaUrl.replace("embed?embed_host=share&url=", "");
+
+  popup.classList.add("active");
+}
+
+/* CLOSE */
+function closeFigma(){
+  const popup = document.getElementById("figmaPopup");
+  const frame = document.getElementById("figmaFrame");
+
+  popup.classList.remove("active");
+
+  setTimeout(()=>{
+    frame.src = ""; // stop loading
+  },300);
+}
+
+/* CLICK OUTSIDE CLOSE */
+document.getElementById("figmaPopup").addEventListener("click", function(e){
+  if(e.target === this){
+    closeFigma();
+  }
+});
+
+/* ESC CLOSE */
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape"){
+    closeFigma();
+  }
+});
+
 /* card */
 .project-card{background:var(--bg3);overflow:hidden;display:flex;flex-direction:column;position:relative;transition:transform 0.4s var(--ease),box-shadow 0.4s var(--ease)}
 .project-card:hover{transform:translateY(-4px);box-shadow:0 24px 48px rgba(0,0,0,0.4)}
@@ -366,16 +511,15 @@ footer{padding:2rem 3rem;display:flex;justify-content:space-between;align-items:
           <span class="skill-tag">UI / UX</span>
           <span class="skill-tag">Wireframing</span>
           <span class="skill-tag">Figma</span>
-          <span class="skill-tag">Product Roadmapping</span>
+          <span class="skill-tag">Requirement Gathering</span>
           <span class="skill-tag">Stakeholder Management</span>
-          <span class="skill-tag">Behaviour Analytics</span>
-          <span class="skill-tag">Retention Strategies</span>
-          <span class="skill-tag">Power BI</span>
+          <span class="skill-tag">SaaS Workflows</span>
+          <span class="skill-tag">UAT Testing</span>
           <span class="skill-tag">SQL</span>
           <span class="skill-tag">Semrush</span>
           <span class="skill-tag">Google Analytics</span>
           <span class="skill-tag">MixPanel</span>
-          <span class="skill-tag">Zoho CRM</span>
+          <span class="skill-tag">CRM</span>
           <span class="skill-tag">SDLC</span>
         </div>
       </div>
@@ -421,9 +565,8 @@ footer{padding:2rem 3rem;display:flex;justify-content:space-between;align-items:
               Case Study
             </button>
             <button class="ov-btn" onclick="openFigmaBtn(event,this)">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M4 1h4v3.5H4zM4 4.5a2 2 0 0 0 0 4V4.5zM4 8.5a2 2 0 1 0 4 0 2 2 0 0 0-4 0zM8 1a2 2 0 0 1 0 3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Live Prototype
-            </button>
+             Live Prototype
+             </button>
             <button class="ov-btn ov-disabled" title="No PDF for this project">
               <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M2 1h6l2 2v8H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 1v3h3M4 6h4M4 8h2" stroke-linecap="round"/></svg>
               No PDF
