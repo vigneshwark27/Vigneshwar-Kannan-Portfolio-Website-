@@ -1000,6 +1000,151 @@ PRD
   </div>
 </div>
 
+<!-- ═══ MODAL: LIVE PROTOTYPE LAUNCH ═══ -->
+<div class="modal-bd" id="m-proto-launch">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-drag"></div>
+    <div class="modal-head">
+      <div class="modal-head-left">
+        <span class="modal-badge" style="background:rgba(104,211,145,.08);color:#68d391;border-color:rgba(104,211,145,.3)">Live Prototype</span>
+        <span class="modal-ttl">Chargebee — Contract to Subscription AI</span>
+      </div>
+      <div class="modal-head-right">
+        <button class="modal-x" onclick="modalClose('m-proto-launch')">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" style="padding:0;overflow:hidden">
+
+      <!-- Screenshot preview using Google PageSpeed screenshot service -->
+      <div style="position:relative;width:100%;background:#0a0a0a;overflow:hidden">
+        <div style="position:relative;padding-top:56.25%">
+          <img
+            src="https://image.thum.io/get/width/1200/crop/630/noanimate/https://gx34dn.csb.app/"
+            alt="Prototype preview"
+            id="proto-screenshot"
+            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;transition:opacity .4s"
+            onerror="this.style.display='none';document.getElementById('proto-fallback-img').style.display='flex'"
+          />
+          <!-- Fallback if screenshot service fails -->
+          <div id="proto-fallback-img" style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;flex-direction:column;gap:1rem;background:linear-gradient(135deg,#0d1117 0%,#161b22 100%)">
+            <svg width="48" height="48" fill="none" stroke="rgba(201,168,76,.4)" stroke-width="1" viewBox="0 0 48 48"><rect x="4" y="8" width="40" height="28" rx="2"/><path d="M16 44h16M24 36v8"/></svg>
+            <span style="font-size:.75rem;color:rgba(240,234,216,.3);letter-spacing:.1em;text-transform:uppercase">Live Application</span>
+          </div>
+          <!-- Overlay gradient -->
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom, transparent 60%, rgba(14,13,11,.95) 100%);pointer-events:none"></div>
+          <!-- Launch button over image -->
+          <div style="position:absolute;bottom:1.5rem;left:0;right:0;display:flex;justify-content:center">
+            <a id="proto-launch-btn" href="https://gx34dn.csb.app/" target="_blank"
+               style="display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 2.2rem;background:var(--gold);color:#0e0d0b;font-family:var(--font-b);font-size:.78rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;transition:all .22s;border:2px solid var(--gold)"
+               onmouseover="this.style.background='transparent';this.style.color='var(--gold)'"
+               onmouseout="this.style.background='var(--gold)';this.style.color='#0e0d0b'">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6"/><path d="M5 7h4M7 5l2 2-2 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Launch Live Prototype
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info strip below screenshot -->
+      <div style="padding:1.4rem 1.8rem;display:flex;gap:2rem;align-items:center;flex-wrap:wrap;border-top:1px solid var(--border-soft)">
+        <div style="display:flex;flex-direction:column;gap:.2rem">
+          <span style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cream-dim)">Built with</span>
+          <span style="font-size:.82rem;color:var(--cream)">CodeSandbox</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.2rem">
+          <span style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cream-dim)">Type</span>
+          <span style="font-size:.82rem;color:var(--cream)">Interactive web prototype</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.2rem">
+          <span style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cream-dim)">Project</span>
+          <span style="font-size:.82rem;color:var(--cream)">Chargebee · Contract-to-Subscription AI</span>
+        </div>
+        <div style="margin-left:auto">
+          <div style="font-size:.68rem;color:rgba(240,234,216,.25);text-align:right;line-height:1.6">Opens in new tab<br>No login required</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-foot">
+      <a href="https://gx34dn.csb.app/" target="_blank" class="fact">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12" style="width:10px;height:10px"><path d="M7 1h4v4M11 1L5 7M3 2H1v9h9V9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Open Live ↗
+      </a>
+      <span class="modal-foot-note">Press Esc or click outside to close</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: FLOW DIAGRAM LAUNCH ═══ -->
+<div class="modal-bd" id="m-flow-launch">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-drag"></div>
+    <div class="modal-head">
+      <div class="modal-head-left">
+        <span class="modal-badge" style="background:rgba(144,205,244,.08);color:#90cdf4;border-color:rgba(144,205,244,.3)">Flow Diagram</span>
+        <span class="modal-ttl">Chargebee — User Flow &amp; Wireframes</span>
+      </div>
+      <div class="modal-head-right">
+        <button class="modal-x" onclick="modalClose('m-flow-launch')">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" style="padding:0;overflow:hidden">
+
+      <div style="position:relative;width:100%;background:#0a0a0a;overflow:hidden">
+        <div style="position:relative;padding-top:56.25%">
+          <img
+            src="https://image.thum.io/get/width/1200/crop/630/noanimate/https://mockup-runway-03382669.figma.site/"
+            alt="Flow diagram preview"
+            id="flow-screenshot"
+            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;transition:opacity .4s"
+            onerror="this.style.display='none';document.getElementById('flow-fallback-img').style.display='flex'"
+          />
+          <div id="flow-fallback-img" style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;flex-direction:column;gap:1rem;background:linear-gradient(135deg,#0d1117 0%,#161b22 100%)">
+            <svg width="48" height="48" fill="none" stroke="rgba(144,205,244,.4)" stroke-width="1" viewBox="0 0 48 48"><rect x="4" y="6" width="14" height="10" rx="2"/><rect x="4" y="32" width="14" height="10" rx="2"/><rect x="30" y="19" width="14" height="10" rx="2"/><path d="M18 11h8a4 4 0 0 1 4 4v5M18 37h8a4 4 0 0 0 4-4v-5"/></svg>
+            <span style="font-size:.75rem;color:rgba(240,234,216,.3);letter-spacing:.1em;text-transform:uppercase">Flow Diagram</span>
+          </div>
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom, transparent 60%, rgba(14,13,11,.95) 100%);pointer-events:none"></div>
+          <div style="position:absolute;bottom:1.5rem;left:0;right:0;display:flex;justify-content:center">
+            <a id="flow-launch-btn" href="https://mockup-runway-03382669.figma.site/" target="_blank"
+               style="display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 2.2rem;background:var(--gold);color:#0e0d0b;font-family:var(--font-b);font-size:.78rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;transition:all .22s;border:2px solid var(--gold)"
+               onmouseover="this.style.background='transparent';this.style.color='var(--gold)'"
+               onmouseout="this.style.background='var(--gold)';this.style.color='#0e0d0b'">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6"/><path d="M5 7h4M7 5l2 2-2 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Open Flow Diagram
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:1.4rem 1.8rem;display:flex;gap:2rem;align-items:center;flex-wrap:wrap;border-top:1px solid var(--border-soft)">
+        <div style="display:flex;flex-direction:column;gap:.2rem">
+          <span style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cream-dim)">Built with</span>
+          <span style="font-size:.82rem;color:var(--cream)">Figma Sites</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.2rem">
+          <span style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cream-dim)">Type</span>
+          <span style="font-size:.82rem;color:var(--cream)">User flow &amp; wireframe walkthrough</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.2rem">
+          <span style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cream-dim)">Project</span>
+          <span style="font-size:.82rem;color:var(--cream)">Chargebee · Contract-to-Subscription AI</span>
+        </div>
+        <div style="margin-left:auto">
+          <div style="font-size:.68rem;color:rgba(240,234,216,.25);text-align:right;line-height:1.6">Opens in new tab<br>No login required</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-foot">
+      <a href="https://mockup-runway-03382669.figma.site/" target="_blank" class="fact">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12" style="width:10px;height:10px"><path d="M7 1h4v4M11 1L5 7M3 2H1v9h9V9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Open in Website ↗
+      </a>
+      <span class="modal-foot-note">Press Esc or click outside to close</span>
+    </div>
+  </div>
+</div>
+
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ══ CURSOR ══ */
 const cur = document.getElementById('cursor');
@@ -1280,36 +1425,14 @@ function openInFullscreenPopup({ url, badge, name, extLabel, loadingText }) {
 function openFlowDiagram(e, btn) {
   e.preventDefault();
   e.stopPropagation();
-  const card = getCard(btn);
-  const url  = card.dataset.figmaFlow || '';
-  if (!url || url.includes('YOUR_')) {
-    showToast('No flow diagram linked yet'); return;
-  }
-  openInFullscreenPopup({
-    url,
-    badge:       'Flow Diagram',
-    name:        card.dataset.title,
-    extLabel:    'Open in Website',
-    loadingText: 'Loading flow diagram…'
-  });
+  modalOpen('m-flow-launch');
 }
 
 /* ══ PROTOTYPE ══ */
 function openPrototypePopup(e, btn) {
   e.preventDefault();
   e.stopPropagation();
-  const card = getCard(btn);
-  const url  = (card.dataset.prototype || '').trim() || (card.dataset.figma || '').trim();
-  if (!url || url.includes('YOUR_')) {
-    showToast('No prototype linked yet'); return;
-  }
-  openInFullscreenPopup({
-    url,
-    badge:       'Live Prototype',
-    name:        card.dataset.title,
-    extLabel:    'Open Live',
-    loadingText: 'Loading prototype…'
-  });
+  modalOpen('m-proto-launch');
 }
 
 /* ══ PDF DOWNLOAD ══ */
