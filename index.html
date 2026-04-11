@@ -340,14 +340,14 @@ footer{padding:2rem 3rem;display:flex;justify-content:space-between;align-items:
         <span class="figma-name" id="figma-popup-name">Prototype</span>
       </div>
       <div class="figma-topbar-right">
-        <a id="figma-popup-ext" href="#" target="_blank">Open in Figma ↗</a>
+        <a id="figma-popup-ext" href="#" target="_blank" id="figma-ext-link">Open Live ↗</a>
         <button class="close-btn" onclick="closeFigmaPopup()">✕</button>
       </div>
     </div>
     <div id="figma-frame-wrap">
       <div class="figma-loading" id="figma-loading">
         <div class="figma-spinner"></div>
-        <span>Loading prototype…</span>
+        <span id="figma-loading-text">Loading…</span>
       </div>
       <!-- iframe injected by JS -->
     </div>
@@ -631,11 +631,11 @@ data-year="2025"
 data-role="Product Manager (Personal Project)"
 data-duration="Self-initiated"
 data-platform="B2B SaaS / Web"
-data-figma="https://gx34dn.csb.app/"
-data-figma-flow="https://www.figma.com/make/VTZY1eKF7gYmOv1hhNVEHD/Create-process-flow-chart?t=kKz2tOAeJg7wvgPY-1"
-data-prototype=""
+data-figma=""
+data-figma-flow="https://mockup-runway-03382669.figma.site/"
+data-prototype="https://gx34dn.csb.app/"
 data-pdf=""
-data-notion="https://www.notion.so/PRD-Chargebee-Contract-to-Subscription-using-AI-feature-31622c713ac980cc8b91d0c125bc9618?source=copy_link"
+data-notion="https://www.notion.so/PRD-Chargebee-Contract-to-Subscription-using-AI-feature-31622c713ac980cc8b91d0c125bc9618"
 data-kpi1-num="AI"    data-kpi1-lbl="Powered feature"
 data-kpi2-num="9"     data-kpi2-lbl="User stories written"
 data-kpi3-num="B2B"   data-kpi3-lbl="SaaS context"
@@ -1079,40 +1079,28 @@ function openFigmaPopup(e, btn) {
   if (!url || !url.trim()) { showToast('No Figma prototype linked to this project'); return; }
 
   const title = card.dataset.title;
-  document.getElementById('figma-popup-name').textContent = title;
-  document.getElementById('figma-popup-ext').href = url;
 
-  // Build correct embed URL
+  // Build correct embed URL for real Figma files
   let embedUrl;
   if (url.includes('/proto/')) {
-    // Proto: use embed.figma.com/proto with embed-host param
-    // Keep all query params, just change domain and add embed-host
     const urlObj = new URL(url);
     urlObj.hostname = 'embed.figma.com';
     urlObj.searchParams.set('embed-host', 'portfolio');
     urlObj.searchParams.set('hide-ui', '1');
     embedUrl = urlObj.toString();
   } else {
-    // File/design: use standard embed endpoint
     embedUrl = 'https://www.figma.com/embed?embed_host=portfolio&url=' + encodeURIComponent(url);
   }
 
-  // Show loading state, inject iframe
-  const wrap = document.getElementById('figma-frame-wrap');
-  const loading = document.getElementById('figma-loading');
-  loading.classList.remove('hidden');
-  // Remove any old iframe
-  const old = wrap.querySelector('iframe');
-  if (old) old.remove();
-  const iframe = document.createElement('iframe');
-  iframe.src = embedUrl;
-  iframe.allowFullscreen = true;
-  iframe.allow = 'fullscreen';
-  iframe.onload = () => loading.classList.add('hidden');
-  wrap.appendChild(iframe);
-
-  document.getElementById('figma-popup').classList.add('active');
-  document.body.style.overflow = 'hidden';
+  openInFullscreenPopup({
+    url:         embedUrl,
+    badge:       'Figma',
+    name:        title,
+    extLabel:    'Open in Figma',
+    loadingText: 'Loading prototype…'
+  });
+  // Override the ext href to the original (non-embed) URL
+  document.getElementById('figma-popup-ext').href = url;
 }
 
 function closeFigmaPopup() {
@@ -1261,44 +1249,49 @@ function openKanban(e, btn) {
   openKanbanBoard();
 }
 
+/* ══ SHARED: open any URL in the fullscreen popup ══ */
+function openInFullscreenPopup({ url, badge, name, extLabel, loadingText }) {
+  const el = id => document.getElementById(id);
+  el('figma-badge-label').textContent = badge;
+  el('figma-popup-name').textContent  = name;
+  el('figma-popup-ext').href          = url;
+  el('figma-popup-ext').textContent   = extLabel + ' ↗';
+  el('figma-loading-text').textContent = loadingText;
+
+  const wrap = el('figma-frame-wrap');
+  const loading = el('figma-loading');
+  loading.classList.remove('hidden');
+  const old = wrap.querySelector('iframe');
+  if (old) old.remove();
+
+  const iframe = document.createElement('iframe');
+  iframe.src = url;
+  iframe.allowFullscreen = true;
+  iframe.allow = 'fullscreen';
+  iframe.style.background = '#fff';
+  iframe.onload = () => loading.classList.add('hidden');
+  wrap.appendChild(iframe);
+
+  document.getElementById('figma-popup').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
 /* ══ FLOW DIAGRAM ══ */
 function openFlowDiagram(e, btn) {
   e.preventDefault();
   e.stopPropagation();
   const card = getCard(btn);
-  const url = card.dataset.figmaFlow || card.dataset.figma;
-  if (!url || !url.trim() || url.includes('YOUR_FIGMA')) {
-    showToast('Paste your Figma flow diagram link into data-figma-flow on the card');
-    return;
+  const url  = card.dataset.figmaFlow || '';
+  if (!url || url.includes('YOUR_')) {
+    showToast('No flow diagram linked yet'); return;
   }
-  // Reuse the figma popup with a "Flow Diagram" label
-  const title = card.dataset.title;
-  document.getElementById('figma-popup-name').textContent = 'Flow Diagram — ' + title;
-  document.getElementById('figma-badge-label').textContent = 'Flow';
-  document.getElementById('figma-popup-ext').href = url;
-  let embedUrl;
-  if (url.includes('/proto/')) {
-    const urlObj = new URL(url);
-    urlObj.hostname = 'embed.figma.com';
-    urlObj.searchParams.set('embed-host', 'portfolio');
-    urlObj.searchParams.set('hide-ui', '1');
-    embedUrl = urlObj.toString();
-  } else {
-    embedUrl = 'https://www.figma.com/embed?embed_host=portfolio&url=' + encodeURIComponent(url);
-  }
-  const wrap = document.getElementById('figma-frame-wrap');
-  const loading = document.getElementById('figma-loading');
-  loading.classList.remove('hidden');
-  const old = wrap.querySelector('iframe');
-  if (old) old.remove();
-  const iframe = document.createElement('iframe');
-  iframe.src = embedUrl;
-  iframe.allowFullscreen = true;
-  iframe.allow = 'fullscreen';
-  iframe.onload = () => loading.classList.add('hidden');
-  wrap.appendChild(iframe);
-  document.getElementById('figma-popup').classList.add('active');
-  document.body.style.overflow = 'hidden';
+  openInFullscreenPopup({
+    url,
+    badge:       'Flow Diagram',
+    name:        card.dataset.title,
+    extLabel:    'Open in Website',
+    loadingText: 'Loading flow diagram…'
+  });
 }
 
 /* ══ PROTOTYPE ══ */
@@ -1306,40 +1299,17 @@ function openPrototypePopup(e, btn) {
   e.preventDefault();
   e.stopPropagation();
   const card = getCard(btn);
-  // Try data-prototype first, then data-figma
-  const url = (card.dataset.prototype && card.dataset.prototype.trim() && !card.dataset.prototype.includes('YOUR_')) 
-    ? card.dataset.prototype 
-    : (card.dataset.figma && !card.dataset.figma.includes('YOUR_')) ? card.dataset.figma : '';
-  if (!url) {
-    showToast('Paste your Figma prototype link into data-prototype on the card');
-    return;
+  const url  = (card.dataset.prototype || '').trim() || (card.dataset.figma || '').trim();
+  if (!url || url.includes('YOUR_')) {
+    showToast('No prototype linked yet'); return;
   }
-  document.getElementById('figma-badge-label').textContent = 'Prototype';
-  document.getElementById('figma-popup-name').textContent = card.dataset.title;
-  document.getElementById('figma-popup-ext').href = url;
-  let embedUrl;
-  if (url.includes('/proto/')) {
-    const urlObj = new URL(url);
-    urlObj.hostname = 'embed.figma.com';
-    urlObj.searchParams.set('embed-host', 'portfolio');
-    urlObj.searchParams.set('hide-ui', '1');
-    embedUrl = urlObj.toString();
-  } else {
-    embedUrl = 'https://www.figma.com/embed?embed_host=portfolio&url=' + encodeURIComponent(url);
-  }
-  const wrap = document.getElementById('figma-frame-wrap');
-  const loading = document.getElementById('figma-loading');
-  loading.classList.remove('hidden');
-  const old = wrap.querySelector('iframe');
-  if (old) old.remove();
-  const iframe = document.createElement('iframe');
-  iframe.src = embedUrl;
-  iframe.allowFullscreen = true;
-  iframe.allow = 'fullscreen';
-  iframe.onload = () => loading.classList.add('hidden');
-  wrap.appendChild(iframe);
-  document.getElementById('figma-popup').classList.add('active');
-  document.body.style.overflow = 'hidden';
+  openInFullscreenPopup({
+    url,
+    badge:       'Live Prototype',
+    name:        card.dataset.title,
+    extLabel:    'Open Live',
+    loadingText: 'Loading prototype…'
+  });
 }
 
 /* ══ PDF DOWNLOAD ══ */
