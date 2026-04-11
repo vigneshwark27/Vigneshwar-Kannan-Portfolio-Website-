@@ -353,7 +353,165 @@ footer{padding:2rem 3rem;display:flex;justify-content:space-between;align-items:
     </div>
   </div>
 </div>
+<!-- ════════ Notion Pop Up  ════════ -->
+  <div id="notionPopup" class="figma-popup">
+  <div class="figma-header">
+    <h3 id="notionTitle"></h3>
+    <button onclick="closeNotion()">✕</button>
+  </div>
 
+  <iframe id="notionFrame" style="width:100%;height:100%;border:none;"></iframe>
+</div>
+
+/* =========================
+   GLOBAL CLOSE HANDLER
+========================= */
+function closePopup(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+
+  el.classList.remove("active");
+
+  // Clear iframe for performance
+  const iframe = el.querySelector("iframe");
+  if(iframe) iframe.src = "";
+}
+
+/* =========================
+   NOTION (PRD VIEW)
+========================= */
+function openNotion(e, btn){
+  e.preventDefault();
+  e.stopPropagation();
+
+  const card = btn.closest('.project-card');
+  const notionUrl = card.dataset.notion;
+
+  const popup = document.getElementById("notionPopup");
+  const frame = document.getElementById("notionFrame");
+  const title = document.getElementById("notionTitle");
+
+  if(!notionUrl){
+    alert("No Notion link added");
+    return;
+  }
+
+  title.innerText = card.dataset.title;
+
+  // Load Notion
+  frame.src = notionUrl;
+
+  popup.classList.add("active");
+}
+
+/* =========================
+   FIGMA PROTOTYPE (FIXED)
+========================= */
+function openFigmaBtn(e, btn){
+  e.preventDefault();
+  e.stopPropagation();
+
+  const card = btn.closest('.project-card');
+  const protoLink = card.dataset.figma;
+
+  const popup = document.getElementById("figmaPopup");
+  const container = document.getElementById("figmaFrameContainer");
+  const title = document.getElementById("figmaTitle");
+
+  if(!protoLink){
+    alert("No Figma prototype added");
+    return;
+  }
+
+  title.innerText = card.dataset.title;
+
+  // ✅ Convert to embed safely
+  const embedUrl =
+    "https://www.figma.com/embed?embed_host=share&url=" +
+    encodeURIComponent(protoLink);
+
+  // Inject iframe
+  container.innerHTML = `
+    <iframe 
+      src="${embedUrl}" 
+      style="width:100%; height:100%; border:none;" 
+      allowfullscreen>
+    </iframe>
+  `;
+
+  popup.classList.add("active");
+}
+
+/* =========================
+   PDF VIEWER
+========================= */
+function openPDFBtn(e, btn){
+  e.preventDefault();
+  e.stopPropagation();
+
+  const card = btn.closest('.project-card');
+  const pdfUrl = card.dataset.pdf;
+
+  const popup = document.getElementById("pdfPopup");
+  const frame = document.getElementById("pdfFrame");
+  const title = document.getElementById("pdfTitle");
+
+  if(!pdfUrl){
+    alert("No PDF added");
+    return;
+  }
+
+  title.innerText = card.dataset.title;
+
+  frame.src = pdfUrl;
+
+  popup.classList.add("active");
+}
+
+/* =========================
+   CLOSE BUTTON FUNCTIONS
+========================= */
+function closeNotion(){
+  closePopup("notionPopup");
+}
+
+function closeFigma(){
+  closePopup("figmaPopup");
+  document.getElementById("figmaFrameContainer").innerHTML = "";
+}
+
+function closePDF(){
+  closePopup("pdfPopup");
+}
+
+/* =========================
+   CLICK OUTSIDE TO CLOSE
+========================= */
+document.querySelectorAll(".figma-popup").forEach(popup=>{
+  popup.addEventListener("click", function(e){
+    if(e.target === popup){
+      popup.classList.remove("active");
+
+      const iframe = popup.querySelector("iframe");
+      if(iframe) iframe.src = "";
+    }
+  });
+});
+
+/* =========================
+   ESC KEY TO CLOSE
+========================= */
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape"){
+    document.querySelectorAll(".figma-popup.active").forEach(p=>{
+      p.classList.remove("active");
+
+      const iframe = p.querySelector("iframe");
+      if(iframe) iframe.src = "";
+    });
+  }
+});
+  
 <!-- ═══ NAV ═══ -->
 <nav id="nav">
   <a href="#home" class="nav-logo">Vicky<span>.</span></a>
@@ -634,6 +792,7 @@ data-duration="← UPDATE"
 data-platform="B2B SaaS / Web"
 data-figma=""
 data-pdf=""
+data-notion="https://www.notion.so/PRD-Chargebee-Contract-to-Subscription-using-AI-feature-31622c713ac980cc8b91d0c125bc9618"
 data-kpi1-num="AI"    data-kpi1-lbl="Powered feature"
 data-kpi2-num="PRD"   data-kpi2-lbl="Full spec delivered"
 data-kpi3-num="B2B"   data-kpi3-lbl="SaaS context"
@@ -1067,5 +1226,24 @@ function openCertModal(path, name) {
   modalOpen('m-pdf');
 }
 </script>
+<!-- ===== POPUPS (ADD HERE) ===== -->
+
+<!-- NOTION -->
+<div id="notionPopup" class="popup">
+  <h3 id="notionTitle"></h3>
+  <iframe id="notionFrame"></iframe>
+</div>
+
+<!-- FIGMA -->
+<div id="figmaPopup" class="popup">
+  <h3 id="figmaTitle"></h3>
+  <div id="figmaFrameContainer"></div>
+</div>
+
+<!-- PDF -->
+<div id="pdfPopup" class="popup">
+  <h3 id="pdfTitle"></h3>
+  <iframe id="pdfFrame"></iframe>
+</div>
 </body>
 </html>
