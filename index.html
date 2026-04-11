@@ -319,6 +319,66 @@ footer{padding:2rem 3rem;display:flex;justify-content:space-between;align-items:
   .nav-links{gap:1.5rem}
   .cs-kpis{grid-template-columns:1fr 1fr}
 }
+
+/* ── RESUME SECTION ── */
+.resume-section{background:var(--bg)}
+.resume-inner{max-width:900px;margin:0 auto}
+.resume-viewer{width:100%;height:70vh;border:1px solid var(--border-soft);background:var(--bg3);display:flex;flex-direction:column;overflow:hidden;margin-top:2.5rem}
+.resume-viewer-bar{display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.2rem;background:var(--bg4);border-bottom:1px solid var(--border-soft);flex-shrink:0}
+.resume-viewer-bar span{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cream-dim)}
+.resume-actions{display:flex;gap:.6rem}
+.resume-viewer iframe{flex:1;border:none;width:100%;background:#fff}
+.resume-ph{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;color:var(--cream-dim);text-align:center;padding:2rem}
+.resume-ph svg{opacity:.18}
+.resume-ph p{font-size:.85rem;max-width:280px;line-height:1.65}
+
+/* ── CONTACT FORM (Say Hello) ── */
+.contact-form-section{background:var(--bg2)}
+.contact-form-inner{max-width:680px;margin:0 auto}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2.5rem}
+.form-group{display:flex;flex-direction:column;gap:.5rem}
+.form-group.full{grid-column:span 2}
+.form-label{font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.form-input,.form-textarea{background:var(--bg3);border:1px solid var(--border-soft);color:var(--cream);font-family:var(--font-b);font-size:.88rem;padding:.75rem 1rem;transition:border-color .2s,box-shadow .2s;outline:none;width:100%;resize:none}
+.form-input:focus,.form-textarea:focus{border-color:var(--gold);box-shadow:0 0 0 2px rgba(201,168,76,.08)}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--cream-dim);opacity:.5}
+.form-textarea{height:130px}
+.form-submit{margin-top:1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.form-note{font-size:.72rem;color:var(--cream-dim);letter-spacing:.04em}
+.form-success{display:none;background:rgba(104,211,145,.08);border:1px solid rgba(104,211,145,.2);padding:1rem 1.4rem;color:#68d391;font-size:.85rem;margin-top:1rem}
+.form-success.show{display:block}
+
+/* ── HIRE ME SECTION ── */
+.hire-section{background:var(--bg)}
+.hire-inner{max-width:960px;margin:0 auto}
+.hire-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;margin-top:3rem}
+.hire-contact-cards{display:flex;flex-direction:column;gap:1rem}
+.hire-card{display:flex;align-items:center;gap:1.2rem;padding:1.2rem 1.4rem;background:var(--bg3);border:1px solid var(--border-soft);text-decoration:none;transition:all .25s var(--ease);position:relative;overflow:hidden}
+.hire-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);transform:scaleY(0);transform-origin:bottom;transition:transform .3s var(--ease)}
+.hire-card:hover::before{transform:scaleY(1)}
+.hire-card:hover{background:var(--bg4);transform:translateX(3px);border-color:var(--gold-dim)}
+.hire-card-icon{width:40px;height:40px;background:var(--gold-faint);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hire-card-icon svg{width:18px;height:18px}
+.hire-card-body{flex:1;min-width:0}
+.hire-card-label{font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.2rem}
+.hire-card-value{font-size:.88rem;color:var(--cream);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hire-card-arrow{font-size:.8rem;color:var(--cream-dim);flex-shrink:0;transition:color .2s,transform .2s}
+.hire-card:hover .hire-card-arrow{color:var(--gold);transform:translateX(3px)}
+.hire-form-col h3{font-family:var(--font-d);font-size:1.5rem;font-weight:300;color:var(--cream);margin-bottom:.4rem}
+.hire-form-col p{font-size:.85rem;color:var(--cream-dim);margin-bottom:1.5rem}
+
+/* ── CERT MODAL ── */
+#m-cert{z-index:550}
+.cert-modal-img{width:100%;height:auto;display:block;max-height:70vh;object-fit:contain;background:#fff}
+.cert-modal-frame{flex:1;border:none;width:100%;min-height:480px;display:block;background:#fff}
+
+@media(max-width:820px){
+  .form-grid{grid-template-columns:1fr}
+  .form-group.full{grid-column:span 1}
+  .hire-grid{grid-template-columns:1fr;gap:3rem}
+  .resume-viewer{height:55vh}
+}
+
 </style>
 </head>
 <body>
@@ -360,8 +420,9 @@ footer{padding:2rem 3rem;display:flex;justify-content:space-between;align-items:
     <a href="#about" class="nav-link">About</a>
     <a href="#projects" class="nav-link">Work</a>
     <a href="#experience" class="nav-link">Experience</a>
-    <a href="#certifications" class="nav-link">Certs</a>
-    <a href="/cdn-cgi/l/email-protection#64120d030a01170c1305160f5653240309050d084a070b09" class="nav-cta">Hire Me</a>
+    <a href="#resume" class="nav-link">Resume</a>
+    <a href="#certifications" class="nav-link">Certificates</a>
+    <a href="#hire" class="nav-cta">Hire Me</a>
   </div>
 </nav>
 
@@ -377,10 +438,10 @@ footer{padding:2rem 3rem;display:flex;justify-content:space-between;align-items:
         <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M6 1v10M1 6l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         View Work
       </a>
-      <a href="/cdn-cgi/l/email-protection#a6d0cfc1c8c3d5ced1c7d4cd9491e6c1cbc7cfca88c5c9cb" class="btn-secondary">Say Hello →</a>
+      <a href="#hire" class="btn-secondary">Say Hello →</a>
     </div>
     <div class="hero-contact">
-      <a href="/cdn-cgi/l/email-protection#017768666f6472697660736a333641666c60686d2f626e6c"><span class="contact-dot"></span><span class="__cf_email__" data-cfemail="0b7d626c656e78637c6a7960393c4b6c666a626725686466">[email&#160;protected]</span></a>
+      <a href="mailto:vigneshwark27@gmail.com"><span class="contact-dot"></span>vigneshwark27@gmail.com</a>
       <a href="https://linkedin.com/in/vigneshwarkannan" target="_blank"><span class="contact-dot"></span>LinkedIn</a>
       <a href="tel:+919345627899"><span class="contact-dot"></span>+91 93456 27899</a>
     </div>
@@ -644,15 +705,11 @@ data-problem="Sales and billing teams at B2B SaaS companies spend significant ti
 data-research="9 user stories were identified spanning: contract PDF upload, AI-based field extraction, uncertain field highlighting, PDF side-by-side view, master record redirection links, and draft subscription creation. Stories were prioritised from High to Low and tracked as a Kanban backlog."
 data-solution="A new 'Create Subscription from Contract' flow within Chargebee's Contracts module. Users upload a contract PDF → AI extracts subscription fields (plan, billing cycle, customer details, etc.) → uncertain fields are highlighted for manual review → user can view the PDF inline → redirect links help create missing master records → draft subscription is saved for activation via the existing flow."
 data-tools="Notion,Figma,Whimsical"
-data-cs-img="assets/images/chargebee logo 2.svg">
+data-cs-img="chargebee-icon.png">
 <div class="project-img-wrap">
 <!-- ✏️ Add a cover image: assets/images/cover-chargebee.webp -->
-<div class="assets/images/chargebee logo 2.svg" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;color:rgba(240,234,216,.12);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase">
-<svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 36 36" opacity=".3"><rect x="4" y="4" width="28" height="28" rx="2"/><path d="M4 12h28M12 4v8"/></svg>
-Add Cover Image
-</div>
+<img class="project-img" src="chargebee-icon.png" alt="Chargebee — Contract-to-Subscription AI"/>
 <div class="card-overlay">
-<img class="project-img" src="assets/images/chargebee logo 2.svg" alt="Chargebee"/>
 <div class="overlay-actions">
 <button class="ov-btn ov-primary" onclick="openCS(event,this)">
 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M1 6h10M6 1l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -710,6 +767,44 @@ PRD
       </div>
     </div>
     <!-- ✏️ Copy exp-item block to add more roles -->
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ RESUME ═══ -->
+<section id="resume" class="resume-section">
+  <div class="resume-inner">
+    <div class="reveal">
+      <div class="section-label">My Resume</div>
+      <h2>View &amp; <em>Download</em></h2>
+      <p style="font-size:.9rem;color:var(--cream-dim);margin-top:.5rem">A snapshot of my experience, skills, and education.</p>
+    </div>
+    <div class="resume-viewer reveal">
+      <div class="resume-viewer-bar">
+        <span>Resume — Vigneshwar Kannan</span>
+        <div class="resume-actions">
+          <!-- ✏️ Replace YOUR_RESUME_FILE.pdf with your actual resume filename -->
+          <a href="assets/resume/Vigneshwar_Resume.pdf" download class="fact">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12" style="width:10px;height:10px"><path d="M2 1h6l2 2v8H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 5v4M4 7l2 2 2-2" stroke-linecap="round"/></svg>
+            Download PDF
+          </a>
+          <a href="assets/resume/Vigneshwar_Resume.pdf" target="_blank" class="fact">Open ↗</a>
+        </div>
+      </div>
+      <!-- ✏️ Replace the src below with your actual resume PDF path -->
+      <!-- If you don't have a hosted resume yet, replace with a Google Drive preview link -->
+      <div class="resume-ph" id="resume-placeholder">
+        <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 48 48"><path d="M10 4h20l10 10v30H10z"/><path d="M30 4v10h10"/><path d="M16 18h16M16 24h16M16 30h10"/></svg>
+        <p>Add your resume PDF path below — replace <code style="color:var(--gold);font-size:.7rem">src</code> in the iframe tag</p>
+        <button class="fact fact-primary" onclick="loadResume()">
+          Load Preview
+        </button>
+      </div>
+      <iframe id="resume-frame" style="display:none;flex:1;border:none;width:100%;background:#fff"
+        src="" title="Vigneshwar Resume">
+      </iframe>
+    </div>
   </div>
 </section>
 
@@ -790,15 +885,92 @@ PRD
 
 <div class="divider"></div>
 
-<!-- ═══ CONTACT ═══ -->
-<section id="contact" class="contact-section">
-  <div class="section-label reveal" style="justify-content:center">Get In Touch</div>
-  <h2 class="reveal">Let's build something <em>together</em></h2>
-  <p class="reveal">Open to PM roles, internships, and interesting conversations. I'd love to chat.</p>
-  <div class="contact-links reveal">
-    <a href="/cdn-cgi/l/email-protection#d7a1beb0b9b2a4bfa0b6a5bce5e097b0bab6bebbf9b4b8ba" class="btn-primary"><span class="__cf_email__" data-cfemail="daacb3bdb4bfa9b2adbba8b1e8ed9abdb7bbb3b6f4b9b5b7">[email&#160;protected]</span></a>
-    <a href="https://linkedin.com/in/vigneshwarkannan" class="btn-secondary" target="_blank">LinkedIn ↗</a>
-    <a href="tel:+919345627899" class="btn-secondary">+91 93456 27899</a>
+<!-- ═══ HIRE ME ═══ -->
+<section id="hire" class="hire-section">
+  <div class="hire-inner">
+    <div class="reveal">
+      <div class="section-label">Work Together</div>
+      <h2>Let's build something <em>great</em></h2>
+    </div>
+    <div class="hire-grid">
+
+      <!-- Contact Cards -->
+      <div class="hire-contact-cards reveal">
+        <a href="mailto:vigneshwark27@gmail.com" class="hire-card">
+          <div class="hire-card-icon">
+            <svg fill="none" stroke="var(--gold)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="hire-card-body">
+            <span class="hire-card-label">Email</span>
+            <span class="hire-card-value">vigneshwark27@gmail.com</span>
+          </div>
+          <span class="hire-card-arrow">↗</span>
+        </a>
+        <a href="https://linkedin.com/in/vigneshwarkannan" target="_blank" class="hire-card">
+          <div class="hire-card-icon">
+            <svg fill="none" stroke="var(--gold)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M7 10v7M7 7v.5M11 17v-4a2 2 0 0 1 4 0v4M11 10v7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="hire-card-body">
+            <span class="hire-card-label">LinkedIn</span>
+            <span class="hire-card-value">linkedin.com/in/vigneshwarkannan</span>
+          </div>
+          <span class="hire-card-arrow">↗</span>
+        </a>
+        <a href="tel:+919345627899" class="hire-card">
+          <div class="hire-card-icon">
+            <svg fill="none" stroke="var(--gold)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="hire-card-body">
+            <span class="hire-card-label">Phone</span>
+            <span class="hire-card-value">+91 93456 27899</span>
+          </div>
+          <span class="hire-card-arrow">↗</span>
+        </a>
+        <!-- ✏️ Update href with your actual resume PDF path -->
+        <a href="assets/resume/Vigneshwar_Resume.pdf" download class="hire-card">
+          <div class="hire-card-icon">
+            <svg fill="none" stroke="var(--gold)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6M12 12v6M9 15l3 3 3-3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="hire-card-body">
+            <span class="hire-card-label">Resume</span>
+            <span class="hire-card-value">Download PDF</span>
+          </div>
+          <span class="hire-card-arrow">↓</span>
+        </a>
+      </div>
+
+      <!-- Leave me a message Form -->
+      <div class="hire-form-col reveal reveal-delay-1">
+        <h3>Leave me a <em>message</em></h3>
+        <p>Drop a quick note and I'll get back to you within 24–48 hours.</p>
+        <div style="display:flex;flex-direction:column;gap:.85rem">
+          <div class="form-group">
+            <label class="form-label" for="hire-name">Name</label>
+            <input class="form-input" id="hire-name" type="text" placeholder="Your name"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hire-email">Email</label>
+            <input class="form-input" id="hire-email" type="email" placeholder="your@email.com"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hire-mobile">Mobile Number</label>
+            <input class="form-input" id="hire-mobile" type="tel" placeholder="+91 98765 43210"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="hire-msg">Message</label>
+            <textarea class="form-textarea" id="hire-msg" placeholder="I'd love to discuss a PM opportunity with you…" style="height:100px"></textarea>
+          </div>
+          <button class="btn-primary" style="align-self:flex-start" onclick="submitHireForm()">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M1 6h10M6 1l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Send Message
+          </button>
+          <div class="form-success" id="hire-success">
+            ✓ Got it! I'll reach out shortly.
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
 
@@ -806,6 +978,30 @@ PRD
   <span>© 2025 Vigneshwar Kannan</span>
   <span>Designed with intention ✦</span>
 </footer>
+
+<!-- ═══ MODAL: CERTIFICATE VIEWER ═══ -->
+<div class="modal-bd" id="m-cert">
+  <div class="modal" style="max-width:860px;height:88vh">
+    <div class="modal-drag"></div>
+    <div class="modal-head">
+      <div class="modal-head-left">
+        <span class="modal-badge" style="background:rgba(104,211,145,.08);color:#68d391;border-color:rgba(104,211,145,.25)">Certificate</span>
+        <span class="modal-ttl" id="cert-ttl">—</span>
+      </div>
+      <div class="modal-head-right">
+        <a id="cert-dl" href="#" download class="fact">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12" style="width:10px;height:10px"><path d="M2 1h6l2 2v8H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 4v4M4 6l2 2 2-2" stroke-linecap="round"/></svg>
+          Download
+        </a>
+        <button class="modal-x" onclick="modalClose('m-cert')">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" id="cert-body" style="overflow-y:auto;background:#f5f5f5"></div>
+    <div class="modal-foot">
+      <span class="modal-foot-note">Press Esc or click outside to close</span>
+    </div>
+  </div>
+</div>
 
 <!-- ═══ MODAL: CASE STUDY (slide-up sheet) ═══ -->
 <div class="modal-bd" id="m-cs">
@@ -1573,6 +1769,53 @@ function openKanbanBoard() {
   modalOpen('m-kanban');
 }
 
-</script>
-</body>
-</html>
+/* ══ CERT MODAL ══ */
+function openCertModal(path, name) {
+  document.getElementById('cert-ttl').textContent = name;
+  document.getElementById('cert-dl').href = path;
+  const body = document.getElementById('cert-body');
+  const isImg = /\.(png|jpg|jpeg|webp|gif)$/i.test(path);
+  if (isImg) {
+    body.innerHTML = `<img src="${path}" alt="${name}" style="width:100%;height:auto;display:block;object-fit:contain;background:#fff;padding:1rem">`;
+  } else {
+    // PDF — iframe with fallback open-in-tab link
+    body.innerHTML = `
+      <iframe src="${path}" style="width:100%;height:100%;min-height:480px;border:none;display:block" title="${name}"></iframe>
+    `;
+  }
+  modalOpen('m-cert');
+}
+
+/* ══ CONTACT FORM ══ */
+function submitContactForm() {
+  const name    = document.getElementById('msg-name').value.trim();
+  const email   = document.getElementById('msg-email').value.trim();
+  const mobile  = document.getElementById('msg-mobile').value.trim();
+  const subject = document.getElementById('msg-subject').value.trim();
+  const message = document.getElementById('msg-message').value.trim();
+  if (!name || !email || !message) { showToast('Please fill in Name, Email and Message'); return; }
+  // ✏️ When you connect a backend/database, replace this block with a fetch() call
+  // For now, compose a mailto: fallback
+  const mailBody = encodeURIComponent(`Name: ${name}\nMobile: ${mobile}\nSubject: ${subject}\n\n${message}`);
+  window.open(`mailto:vigneshwark27@gmail.com?subject=${encodeURIComponent(subject||'Portfolio Enquiry')}&body=${mailBody}`);
+  document.getElementById('contact-success').classList.add('show');
+  setTimeout(() => document.getElementById('contact-success').classList.remove('show'), 5000);
+}
+
+/* ══ HIRE FORM ══ */
+function submitHireForm() {
+  const name    = document.getElementById('hire-name').value.trim();
+  const email   = document.getElementById('hire-email').value.trim();
+  const mobile  = document.getElementById('hire-mobile').value.trim();
+  const message = document.getElementById('hire-msg').value.trim();
+  if (!name || !email || !message) { showToast('Please fill in Name, Email and Message'); return; }
+  const mailBody = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nMobile: ${mobile}\n\n${message}`);
+  window.open(`mailto:vigneshwark27@gmail.com?subject=Portfolio%20Enquiry&body=${mailBody}`);
+  document.getElementById('hire-success').classList.add('show');
+  setTimeout(() => document.getElementById('hire-success').classList.remove('show'), 5000);
+}
+
+/* ══ RESUME LOADER ══ */
+function loadResume() {
+  // ✏️ Replace the src below with your actual resume PDF path or Google Drive preview URL
+  // Example: 'assets/resume/V
