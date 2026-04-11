@@ -626,68 +626,80 @@ footer{padding:2rem 3rem;display:flex;justify-content:space-between;align-items:
          share the Notion content with me!
          Placeholders marked ← UPDATE
     ══════════════════════════════════════ -->
-    <div class="project-card reveal reveal-delay-1"
-      data-title="PRD — Chargebee: Contract-to-Subscription via AI"
-      data-year="2025"
-      data-role="Product Manager (Personal Project)"
-      data-duration="← UPDATE"
-      data-platform="B2B SaaS / Web"
-      data-figma=""
-      data-pdf=""
-      data-kpi1-num="AI"    data-kpi1-lbl="Powered feature"
-      data-kpi2-num="PRD"   data-kpi2-lbl="Full spec delivered"
-      data-kpi3-num="B2B"   data-kpi3-lbl="SaaS context"
-      data-overview="← PASTE: Your overview from the Notion PRD. Describe what the AI feature does and why it matters for Chargebee customers."
-      data-problem="← PASTE: The problem statement from your PRD — what friction exists in the contract-to-subscription workflow today?"
-      data-research="← PASTE: User stories, research insights, or discovery findings from your PRD."
-      data-solution="← PASTE: The proposed AI-powered solution — how it converts contracts to subscriptions, key flows, edge cases handled."
-      data-tools="Notion,Figma,Whimsical"
-      data-cs-img="assets/images/cover-chargebee.webp">
-      <div class="project-img-wrap">
-        <!-- ✏️ Add a cover image: assets/images/cover-chargebee.webp -->
-        <div class="project-img-placeholder" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;color:rgba(240,234,216,.12);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase">
-          <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 36 36" opacity=".3"><rect x="4" y="4" width="28" height="28" rx="2"/><path d="M4 12h28M12 4v8"/></svg>
-          Add Cover Image
-        </div>
-        <div class="card-overlay">
-          <div class="overlay-actions">
-            <button class="ov-btn ov-primary" onclick="openCS(event,this)">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M1 6h10M6 1l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Case Study
-            </button>
-            <!-- ✏️ If you have a Figma link, change ov-disabled to ov-btn and add onclick="openFigmaPopup(event,this)" -->
-            <button class="ov-btn ov-disabled">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M4 1h4v3.5H4zM4 4.5a2 2 0 0 0 0 4V4.5zM4 8.5a2 2 0 1 0 4 0 2 2 0 0 0-4 0zM8 1a2 2 0 0 1 0 3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Prototype
-            </button>
-            <!-- ✏️ If you have a PDF, add data-pdf="your-link" and change to onclick="openPDFBtn(event,this)" -->
-            <button class="ov-btn ov-disabled">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M2 1h6l2 2v8H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 1v3h3M4 6h4M4 8h2" stroke-linecap="round"/></svg>
-              PRD PDF
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="project-info">
-        <div class="project-tags">
-          <span class="project-tag">PRD</span>
-          <span class="project-tag">AI Feature</span>
-          <span class="project-tag">B2B SaaS</span>
-          <span class="project-tag">User Stories</span>
-        </div>
-        <div class="project-title">PRD — Chargebee: Contract-to-Subscription via AI</div>
-        <p class="project-desc">Full Product Requirements Document for an AI-powered feature that converts contracts to subscriptions within Chargebee — including user stories, acceptance criteria, and prototype flows.</p>
-        <div class="project-footer">
-          <span class="project-year">2025 · PRD + Prototype · Personal</span>
-          <span class="project-hint">Hover to explore →</span>
-        </div>
+   <div class="project-card reveal reveal-delay-1"
+  data-title="PRD — Chargebee: Contract-to-Subscription via AI"
+  data-year="2025"
+  data-role="Product Manager (Personal Project)"
+  data-duration="1 Week"
+  data-platform="B2B SaaS / Web"
+
+  data-notion="https://www.notion.so/PRD-Chargebee-Contract-to-Subscription-using-AI-feature-31622c713ac980cc8b91d0c125bc9618"
+  data-figma="" 
+  data-pdf="" 
+
+  data-kpi1-num="AI" data-kpi1-lbl="Automation"
+  data-kpi2-num="PRD" data-kpi2-lbl="End-to-end Spec"
+  data-kpi3-num="B2B" data-kpi3-lbl="SaaS Focus"
+
+  data-overview="Designed a complete PRD for an AI-powered feature that converts contracts into subscriptions in Chargebee, reducing manual effort and improving billing efficiency."
+  data-problem="Manual contract-to-subscription workflows are time-consuming and error-prone, causing operational inefficiencies."
+  data-research="Analyzed SaaS billing workflows, user pain points, and existing Chargebee processes."
+  data-solution="Proposed an AI system that extracts contract data and auto-generates subscriptions with validation and edge-case handling."
+  
+  data-tools="Notion,Figma,Whimsical"
+  data-cs-img="assets/images/cover-chargebee.webp"
+>
+
+  <div class="project-img-wrap">
+    <img class="project-img" src="assets/images/cover-chargebee.webp" />
+
+    <div class="card-overlay">
+      <div class="overlay-actions">
+
+        <!-- CASE STUDY -->
+        <button class="ov-btn ov-primary" onclick="openCS(event,this)">
+          Case Study
+        </button>
+
+        <!-- NOTION (PRD VIEW) -->
+        <button class="ov-btn" onclick="openNotion(event,this)">
+          View PRD
+        </button>
+
+        <!-- FIGMA -->
+        <button class="ov-btn ov-disabled">
+          Prototype
+        </button>
+
+        <!-- PDF -->
+        <button class="ov-btn ov-disabled">
+          PDF
+        </button>
+
       </div>
     </div>
+  </div>
 
-  </div><!-- /projects-grid -->
-</section>
+  <div class="project-info">
+    <div class="project-tags">
+      <span class="project-tag">PRD</span>
+      <span class="project-tag">AI Feature</span>
+      <span class="project-tag">B2B SaaS</span>
+      <span class="project-tag">User Stories</span>
+    </div>
 
-<div class="divider"></div>
+    <div class="project-title">AI-powered Contract → Subscription (Chargebee)</div>
+
+    <p class="project-desc">
+      End-to-end PRD with user stories, flows, and AI-based automation logic for subscription creation.
+    </p>
+
+    <div class="project-footer">
+      <span class="project-year">2025 · PRD + System Design</span>
+      <span class="project-hint">Hover to explore →</span>
+    </div>
+  </div>
+</div>
 
 <!-- ═══ EXPERIENCE ═══ -->
 <section id="experience">
