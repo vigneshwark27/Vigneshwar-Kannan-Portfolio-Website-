@@ -325,6 +325,11 @@ input::placeholder, textarea::placeholder { color: rgba(240,234,216,0.3); }
 input:focus, textarea:focus { border-color: var(--gold) !important; }
 textarea { font-family: var(--font-b); }
 
+
+@keyframes vfRing {
+  0%,100%{opacity:.4;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.08)}
+}
 </style>
 </head>
 <body>
@@ -651,9 +656,9 @@ data-problem="Sales and billing teams at B2B SaaS companies spend significant ti
 data-research="9 user stories were identified spanning: contract PDF upload, AI-based field extraction, uncertain field highlighting, PDF side-by-side view, master record redirection links, and draft subscription creation. Stories were prioritised from High to Low and tracked as a Kanban backlog."
 data-solution="A new 'Create Subscription from Contract' flow within Chargebee's Contracts module. Users upload a contract PDF → AI extracts subscription fields (plan, billing cycle, customer details, etc.) → uncertain fields are highlighted for manual review → user can view the PDF inline → redirect links help create missing master records → draft subscription is saved for activation via the existing flow."
 data-tools="Notion,Figma,Whimsical"
-data-cs-img="Chargebee_Icon_1.png">
+data-cs-img="1775942854054_Chargebee_Icon_1.png">
 <div class="project-img-wrap">
-<img class="project-img" src="Chargebee_Icon_1.png" alt="Chargebee" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;">
+<img class="project-img" src="1775942854054_Chargebee_Icon_1.png" alt="Chargebee" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;">
 <div class="card-overlay">
 <div class="overlay-actions">
 <button class="ov-btn ov-primary" onclick="openCS(event,this)">
@@ -690,6 +695,71 @@ PRD
 </div>
 </div>
 </div>
+
+
+  <!-- ══════════════════════════════════════
+       PROJECT: VISIONFLOW TEARDOWN
+  ══════════════════════════════════════ -->
+  <div class="project-card reveal"
+    data-title="VisionFlow — Product Teardown"
+    data-year="2025"
+    data-role="Product Manager (Personal Project)"
+    data-duration="Self-initiated"
+    data-platform="Mobile App / AI-Powered"
+    data-figma=""
+    data-figma-flow=""
+    data-prototype="https://visionflow-550751129302.us-west1.run.app"
+    data-pdf=""
+    data-kpi1-num="10"   data-kpi1-lbl="Core features built"
+    data-kpi2-num="5+"   data-kpi2-lbl="AI touchpoints"
+    data-kpi3-num="13"   data-kpi3-lbl="Slides teardown"
+    data-overview="VisionFlow is an AI-powered goal-driven productivity app where every task is tied to a personal vision — and your vision literally comes to life as you make progress. Built with Google AI Studio and Gemini, it solves the core problem that productivity apps fail to address: tasks without meaning. This teardown covers features, AI mechanics, design decisions, user research, and market opportunity."
+    data-problem="The market has 47M Todoist users, 100M Notion users — yet people still can't stay consistent. Tasks sit with no link to why they matter. Apps punish missed days (broken streaks, drained HP). No app offers behavioural intelligence, peak focus personalisation, or rest day management. The problem isn't features — it's meaning."
+    data-research="User research with Afridi (IT Pro, 23), Smruthi (IT Pro, 26), and Ravi (Senior PM, 34) revealed: missing daily motivation anchors, punishing streak systems, no scheduling flexibility, no personalised insights, and cluttered UIs. App Store reviews and Habitica forums validated these as systemic — not edge-case — problems."
+    data-solution="VisionFlow introduces: Vision-First Design (tasks live inside Visions; completion colours your vision image from B&W to full colour), Gemini AI that learns peak focus windows and detects scheduling conflicts, Rest Day Management (4 days/month, progress frozen not drained), Social Accountability Streaks, Focus Mode with ambient music, and a Vision Progress Ring per goal. 9 of 13 user pain points fully solved."
+    data-tools="Google AI Studio,Gemini,Google Stitch"
+    data-cs-img="">
+    <div class="project-img-wrap">
+      <!-- Cover image placeholder — add your image path to src below -->
+      <div id="vf-cover-placeholder" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.6rem;background:linear-gradient(135deg,#0d1117 0%,#0a1628 50%,#061020 100%);position:relative;overflow:hidden">
+        <!-- Animated background rings -->
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
+          <div style="width:200px;height:200px;border-radius:50%;border:1px solid rgba(99,179,237,.08);position:absolute;animation:vfRing 4s ease-in-out infinite"></div>
+          <div style="width:140px;height:140px;border-radius:50%;border:1px solid rgba(99,179,237,.12);position:absolute;animation:vfRing 4s ease-in-out infinite .8s"></div>
+          <div style="width:80px;height:80px;border-radius:50%;border:1px solid rgba(99,179,237,.2);position:absolute;animation:vfRing 4s ease-in-out infinite 1.6s"></div>
+        </div>
+        <svg width="32" height="32" fill="none" stroke="rgba(99,179,237,.5)" stroke-width="1.2" viewBox="0 0 24 24" style="position:relative"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        <span style="font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(99,179,237,.4);position:relative">Add Cover Image</span>
+        <span style="font-size:.52rem;color:rgba(255,255,255,.18);letter-spacing:.08em;position:relative">Set src in data-cs-img</span>
+      </div>
+      <div class="card-overlay">
+        <div class="overlay-actions">
+          <button class="ov-btn ov-primary" onclick="openCS(event,this)">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><path d="M1 6h10M6 1l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Teardown
+          </button>
+          <button class="ov-btn" onclick="openVFPrototype(event,this)">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12"><circle cx="6" cy="6" r="5"/><path d="M4 6h4M6 4l2 2-2 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Live App
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="project-info">
+      <div class="project-tags">
+        <span class="project-tag">Product Teardown</span>
+        <span class="project-tag">AI App</span>
+        <span class="project-tag">Google AI Studio</span>
+        <span class="project-tag">Gemini</span>
+      </div>
+      <div class="project-title">VisionFlow — Product Teardown</div>
+      <p class="project-desc">A complete teardown of VisionFlow — an AI-powered goal visualisation app built with Gemini. Covers all 10 features, AI mechanics, user research, competitor analysis, and market opportunity.</p>
+      <div class="project-footer">
+        <span class="project-year">2025 · Teardown + Live Prototype · Personal</span>
+        <span class="project-hint">Hover to explore →</span>
+      </div>
+    </div>
+  </div>
 
 </div><!-- /projects-grid -->
 </section>
@@ -939,6 +1009,211 @@ PRD
   <span>© 2025 Vigneshwar Kannan</span>
   <span>Designed with intention ✦</span>
 </footer>
+
+
+<!-- ═══ MODAL: VISIONFLOW LIVE APP ═══ -->
+<div class="modal-bd" id="m-vf-proto">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-drag"></div>
+    <div class="modal-head">
+      <div class="modal-head-left">
+        <span class="modal-badge" style="background:rgba(99,179,237,.1);color:#90cdf4;border-color:rgba(99,179,237,.3)">Live App</span>
+        <span class="modal-ttl">VisionFlow — Reactive Prototype</span>
+      </div>
+      <div class="modal-head-right">
+        <button class="modal-x" onclick="modalClose('m-vf-proto')">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" style="padding:0;overflow:hidden">
+      <!-- Screenshot preview -->
+      <div style="position:relative;width:100%;background:#0a0a0a;overflow:hidden">
+        <div style="position:relative;padding-top:56.25%">
+          <img
+            src="https://image.thum.io/get/width/1200/crop/630/noanimate/https://visionflow-550751129302.us-west1.run.app"
+            alt="VisionFlow app preview"
+            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top"
+            onerror="this.style.display='none';document.getElementById('vf-fb').style.display='flex'"
+          />
+          <!-- Fallback -->
+          <div id="vf-fb" style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;flex-direction:column;gap:1rem;background:linear-gradient(135deg,#0d1117,#0a1628)">
+            <svg width="48" height="48" fill="none" stroke="rgba(99,179,237,.4)" stroke-width="1" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            <span style="font-size:.75rem;color:rgba(240,234,216,.3);letter-spacing:.1em;text-transform:uppercase">VisionFlow</span>
+          </div>
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,rgba(14,13,11,.95) 100%);pointer-events:none"></div>
+          <!-- Launch button -->
+          <div style="position:absolute;bottom:1.5rem;left:0;right:0;display:flex;justify-content:center">
+            <a href="https://visionflow-550751129302.us-west1.run.app" target="_blank"
+               style="display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 2.2rem;background:var(--gold);color:#0e0d0b;font-family:var(--font-b);font-size:.78rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;transition:all .22s;border:2px solid var(--gold)"
+               onmouseover="this.style.background='transparent';this.style.color='var(--gold)'"
+               onmouseout="this.style.background='var(--gold)';this.style.color='#0e0d0b'">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6"/><path d="M5 7h4M7 5l2 2-2 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Open Live App
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Info strip -->
+      <div style="padding:1.2rem 1.8rem;display:flex;gap:2rem;align-items:center;flex-wrap:wrap;border-top:1px solid var(--border-soft)">
+        <div style="display:flex;flex-direction:column;gap:.2rem">
+          <span style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cream-dim)">Built with</span>
+          <span style="font-size:.82rem;color:var(--cream)">Google AI Studio · Gemini</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.2rem">
+          <span style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cream-dim)">Type</span>
+          <span style="font-size:.82rem;color:var(--cream)">Fully reactive prototype</span>
+        </div>
+        <div style="margin-left:auto">
+          <div style="font-size:.68rem;color:rgba(240,234,216,.25);text-align:right;line-height:1.6">Opens in new tab<br>No login required</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <a href="https://visionflow-550751129302.us-west1.run.app" target="_blank" class="fact">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12" style="width:10px;height:10px"><path d="M7 1h4v4M11 1L5 7M3 2H1v9h9V9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Open Live Site ↗
+      </a>
+      <span class="modal-foot-note">Press Esc or click outside to close</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: VISIONFLOW TEARDOWN CASE STUDY ═══ -->
+<div class="modal-bd" id="m-vf-cs">
+  <div class="modal" style="max-width:900px;height:92vh">
+    <div class="modal-drag"></div>
+    <div class="modal-head">
+      <div class="modal-head-left">
+        <span class="modal-badge" style="background:rgba(99,179,237,.08);color:#90cdf4;border-color:rgba(99,179,237,.25)">Teardown</span>
+        <span class="modal-ttl">VisionFlow — Product Teardown</span>
+      </div>
+      <div class="modal-head-right">
+        <button class="modal-x" onclick="modalClose('m-vf-cs')">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" style="padding:0;overflow:hidden;background:#191919;color:#e3dfd9">
+      <div style="width:100%;height:100%;overflow-y:auto;font-family:'Segoe UI',system-ui,sans-serif;background:#191919">
+        <div style="max-width:740px;margin:0 auto;padding:3rem 2.5rem">
+
+          <!-- Title block -->
+          <div style="margin-bottom:2rem">
+            <div style="font-size:2.8rem;margin-bottom:.5rem">🌊</div>
+            <h1 style="font-size:1.9rem;font-weight:700;color:#e8e4de;line-height:1.25;margin-bottom:.3rem">VisionFlow — Product Teardown</h1>
+            <p style="font-size:.85rem;color:#9b9693;margin-bottom:1rem">Where Daily Action Meets Long-Term Vision</p>
+            <div style="display:flex;gap:1.2rem;flex-wrap:wrap;padding:.7rem 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06)">
+              <span style="font-size:.78rem;color:#9b9693">👤 <span style="color:#e3dfd9">Vigneshwar Kannan</span></span>
+              <span style="font-size:.78rem;color:#9b9693">📅 <span style="color:#e3dfd9">2025</span></span>
+              <span style="font-size:.78rem;color:#9b9693">🔧 <span style="color:#e3dfd9">Google AI Studio · Gemini · Google Stitch</span></span>
+              <span style="font-size:.78rem;background:rgba(99,179,237,.15);color:#90cdf4;padding:.1rem .55rem;border-radius:3px">Prototype Stage</span>
+            </div>
+          </div>
+
+          <!-- Callout -->
+          <div style="background:rgba(99,179,237,.06);border-left:3px solid rgba(99,179,237,.4);border-radius:0 6px 6px 0;padding:1rem 1.2rem;margin-bottom:2rem">
+            <p style="font-size:.87rem;color:#c8c4be;line-height:1.7;margin:0"><strong style="color:#e3dfd9">VisionFlow</strong> is the first productivity app that doesn't punish you for being human. Rest days are built in. Progress never goes backwards. The AI knows your best hours before you add a single task. And your vision literally comes to life as you work.</p>
+          </div>
+
+          <!-- The Problem -->
+          <h2 style="font-size:1rem;font-weight:700;color:#e8e4de;margin:2rem 0 .8rem;display:flex;align-items:center;gap:.5rem"><span>🔴</span> The Problem</h2>
+          <p style="font-size:.87rem;color:#c8c4be;line-height:1.7;margin-bottom:.8rem">The market has 47M Todoist users, 100M Notion users — yet people still can't stay consistent. The problem isn't features. It's meaning.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.5rem">
+            ${[
+              ['🔗','Disconnection Gap','Tasks sit with no link to why they matter.'],
+              ['⚡','Punishment Over Compassion','Miss one day and your streak breaks. Apps treat setbacks as failure.'],
+              ['🧠','No Behavioural Intelligence','Apps show completion history — not insight. No peak focus awareness.'],
+              ['📅','Rigid Scheduling','No conflict detection, no flexible recurrence, no timezone support.']
+            ].map(([i,t,d])=>`<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:5px;padding:.85rem 1rem"><div style="font-size:.78rem;font-weight:600;color:#e3dfd9;margin-bottom:.3rem">${i} ${t}</div><p style="font-size:.77rem;color:#9b9693;line-height:1.55;margin:0">${d}</p></div>`).join('')}
+          </div>
+
+          <!-- Product Overview -->
+          <h2 style="font-size:1rem;font-weight:700;color:#e8e4de;margin:2rem 0 .8rem;display:flex;align-items:center;gap:.5rem"><span>🌊</span> What is VisionFlow?</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:1.5rem">
+            ${[
+              ['01','Vision-First Design','Every task lives inside a Vision. Completing tasks colours your vision image from B&W to full colour.'],
+              ['02','AI That Understands You','Gemini learns your peak focus window, detects conflicts, suggests optimal timings.'],
+              ['03','Compassionate Consistency','Rest Day Management, freeze-not-drain progress, and social streaks make habits sustainable.']
+            ].map(([n,t,d])=>`<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:5px;padding:.85rem 1rem"><div style="font-size:.6rem;letter-spacing:.1em;color:rgba(99,179,237,.6);margin-bottom:.3rem">${n}</div><div style="font-size:.78rem;font-weight:600;color:#e3dfd9;margin-bottom:.3rem">${t}</div><p style="font-size:.76rem;color:#9b9693;line-height:1.5;margin:0">${d}</p></div>`).join('')}
+          </div>
+
+          <!-- Stats row -->
+          <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2rem">
+            ${[['10','Core Features'],['5+','AI Touchpoints'],['4','Rest Days/Month'],['∞','Shared Streaks']].map(([n,l])=>`<div style="flex:1;min-width:90px;background:rgba(99,179,237,.06);border:1px solid rgba(99,179,237,.15);border-radius:5px;padding:.85rem;text-align:center"><div style="font-size:1.4rem;font-weight:700;color:#90cdf4;margin-bottom:.2rem">${n}</div><div style="font-size:.65rem;color:#9b9693;text-transform:uppercase;letter-spacing:.08em">${l}</div></div>`).join('')}
+          </div>
+
+          <!-- Feature Map -->
+          <h2 style="font-size:1rem;font-weight:700;color:#e8e4de;margin:2rem 0 .8rem;display:flex;align-items:center;gap:.5rem"><span>🗺️</span> All 10 Features</h2>
+          <div style="margin-bottom:1.5rem">
+            ${[
+              ['🎯','Vision + Task Creation','Users create a Vision and add tasks under it. Daily habits, weekend routines, or one-time deadlines — all linked to the parent vision.'],
+              ['⏰','Smart Conflict Detection','If a task time conflicts with another, the system auto-suggests a better slot. User can accept or manually override.'],
+              ['🖼️','AI Vision Image + B/W→Colour','Pick or AI-generate an image. It starts in B&W. As task completion grows, the image gains colour — the dream becomes real.'],
+              ['🤝','Social Accountability Streaks','Create streaks with specific users — tied to all visions or one. Share progress to social media directly.'],
+              ['🌅','Peak Focus Onboarding','During signup, users share their natural peak focus window. AI uses this to suggest optimal task timings from day one.'],
+              ['😴','Rest Day Management','Up to 4 rest days/month. Progress frozen, streaks preserved, tasks hidden. Not a cheat — a built-in recovery system.'],
+              ['🧠','AI Optimize Schedule','One-tap AI re-optimisation based on past performance, completion patterns, and peak focus window.'],
+              ['⏱️','Focus Mode','Timed focus session with ambient music (based on task type). DND toggled from within. Exit or pause anytime.'],
+              ['💍','Vision Progress Ring','Each Vision card shows an SVG ring filling as progress increases. Colour shifts grey → indigo → green at completion.'],
+              ['⚙️','Editable Focus Hours','Peak focus hours set at onboarding can be updated anytime — AI recalibrates scheduling suggestions accordingly.']
+            ].map(([icon,title,desc])=>`<div style="border-bottom:1px solid rgba(255,255,255,.05);padding:.75rem 0;display:flex;gap:.75rem;align-items:flex-start"><span style="font-size:1.1rem;flex-shrink:0;margin-top:1px">${icon}</span><div><div style="font-size:.82rem;font-weight:600;color:#e3dfd9;margin-bottom:.2rem">${title}</div><p style="font-size:.78rem;color:#9b9693;line-height:1.55;margin:0">${desc}</p></div></div>`).join('')}
+          </div>
+
+          <!-- Pain Point Coverage -->
+          <h2 style="font-size:1rem;font-weight:700;color:#e8e4de;margin:2rem 0 .8rem;display:flex;align-items:center;gap:.5rem"><span>📌</span> Pain Point Coverage</h2>
+          <div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:6px;overflow:hidden;margin-bottom:1.5rem">
+            <div style="display:grid;grid-template-columns:1fr auto;gap:1rem;padding:.6rem 1rem;background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.07)">
+              <span style="font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#9b9693">Pain Point</span>
+              <span style="font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:#9b9693">Status</span>
+            </div>
+            ${[
+              ['Apps don't inspire — just ask if you did it','✓ Solved','#6fcf97'],
+              ['Fun at first, lose interest fast. Badges feel pointless','✓ Solved','#6fcf97'],
+              ['1 missed day breaks everything — leads to churn','✓ Solved','#6fcf97'],
+              ['No scheduling flexibility / conflict detection','✓ Solved','#6fcf97'],
+              ['No peak productivity insights or personalisation','✓ Solved','#6fcf97'],
+              ['No timezone / shift worker support','~ Partial','#f6ad55'],
+              ['Offline support — can't check tasks without internet','✗ Gap','#fc8181'],
+              ['No retroactive habit logging','✗ Gap','#fc8181'],
+              ['Need accountability with specific people','✓ Solved','#6fcf97'],
+              ['Cluttered UI / more time managing than doing','✓ Solved','#6fcf97'],
+            ].map(([p,s,col])=>`<div style="display:grid;grid-template-columns:1fr auto;gap:1rem;padding:.65rem 1rem;border-bottom:1px solid rgba(255,255,255,.04)"><span style="font-size:.8rem;color:#c8c4be">${p}</span><span style="font-size:.72rem;font-weight:600;color:${col};white-space:nowrap">${s}</span></div>`).join('')}
+          </div>
+          <div style="display:flex;gap:1rem;margin-bottom:2rem">
+            <div style="flex:1;background:rgba(104,211,145,.06);border:1px solid rgba(104,211,145,.2);border-radius:5px;padding:.75rem;text-align:center"><div style="font-size:1.3rem;font-weight:700;color:#68d391">9</div><div style="font-size:.65rem;color:#9b9693;text-transform:uppercase;letter-spacing:.07em">Fully Solved</div></div>
+            <div style="flex:1;background:rgba(246,173,85,.06);border:1px solid rgba(246,173,85,.2);border-radius:5px;padding:.75rem;text-align:center"><div style="font-size:1.3rem;font-weight:700;color:#f6ad55">2</div><div style="font-size:.65rem;color:#9b9693;text-transform:uppercase;letter-spacing:.07em">Partial</div></div>
+            <div style="flex:1;background:rgba(252,129,129,.06);border:1px solid rgba(252,129,129,.2);border-radius:5px;padding:.75rem;text-align:center"><div style="font-size:1.3rem;font-weight:700;color:#fc8181">2</div><div style="font-size:.65rem;color:#9b9693;text-transform:uppercase;letter-spacing:.07em">Critical Gaps</div></div>
+          </div>
+
+          <!-- Market -->
+          <h2 style="font-size:1rem;font-weight:700;color:#e8e4de;margin:2rem 0 .8rem;display:flex;align-items:center;gap:.5rem"><span>📊</span> Market Opportunity</h2>
+          <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem">
+            ${[['$32.5B','Productivity app revenue (2024)'],['9.2%','Market CAGR 2025–2035'],['$4.5B','AI app revenue in 2024']].map(([n,l])=>`<div style="flex:1;min-width:120px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:5px;padding:.85rem;text-align:center"><div style="font-size:1.2rem;font-weight:700;color:#90cdf4;margin-bottom:.3rem">${n}</div><div style="font-size:.72rem;color:#9b9693;line-height:1.4">${l}</div></div>`).join('')}
+          </div>
+          <p style="font-size:.82rem;color:#9b9693;line-height:1.65;margin-bottom:2rem">VisionFlow's TAM: 200M+ users across Todoist, TickTick, Notion &amp; Habitica who still can't stay consistent — because no app treats rest and recovery as features.</p>
+
+          <!-- Verdict -->
+          <h2 style="font-size:1rem;font-weight:700;color:#e8e4de;margin:2rem 0 .8rem;display:flex;align-items:center;gap:.5rem"><span>🏁</span> Teardown Verdict</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:2.5rem">
+            <div style="background:rgba(104,211,145,.06);border:1px solid rgba(104,211,145,.2);border-radius:6px;padding:1rem">
+              <div style="font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#68d391;margin-bottom:.6rem">✅ What Works</div>
+              ${['Rest Day Management is the single most differentiated feature in the market','B/W→Colour vision image: emotional motivation no competitor has','Conflict detection + peak focus onboarding makes AI feel personal from day one','Social streaks add accountability without a full social network','Focus Mode with ambient music + in-session DND is a complete ritual'].map(d=>`<p style="font-size:.78rem;color:#c8c4be;line-height:1.55;margin:0 0 .4rem;padding-left:.8rem;border-left:2px solid rgba(104,211,145,.25)">→ ${d}</p>`).join('')}
+            </div>
+            <div style="background:rgba(252,129,129,.04);border:1px solid rgba(252,129,129,.18);border-radius:6px;padding:1rem">
+              <div style="font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:#fc8181;margin-bottom:.6rem">⚠️ Fix Next</div>
+              ${[['Offline task completion','Cache tasks locally with service worker. Sync on reconnect.'],['Retroactive logging','Allow marking past tasks complete from Schedule view.'],['Image discovery','Add Unsplash API search alongside AI gen.'],['Morning notification','Push with vision image + one micro-task.']].map(([t,d])=>`<div style="margin-bottom:.6rem"><p style="font-size:.78rem;font-weight:600;color:#e3dfd9;margin:0 0 .15rem">✗ ${t}</p><p style="font-size:.74rem;color:#9b9693;margin:0;line-height:1.4">${d}</p></div>`).join('')}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot" style="background:#191919;border-top:1px solid rgba(255,255,255,.06)">
+      <button class="fact" onclick="modalClose('m-vf-cs');setTimeout(()=>modalOpen('m-vf-proto'),400)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12" style="width:10px;height:10px"><circle cx="6" cy="6" r="5"/><path d="M4 6h4M6 4l2 2-2 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        View Live App
+      </button>
+      <span class="modal-foot-note">Press Esc or click outside to close</span>
+    </div>
+  </div>
+</div>
 
 <!-- ═══ MODAL: CERTIFICATE VIEWER ═══ -->
 <div class="modal-bd" id="m-cert">
@@ -1728,6 +2003,26 @@ function openKanbanBoard() {
   }).join('');
   modalOpen('m-kanban');
 }
+
+/* ══ VISIONFLOW PROTOTYPE ══ */
+function openVFPrototype(e, btn) {
+  e.preventDefault();
+  e.stopPropagation();
+  modalOpen('m-vf-proto');
+}
+
+/* Override openCS for VisionFlow card to open VF teardown modal */
+const _origOpenCS = openCS;
+function openCS(e, btn) {
+  const card = getCard(btn);
+  if (card && card.dataset.title && card.dataset.title.includes('VisionFlow')) {
+    e.stopPropagation();
+    modalOpen('m-vf-cs');
+    return;
+  }
+  _origOpenCS(e, btn);
+}
+
 
 /* ══ CONTACT FORM SUBMIT ══ */
 function submitContactForm(formId) {
