@@ -4061,7 +4061,7 @@ Tell me about:
 
     /* Override openCS for VisionFlow card to open VF teardown modal */
     const _origOpenCS = openCS;
-    function openCS(e, btn) {
+    window.openCS = function (e, btn) {
       const card = getCard(btn);
       if (card && card.dataset.title && card.dataset.title.includes('VisionFlow')) {
         e.stopPropagation();
@@ -4069,7 +4069,7 @@ Tell me about:
         return;
       }
       _origOpenCS(e, btn);
-    }
+    };
 
     /* ══ RESUME TOGGLE ══ */
     function toggleResumePreview() {
