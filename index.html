@@ -4047,16 +4047,51 @@ Tell me about:
       modalOpen('m-vf-proto');
     }
 
+    function toggleInlinePreview(e, btn, filename, title) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      const card = btn ? btn.closest('.project-card, .cert-card') : null;
+      if (!card) return;
+
+      let wrap = card.querySelector('.inline-preview-wrap');
+
+      if (!wrap) {
+        wrap = document.createElement('div');
+        wrap.className = 'inline-preview-wrap';
+        wrap.style.maxHeight = '0px';
+        wrap.style.overflow = 'hidden';
+        wrap.style.transition = 'max-height 0.4s ease';
+        wrap.style.marginTop = '0px';
+
+        let contentHtml = '';
+        const ext = filename.split('.').pop().toLowerCase();
+        if (ext === 'pdf') {
+          contentHtml = `<iframe src="${filename}" style="width:100%;height:100%;border:none;display:block" title="${title}"></iframe>`;
+        } else {
+          contentHtml = `<img src="${filename}" alt="${title}" style="max-width:100%;max-height:100%;object-fit:contain;"/>`;
+        }
+
+        wrap.innerHTML = `<div style="width:100%;height:460px;background:#1e1d1a;position:relative;border-top:1px solid var(--border-soft);margin-top:1.5rem;padding-top:1rem">${contentHtml}</div>`;
+        card.appendChild(wrap);
+      }
+
+      const isOpen = wrap.style.maxHeight !== '0px';
+      if (isOpen) {
+        wrap.style.maxHeight = '0px';
+        if (btn.innerHTML.includes('Hide Preview')) btn.innerHTML = btn.innerHTML.replace('Hide Preview', 'Preview');
+        else if (btn.innerHTML.includes('Close ')) btn.innerHTML = btn.innerHTML.replace('Close ', 'View ');
+      } else {
+        wrap.style.maxHeight = '500px';
+        if (btn.innerHTML.includes('Preview')) btn.innerHTML = btn.innerHTML.replace('Preview', 'Hide Preview');
+        else if (btn.innerHTML.includes('View ')) btn.innerHTML = btn.innerHTML.replace('View ', 'Close ');
+      }
+    }
+
     /* ══ VISIONFLOW TEARDOWN PDF ══ */
     function openVFTeardownPDF(e, btn) {
-      e.preventDefault();
-      e.stopPropagation();
-      const pdfPath = 'assets/images/VisionFlow_Teardown.pdf';
-      document.getElementById('pdf-ttl').textContent = 'VisionFlow — Product Teardown';
-      document.getElementById('pdf-ext').href = pdfPath;
-      document.getElementById('pdf-ext').textContent = 'Open PDF ↗';
-      document.getElementById('pdf-body').innerHTML = `<iframe class="embed-frame" style="background:#fff" src="${pdfPath}" title="VisionFlow Teardown"></iframe>`;
-      modalOpen('m-pdf');
+      toggleInlinePreview(e, btn, 'assets/images/VisionFlow_Teardown.pdf', 'VisionFlow — Product Teardown');
     }
 
     /* Override openCS for VisionFlow card to open VF teardown modal */
@@ -4090,7 +4125,6 @@ Tell me about:
       }
     }
 
-
     /* ══ CONTACT FORM SUBMIT ══ */
     function submitContactForm(formId) {
       const prefix = formId === 'hire' ? 'hire' : 'contact';
@@ -4119,27 +4153,11 @@ Tell me about:
       if (success) success.style.display = 'block';
     }
 
-
     /* ══ CERTIFICATE MODAL ══ */
     function openCertModal(filename, title) {
-      document.getElementById('cert-ttl').textContent = title;
-      const certBody = document.getElementById('cert-body');
-      const certDownload = document.getElementById('cert-download');
-      // filename already IS the full relative path (e.g. "assets/images/cert.pdf")
-      // Do NOT add any prefix — the onclick buttons already include the full path
-      const filePath = filename;
-      certDownload.href = filePath;
-      certDownload.download = filename.split('/').pop();
-
-      const ext = filename.split('.').pop().toLowerCase();
-      if (ext === 'pdf') {
-        certBody.innerHTML = `<iframe src="${filePath}" style="width:100%;height:100%;border:none;display:block" title="${title}"></iframe>`;
-      } else {
-        certBody.innerHTML = `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:1.5rem;background:#1a1917;overflow:auto">
-      <img src="${filePath}" alt="${title}" style="max-width:100%;max-height:100%;object-fit:contain;box-shadow:0 8px 40px rgba(0,0,0,.5)" onerror="this.parentElement.innerHTML='<div style=\'display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:1rem;padding:2rem;color:var(--cream-dim);text-align:center\'><p style=\'font-size:.85rem\'>Could not load certificate. Try the Download button above.</p></div>'"/>
-    </div>`;
-      }
-      modalOpen('m-cert');
+      const e = window.event;
+      let btn = e ? (e.target.closest('.cert-btn') || e.target) : null;
+      toggleInlinePreview(e, btn, filename, title);
     }
 
 
