@@ -2304,43 +2304,11 @@
         data-solution="VisionFlow introduces: Vision-First Design (tasks live inside Visions; completion colours your vision image from B&W to full colour), Gemini AI that learns peak focus windows and detects scheduling conflicts, Rest Day Management (4 days/month, progress frozen not drained), Social Accountability Streaks, Focus Mode with ambient music, and a Vision Progress Ring per goal. 9 of 13 user pain points fully solved."
         data-tools="Google AI Studio,Gemini,Google Stitch" data-cs-img="">
         <div class="project-img-wrap">
-          <!-- Cover image placeholder — add your image path to src below -->
-          <div id="vf-cover-placeholder"
-            style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.6rem;background:linear-gradient(135deg,#0d1117 0%,#0a1628 50%,#061020 100%);position:relative;overflow:hidden">
-            <!-- Animated background rings -->
-            <div
-              style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
-              <div
-                style="width:200px;height:200px;border-radius:50%;border:1px solid rgba(99,179,237,.08);position:absolute;animation:vfRing 4s ease-in-out infinite">
-              </div>
-              <div
-                style="width:140px;height:140px;border-radius:50%;border:1px solid rgba(99,179,237,.12);position:absolute;animation:vfRing 4s ease-in-out infinite .8s">
-              </div>
-              <div
-                style="width:80px;height:80px;border-radius:50%;border:1px solid rgba(99,179,237,.2);position:absolute;animation:vfRing 4s ease-in-out infinite 1.6s">
-              </div>
-            </div>
-            <svg width="32" height="32" fill="none" stroke="rgba(99,179,237,.5)" stroke-width="1.2" viewBox="0 0 24 24"
-              style="position:relative">
-              <path d="M12 2L2 7l10 5 10-5-10-5z" />
-              <path d="M2 17l10 5 10-5" />
-              <path d="M2 12l10 5 10-5" />
-            </svg>
-            <span
-              style="font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(99,179,237,.4);position:relative">Add
-              Cover Image</span>
-            <span style="font-size:.52rem;color:rgba(255,255,255,.18);letter-spacing:.08em;position:relative">Set src in
-              data-cs-img</span>
-          </div>
+          <img class="project-img" src="assets/images/visionflow-cover.png" alt="VisionFlow Cover"
+            style="width:100%;height:100%;object-fit:cover;">
           <div class="card-overlay">
             <div class="overlay-actions">
-              <button class="ov-btn ov-primary" onclick="openCS(event,this)">
-                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12">
-                  <path d="M1 6h10M6 1l5 5-5 5" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                Case Study
-              </button>
-              <button class="ov-btn" onclick="openVFTeardownPDF(event,this)">
+              <button class="ov-btn ov-primary" onclick="openVFTeardownPDF(event,this)">
                 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12">
                   <path d="M2 1h6l2 2v8H2z" stroke-linecap="round" stroke-linejoin="round" />
                   <path d="M7 1v3h3M4 6h4M4 8h2" stroke-linecap="round" />
