@@ -2762,26 +2762,55 @@ Tell me about:
           <div id="btn-spinner"
             style="display:none;width:12px;height:12px;border:2px solid #0e0d0b77;border-top-color:#0e0d0b;border-radius:50%;animation:vfRing 1s linear infinite">
           </div>
-          <svg id="btn-icon" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"
-            viewBox="0 0 12 12">
-            <path d="M11 1L1 5.5l4 1.5 1.5 4L11 1z" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-          <span id="btn-text">🚀 Send Message</span>
+          <span id="btn-text">Send Message</span>
         </button>
       </form>
       <p style="font-size:.68rem;color:var(--cream-dim);text-align:center;margin-top:.8rem;letter-spacing:.06em">⚡ I
         usually respond within 24 hours</p>
     </div>
     <div id="contact-success"
-      style="display:none;text-align:center;padding:2.5rem;border:1px solid rgba(104,211,145,.25);background:rgba(104,211,145,.05)">
-      <svg width="36" height="36" fill="none" stroke="#68d391" stroke-width="1.5" viewBox="0 0 24 24"
-        style="margin-bottom:1rem">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
-      <p style="color:#68d391;font-size:.95rem;margin:0 0 .5rem;font-weight:400">Message sent! 🎉</p>
-      <p style="color:var(--cream-dim);font-size:.8rem;margin:0">I'll get back to you within 24 hours.</p>
+      style="display:none;text-align:center;padding:3.5rem 2rem;background:rgba(240,234,216,0.02);border:1px solid var(--border-soft);animation:msgSuccessFade .6s var(--ease) forwards">
+      <div style="margin-bottom:1.2rem;display:flex;justify-content:center">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="19" stroke="var(--gold)" stroke-width="1" stroke-dasharray="120"
+            stroke-dashoffset="120" style="animation:msgCircleDraw 1s var(--ease) forwards 0.1s" />
+          <path d="M12 20L18 26L28 16" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" stroke-dasharray="30" stroke-dashoffset="30"
+            style="animation:msgCheckDraw 0.6s var(--ease) forwards 0.7s" />
+        </svg>
+      </div>
+      <p
+        style="color:var(--cream);font-size:1.1rem;font-family:var(--font-d);margin:0 0 .5rem;font-weight:400;letter-spacing:0.02em">
+        Message sent successfully</p>
+      <p style="color:var(--cream-dim);font-size:.8rem;margin:0;letter-spacing:0.03em">I'll get back to you within 24
+        hours.</p>
     </div>
+
+    <style>
+      @keyframes msgSuccessFade {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes msgCircleDraw {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+
+      @keyframes msgCheckDraw {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+    </style>
   </section>
 
   <footer>
@@ -4107,13 +4136,11 @@ Tell me about:
         e.preventDefault();
         const btn = document.getElementById('contact-submit-btn');
         const spinner = document.getElementById('btn-spinner');
-        const icon = document.getElementById('btn-icon');
         const text = document.getElementById('btn-text');
 
         // Loading state
         btn.style.pointerEvents = 'none';
         spinner.style.display = 'block';
-        icon.style.display = 'none';
         text.textContent = 'Sending...';
 
         const formData = new FormData(contactForm);
@@ -4143,8 +4170,7 @@ Tell me about:
             contactForm.reset();
             btn.style.pointerEvents = '';
             spinner.style.display = 'none';
-            icon.style.display = 'block';
-            text.textContent = '🚀 Send Message';
+            text.textContent = 'Send Message';
           });
       });
     }
