@@ -2728,36 +2728,47 @@
     </div>
 
     <div id="contact-form-wrap" class="reveal">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-bottom:.85rem">
-        <input type="text" id="contact-name" placeholder="👤 Your Name"
-          style="background:var(--bg3);border:1px solid var(--border-soft);color:var(--cream);padding:.85rem 1rem;font-family:var(--font-b);font-size:.83rem;outline:none;transition:border-color .2s;width:100%;box-sizing:border-box"
-          onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border-soft)'" />
-        <input type="email" id="contact-email" placeholder="📧 Email Address"
-          style="background:var(--bg3);border:1px solid var(--border-soft);color:var(--cream);padding:.85rem 1rem;font-family:var(--font-b);font-size:.83rem;outline:none;transition:border-color .2s;width:100%;box-sizing:border-box"
-          onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border-soft)'" />
-      </div>
-      <input type="tel" id="contact-phone" placeholder="📱 Mobile Number (optional)"
-        style="background:var(--bg3);border:1px solid var(--border-soft);color:var(--cream);padding:.85rem 1rem;font-family:var(--font-b);font-size:.83rem;outline:none;transition:border-color .2s;width:100%;margin-bottom:.85rem;box-sizing:border-box"
-        onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border-soft)'" />
-      <div style="position:relative;margin-bottom:1rem">
-        <textarea id="contact-msg" placeholder="💭 Your message...
+      <form id="contact-form">
+        <!-- Web3Forms Config -->
+        <input type="hidden" name="access_key" value="16fb2b02-6203-421b-ab28-d4fac0f4c39c">
+        <input type="hidden" name="subject" value="New Portfolio Message from Vigneshwar">
+        <input type="checkbox" name="botcheck" id="" style="display: none;">
 
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-bottom:.85rem">
+          <input type="text" name="name" id="contact-name" placeholder="👤 Your Name" required
+            style="background:var(--bg3);border:1px solid var(--border-soft);color:var(--cream);padding:.85rem 1rem;font-family:var(--font-b);font-size:.83rem;outline:none;transition:border-color .2s;width:100%;box-sizing:border-box"
+            onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border-soft)'" />
+          <input type="email" name="email" id="contact-email" placeholder="📧 Email Address" required
+            style="background:var(--bg3);border:1px solid var(--border-soft);color:var(--cream);padding:.85rem 1rem;font-family:var(--font-b);font-size:.83rem;outline:none;transition:border-color .2s;width:100%;box-sizing:border-box"
+            onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border-soft)'" />
+        </div>
+        <input type="tel" name="phone" id="contact-phone" placeholder="📱 Mobile Number (optional)"
+          style="background:var(--bg3);border:1px solid var(--border-soft);color:var(--cream);padding:.85rem 1rem;font-family:var(--font-b);font-size:.83rem;outline:none;transition:border-color .2s;width:100%;margin-bottom:.85rem;box-sizing:border-box"
+          onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border-soft)'" />
+        <div style="position:relative;margin-bottom:1rem">
+          <textarea name="message" id="contact-msg" required placeholder="💭 Your message...
+  
 Tell me about:
 – The role you're hiring for
 – What you're building
 – Or just say hi 👀" rows="6"
-          style="background:var(--bg3);border:1px solid var(--border-soft);color:var(--cream);padding:.85rem 1rem;font-family:var(--font-b);font-size:.83rem;outline:none;transition:border-color .2s;width:100%;resize:vertical;box-sizing:border-box"
-          onfocus="this.style.borderColor='var(--gold)'"
-          onblur="this.style.borderColor='var(--border-soft)'"></textarea>
-      </div>
-      <button onclick="submitContactForm('contact')"
-        style="width:100%;padding:1rem;background:var(--gold);border:none;color:#0e0d0b;font-family:var(--font-b);font-size:.78rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .22s;display:flex;align-items:center;justify-content:center;gap:.6rem"
-        onmouseover="this.style.background='#e0bb5c'" onmouseout="this.style.background='var(--gold)'">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 12 12">
-          <path d="M11 1L1 5.5l4 1.5 1.5 4L11 1z" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        🚀 Send Message
-      </button>
+            style="background:var(--bg3);border:1px solid var(--border-soft);color:var(--cream);padding:.85rem 1rem;font-family:var(--font-b);font-size:.83rem;outline:none;transition:border-color .2s;width:100%;resize:vertical;box-sizing:border-box"
+            onfocus="this.style.borderColor='var(--gold)'"
+            onblur="this.style.borderColor='var(--border-soft)'"></textarea>
+        </div>
+        <button type="submit" id="contact-submit-btn"
+          style="width:100%;padding:1rem;background:var(--gold);border:none;color:#0e0d0b;font-family:var(--font-b);font-size:.78rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .22s;display:flex;align-items:center;justify-content:center;gap:.6rem"
+          onmouseover="this.style.background='#e0bb5c'" onmouseout="this.style.background='var(--gold)'">
+          <div id="btn-spinner"
+            style="display:none;width:12px;height:12px;border:2px solid #0e0d0b77;border-top-color:#0e0d0b;border-radius:50%;animation:vfRing 1s linear infinite">
+          </div>
+          <svg id="btn-icon" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 12 12">
+            <path d="M11 1L1 5.5l4 1.5 1.5 4L11 1z" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span id="btn-text">🚀 Send Message</span>
+        </button>
+      </form>
       <p style="font-size:.68rem;color:var(--cream-dim);text-align:center;margin-top:.8rem;letter-spacing:.06em">⚡ I
         usually respond within 24 hours</p>
     </div>
@@ -4089,32 +4100,53 @@ Tell me about:
     }
 
 
-    /* ══ CONTACT FORM SUBMIT ══ */
-    function submitContactForm(formId) {
-      const prefix = formId === 'hire' ? 'hire' : 'contact';
-      const name = (document.getElementById(prefix + '-name') || {}).value || '';
-      const email = (document.getElementById(prefix + '-email') || {}).value || '';
-      const phone = (document.getElementById(prefix + '-phone') || {}).value || '';
-      const msg = (document.getElementById(prefix + '-msg') || {}).value || '';
+    /* ══ CONTACT FORM SUBMIT (WEB3FORMS) ══ */
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+      contactForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const btn = document.getElementById('contact-submit-btn');
+        const spinner = document.getElementById('btn-spinner');
+        const icon = document.getElementById('btn-icon');
+        const text = document.getElementById('btn-text');
 
-      if (!name.trim() || !email.trim() || !msg.trim()) {
-        showToast('Please fill in Name, Email, and Message');
-        return;
-      }
-      if (!/\S+@\S+\.\S+/.test(email)) {
-        showToast('Please enter a valid email address');
-        return;
-      }
+        // Loading state
+        btn.style.pointerEvents = 'none';
+        spinner.style.display = 'block';
+        icon.style.display = 'none';
+        text.textContent = 'Sending...';
 
-      // ── TODO: Connect to your backend/database here ──
-      // Example: fetch('/api/contact', { method:'POST', body: JSON.stringify({name,email,phone,msg}) })
-      console.log('Form submission:', { formId, name, email, phone, msg });
+        const formData = new FormData(contactForm);
+        const object = Object.fromEntries(formData);
+        const json = JSON.stringify(object);
 
-      // Show success state
-      const wrap = document.getElementById(prefix + '-form-wrap');
-      const success = document.getElementById(prefix + '-success');
-      if (wrap) wrap.style.display = 'none';
-      if (success) success.style.display = 'block';
+        fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: json
+        })
+          .then(async (response) => {
+            let res = await response.json();
+            if (response.status == 200) {
+              document.getElementById('contact-form-wrap').style.display = 'none';
+              document.getElementById('contact-success').style.display = 'block';
+            } else {
+              console.log(response);
+              showToast(res.message || 'Submission failed');
+            }
+          })
+          .catch(error => {
+            console.log(error);
+            showToast('Something went wrong. Please try again.');
+          })
+          .then(function () {
+            contactForm.reset();
+            btn.style.pointerEvents = '';
+            spinner.style.display = 'none';
+            icon.style.display = 'block';
+            text.textContent = '🚀 Send Message';
+          });
+      });
     }
 
 
