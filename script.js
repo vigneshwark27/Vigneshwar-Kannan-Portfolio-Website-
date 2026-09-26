@@ -1,5 +1,5 @@
 /* ==========================================================================
-   VIGNESHWAR KANNAN — PORTFOLIO SCRIPT (ZERO-LAG POPUPS & IN-APP PRD READERS)
+   VIGNESHWAR KANNAN — PORTFOLIO SCRIPT (ZERO-LAG POPUPS & IN-APP READERS)
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -66,7 +66,7 @@ function initCategoryFilters() {
   });
 }
 
-/* ── COMPLETE PRD & CASE STUDY POPUP TEXT CONTENTS ── */
+/* ── PRD & CASE STUDY TEXT CONTENT FOR IN-APP POPUPS ── */
 const caseStudyData = {
   genz: {
     title: "Gen-Z Clothing Brand — Product & UX Design",
@@ -149,8 +149,8 @@ const caseStudyData = {
   },
   chargebee: {
     title: "PRD — Chargebee: Contract-to-Subscription via AI",
-    badge: "Notion PRD Popup",
-    extUrl: "https://app.notion.com/p/PRD-Chargebee-Contract-to-Subscription-using-AI-feature-31622c713ac980cc8b91d0c125bc9618?pvs=11",
+    badge: "Public Notion PRD",
+    extUrl: "https://www.notion.so/PRD-Chargebee-Contract-to-Subscription-using-AI-feature-31622c713ac980cc8b91d0c125bc9618",
     html: `
       <div class="case-study-drawer">
         <div class="cs-section">
@@ -199,8 +199,8 @@ const caseStudyData = {
   },
   carepulse: {
     title: "PRD — Cashless Hospital Discharge Automation (CarePulse)",
-    badge: "Notion PRD Popup",
-    extUrl: "https://app.notion.com/p/Fabri-Play-PM-Assignment-3bd22c71-3ac9-80fa-af21-e6c2f9790d25",
+    badge: "Public Notion PRD",
+    extUrl: "https://www.notion.so/Fabri-Play-PM-Assignment-3bd22c71-3ac9-80fa-af21-e6c2f9790d25",
     html: `
       <div class="case-study-drawer">
         <div class="cs-section">
@@ -232,8 +232,8 @@ const caseStudyData = {
   },
   claimchart: {
     title: "PRD — ClaimChart AI: Patent Analysis & Litigation Workspace",
-    badge: "Notion PRD Popup",
-    extUrl: "https://app.notion.com/p/Lumenci-Assignment-3a622c71-3ac9-80dab62ee34f268402a2?source=copy_link",
+    badge: "Public Notion PRD",
+    extUrl: "https://www.notion.so/Lumenci-Assignment-3a622c71-3ac9-80dab62ee34f268402a2",
     html: `
       <div class="case-study-drawer">
         <div class="cs-section">
@@ -284,7 +284,6 @@ function initModalEngine() {
     modalBadge.textContent = data.badge;
     modalExtLink.href = data.extUrl || '#';
 
-    // Hide iframe & loader, render clean HTML inside modal body
     modalIframe.style.display = 'none';
     modalLoader.classList.add('hidden');
     

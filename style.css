@@ -755,7 +755,7 @@ img {
   margin-bottom: 0.4rem;
 }
 
-/* ── CERTIFICATIONS SHOWCASE GRID ── */
+/* ── CERTIFICATIONS SHOWCASE GRID WITH HOVER BUTTON ── */
 .cert-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -766,11 +766,14 @@ img {
   background: #FFFFFF;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 1.4rem;
+  padding: 1.5rem;
   transition: all var(--transition-fast);
   box-shadow: var(--shadow-card);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .cert-card::before {
@@ -809,7 +812,32 @@ img {
   font-size: 1.1rem;
   font-weight: 400;
   color: var(--text-main);
-  line-height: 1.3;
+  line-height: 1.35;
+  margin-bottom: 1.25rem;
+}
+
+.cert-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.cert-card:hover .cert-btn {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+  background: var(--accent-gold-faint);
 }
 
 /* ── SKILLS MATRIX ── */
@@ -919,7 +947,7 @@ img {
 }
 
 /* ==========================================================================
-   IN-APP MODAL SHEET ENGINE (FOR CASE STUDY READING, PDF & FIGMA VIEWING)
+   IN-APP MODAL SHEET & POPUP ENGINE (FOR CASE STUDIES, PRDS, PDFS & FIGMA)
    ========================================================================== */
 .modal-backdrop {
   position: fixed;
@@ -1015,16 +1043,16 @@ img {
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--text-muted);
-  border: 1px solid var(--border-subtle);
+  color: var(--accent-gold);
+  border: 1px solid var(--accent-gold-border);
   border-radius: var(--radius-sm);
-  background: #FFFFFF;
+  background: var(--accent-gold-faint);
   transition: all var(--transition-fast);
 }
 
 .modal-ext-link:hover {
-  border-color: var(--accent-gold);
-  color: var(--accent-gold);
+  background: var(--accent-gold);
+  color: #FFFFFF;
 }
 
 .modal-close-btn {
@@ -1065,7 +1093,7 @@ img {
 /* Formatted In-App Case Study Drawer Container */
 .case-study-drawer {
   padding: 2.5rem;
-  max-width: 900px;
+  max-width: 920px;
   margin: 0 auto;
 }
 

@@ -31,10 +31,10 @@
         <li><a href="#contact" class="nav-link">Contact</a></li>
       </ul>
 
-      <a href="https://docs.google.com/document/d/1aK5vJPCUwlwzViKOGG6i7Y6PNmVr49qXOgRpd4CtEIo/edit?usp=sharing" target="_blank" class="nav-cta">
+      <button class="nav-cta" onclick="openModal('Resume PDF', 'Vigneshwar Kannan — Resume PDF', 'https://drive.google.com/file/d/1pjweNhEWDgFfcVVKSY8xt2iXjQ0stlUL/preview', 'https://drive.google.com/file/d/1pjweNhEWDgFfcVVKSY8xt2iXjQ0stlUL/view?usp=sharing')">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-        Google Doc Resume ↗
-      </a>
+        Resume PDF
+      </button>
     </div>
   </nav>
 
@@ -59,9 +59,9 @@
             Explore 7 Selected Work & PRDs
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </a>
-          <a href="https://docs.google.com/document/d/1aK5vJPCUwlwzViKOGG6i7Y6PNmVr49qXOgRpd4CtEIo/edit?usp=sharing" target="_blank" class="btn-secondary">
-            View Resume ↗
-          </a>
+          <button class="btn-secondary" onclick="openModal('Resume PDF', 'Vigneshwar Kannan — Resume PDF', 'https://drive.google.com/file/d/1pjweNhEWDgFfcVVKSY8xt2iXjQ0stlUL/preview', 'https://drive.google.com/file/d/1pjweNhEWDgFfcVVKSY8xt2iXjQ0stlUL/view?usp=sharing')">
+            📄 View Resume PDF
+          </button>
         </div>
 
         <div class="hero-stats">
@@ -92,7 +92,7 @@
               <div class="hero-card-role">Business Analyst @ Ivy Mobility • PSPO I</div>
             </div>
             <div class="social-links">
-              <a href="https://www.linkedin.com/in/vigneshwar-kannan/" target="_blank" class="social-btn" title="LinkedIn Profile">
+              <a href="https://www.linkedin.com/in/vigneshwarkannan" target="_blank" class="social-btn" title="LinkedIn Profile">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
               </a>
               <a href="https://github.com/vigneshwark27" target="_blank" class="social-btn" title="GitHub">
@@ -199,9 +199,6 @@
               <button class="action-btn" onclick="openModal('PDF Case Study', 'Ola UX Case Study — Tier 2/3 Cities', 'https://drive.google.com/file/d/1UO1ij-67LFEumMwNrRplr2s9BjuseMkR/preview', 'https://drive.google.com/file/d/1UO1ij-67LFEumMwNrRplr2s9BjuseMkR/view?usp=sharing')">
                 📄 View PDF Inside
               </button>
-              <a href="https://drive.google.com/file/d/1UO1ij-67LFEumMwNrRplr2s9BjuseMkR/view?usp=sharing" target="_blank" class="action-btn">
-                Drive Link ↗
-              </a>
             </div>
           </div>
         </div>
@@ -238,9 +235,6 @@
               <button class="action-btn" onclick="openModal('PDF Case Study', 'AmbitionBox 25% Retention Lift Strategy', 'https://drive.google.com/file/d/1gZb3Y2EqE2lltr2TbtfzZG0XfyM329Aa/preview', 'https://drive.google.com/file/d/1gZb3Y2EqE2lltr2TbtfzZG0XfyM329Aa/view?usp=sharing')">
                 📄 View PDF Inside
               </button>
-              <a href="https://drive.google.com/file/d/1gZb3Y2EqE2lltr2TbtfzZG0XfyM329Aa/view?usp=sharing" target="_blank" class="action-btn">
-                Drive Link ↗
-              </a>
             </div>
           </div>
         </div>
@@ -274,13 +268,13 @@
               <button class="action-btn btn-gold" onclick="openCaseStudyText('chargebee')">
                 📖 Read PRD Inside
               </button>
-              <button class="action-btn" onclick="openModal('Working Prototype', 'Chargebee Contract-to-Subscription Prototype', 'https://gx34dn.csb.app/', 'https://gx34dn.csb.app/')">
+              <button class="action-btn" onclick="openModal('Interactive Prototype', 'Chargebee Contract-to-Subscription Prototype', 'https://gx34dn.csb.app/', 'https://gx34dn.csb.app/')">
                 ⚡ Prototype
               </button>
               <button class="action-btn" onclick="openModal('Process Flow', 'Chargebee AI Feature Process Flow', 'https://mockup-runway-03382669.figma.site/', 'https://mockup-runway-03382669.figma.site/')">
                 ⚡ Flow Diagram
               </button>
-              <a href="https://app.notion.com/p/PRD-Chargebee-Contract-to-Subscription-using-AI-feature-31622c713ac980cc8b91d0c125bc9618?pvs=11" target="_blank" class="action-btn">
+              <a href="https://www.notion.so/PRD-Chargebee-Contract-to-Subscription-using-AI-feature-31622c713ac980cc8b91d0c125bc9618" target="_blank" class="action-btn">
                 Notion PRD ↗
               </a>
             </div>
@@ -316,12 +310,12 @@
               <button class="action-btn btn-gold" onclick="openCaseStudyText('visionflow')">
                 📖 Read Teardown Inside
               </button>
+              <button class="action-btn" onclick="openModal('AI Studio App', 'VisionFlow — Gemini AI Prototype App', 'https://ai.studio/apps/7a5233f8-33cf-4464-8e07-53175fec4a41?fullscreenApplet=true', 'https://ai.studio/apps/7a5233f8-33cf-4464-8e07-53175fec4a41?fullscreenApplet=true')">
+                ⚡ AI Studio App
+              </button>
               <button class="action-btn" onclick="openModal('PDF Teardown', 'VisionFlow Teardown & Design Deck', 'https://drive.google.com/file/d/1XpayTK5nTvvwYyikXCO40JEn0-5b2IUB/preview', 'https://drive.google.com/file/d/1XpayTK5nTvvwYyikXCO40JEn0-5b2IUB/view?usp=sharing')">
                 📄 View PDF Inside
               </button>
-              <a href="https://ai.studio/apps/7a5233f8-33cf-4464-8e07-53175fec4a41?fullscreenApplet=true" target="_blank" class="action-btn">
-                AI Studio App ↗
-              </a>
             </div>
           </div>
         </div>
@@ -358,7 +352,7 @@
               <button class="action-btn btn-gold" onclick="openCaseStudyText('carepulse')">
                 📖 Read PRD Inside
               </button>
-              <a href="https://app.notion.com/p/Fabri-Play-PM-Assignment-3bd22c71-3ac9-80fa-af21-e6c2f9790d25" target="_blank" class="action-btn">
+              <a href="https://www.notion.so/Fabri-Play-PM-Assignment-3bd22c71-3ac9-80fa-af21-e6c2f9790d25" target="_blank" class="action-btn">
                 Notion PRD ↗
               </a>
             </div>
@@ -397,13 +391,13 @@
               <button class="action-btn btn-gold" onclick="openCaseStudyText('claimchart')">
                 📖 Read PRD Inside
               </button>
+              <button class="action-btn" onclick="openModal('Claude AI App', 'ClaimChart AI — Functional Prototype App', 'https://claude.ai/public/artifacts/5c7f110e-e12f-41ca-b48f-1899cef5a55c', 'https://claude.ai/public/artifacts/5c7f110e-e12f-41ca-b48f-1899cef5a55c')">
+                ⚡ Claude AI App
+              </button>
               <button class="action-btn" onclick="openModal('Figma Flow', 'ClaimChart AI — Interactive User Flow Diagram', 'https://stomp-hatch-92389255.figma.site/', 'https://stomp-hatch-92389255.figma.site/')">
                 ⚡ Figma Flow
               </button>
-              <a href="https://claude.ai/public/artifacts/5c7f110e-e12f-41ca-b48f-1899cef5a55c" target="_blank" class="action-btn">
-                Claude AI App ↗
-              </a>
-              <a href="https://app.notion.com/p/Lumenci-Assignment-3a622c71-3ac9-80dab62ee34f268402a2?source=copy_link" target="_blank" class="action-btn">
+              <a href="https://www.notion.so/Lumenci-Assignment-3a622c71-3ac9-80dab62ee34f268402a2" target="_blank" class="action-btn">
                 Notion PRD ↗
               </a>
             </div>
@@ -541,48 +535,93 @@
 
       <div class="cert-grid">
         <div class="cert-card">
-          <div class="cert-issuer">Scrum.org • Jul 2026</div>
-          <h4 class="cert-name">Professional Scrum Product Owner™ I (PSPO I)</h4>
+          <div>
+            <div class="cert-issuer">Scrum.org • Jul 2026</div>
+            <h4 class="cert-name">Professional Scrum Product Owner™ I (PSPO I)</h4>
+          </div>
+          <button class="cert-btn" onclick="openModal('Certificate PDF', 'Professional Scrum Product Owner I (PSPO I)', 'assets/images/Hello PM bootcamp.pdf', 'assets/images/Hello PM bootcamp.pdf')">
+            📄 View Certificate PDF
+          </button>
         </div>
 
         <div class="cert-card">
-          <div class="cert-issuer">Boston Consulting Group (BCG)</div>
-          <h4 class="cert-name">Strategy & Business Consulting Virtual Experience</h4>
+          <div>
+            <div class="cert-issuer">Boston Consulting Group (BCG)</div>
+            <h4 class="cert-name">Strategy & Business Consulting Virtual Experience</h4>
+          </div>
+          <button class="cert-btn" onclick="openModal('Certificate PDF', 'BCG Strategy & Business Consulting', 'assets/images/BCG certifiation.pdf', 'assets/images/BCG certifiation.pdf')">
+            📄 View Certificate PDF
+          </button>
         </div>
 
         <div class="cert-card">
-          <div class="cert-issuer">Atlassian</div>
-          <h4 class="cert-name">Jira Fundamentals Certification</h4>
+          <div>
+            <div class="cert-issuer">Atlassian</div>
+            <h4 class="cert-name">Jira Fundamentals Certification</h4>
+          </div>
+          <button class="cert-btn" onclick="openModal('Certificate PDF', 'Atlassian Jira Fundamentals', 'assets/images/Jira Fundamentals _ Atlassian.pdf', 'assets/images/Jira Fundamentals _ Atlassian.pdf')">
+            📄 View Certificate PDF
+          </button>
         </div>
 
         <div class="cert-card">
-          <div class="cert-issuer">Google</div>
-          <h4 class="cert-name">Google Analytics (GA4) for Beginners</h4>
+          <div>
+            <div class="cert-issuer">Google</div>
+            <h4 class="cert-name">Google Analytics (GA4) for Beginners</h4>
+          </div>
+          <button class="cert-btn" onclick="openModal('Certificate PDF', 'Google Analytics GA4', 'assets/images/google analytics for beginners.pdf', 'assets/images/google analytics for beginners.pdf')">
+            📄 View Certificate PDF
+          </button>
         </div>
 
         <div class="cert-card">
-          <div class="cert-issuer">Pendo</div>
-          <h4 class="cert-name">Product Discovery Certification</h4>
+          <div>
+            <div class="cert-issuer">Pendo</div>
+            <h4 class="cert-name">Product Discovery Certification</h4>
+          </div>
+          <button class="cert-btn" onclick="openModal('Certificate PDF', 'Pendo Product Discovery', 'assets/images/Pendo Product discovery certificate.pdf', 'assets/images/Pendo Product discovery certificate.pdf')">
+            📄 View Certificate PDF
+          </button>
         </div>
 
         <div class="cert-card">
-          <div class="cert-issuer">Product School / Hello PM</div>
-          <h4 class="cert-name">Product Roadmapping Micro-Certification</h4>
+          <div>
+            <div class="cert-issuer">Product School / Hello PM</div>
+            <h4 class="cert-name">Product Roadmapping Micro-Certification</h4>
+          </div>
+          <button class="cert-btn" onclick="openModal('Certificate PDF', 'Product Roadmapping Micro-Certification', 'assets/images/certificate-of-completion-for-product-roadmapping-micro-certificatio (1).pdf', 'assets/images/certificate-of-completion-for-product-roadmapping-micro-certificatio (1).pdf')">
+            📄 View Certificate PDF
+          </button>
         </div>
 
         <div class="cert-card">
-          <div class="cert-issuer">LinkedIn Learning</div>
-          <h4 class="cert-name">Agile Requirements Foundations</h4>
+          <div>
+            <div class="cert-issuer">LinkedIn Learning</div>
+            <h4 class="cert-name">Agile Requirements Foundations</h4>
+          </div>
+          <button class="cert-btn" onclick="openModal('Certificate PDF', 'Agile Requirements Foundations', 'assets/images/CertificateOfCompletion_Agile Requirements Foundations (1) (1).pdf', 'assets/images/CertificateOfCompletion_Agile Requirements Foundations (1) (1).pdf')">
+            📄 View Certificate PDF
+          </button>
         </div>
 
         <div class="cert-card">
-          <div class="cert-issuer">LinkedIn Learning</div>
-          <h4 class="cert-name">Project Management Foundations: Requirements</h4>
+          <div>
+            <div class="cert-issuer">LinkedIn Learning</div>
+            <h4 class="cert-name">Project Management Foundations: Requirements</h4>
+          </div>
+          <button class="cert-btn" onclick="openModal('Certificate PDF', 'PM Foundations Requirements', 'assets/images/CertificateOfCompletion_Project Management Foundations Requirements (1) (1).pdf', 'assets/images/CertificateOfCompletion_Project Management Foundations Requirements (1) (1).pdf')">
+            📄 View Certificate PDF
+          </button>
         </div>
 
         <div class="cert-card">
-          <div class="cert-issuer">Philanthropy University</div>
-          <h4 class="cert-name">Fundamentals of Project Management</h4>
+          <div>
+            <div class="cert-issuer">Philanthropy University</div>
+            <h4 class="cert-name">Fundamentals of Project Management</h4>
+          </div>
+          <button class="cert-btn" onclick="openModal('Certificate PDF', 'Fundamentals of Project Management', 'assets/images/PhilanthropyUniversity_FundamentalsofProjectManagement.pdf', 'assets/images/PhilanthropyUniversity_FundamentalsofProjectManagement.pdf')">
+            📄 View Certificate PDF
+          </button>
         </div>
       </div>
     </div>
@@ -660,7 +699,7 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
             vigneshwark27@gmail.com
           </a>
-          <a href="https://www.linkedin.com/in/vigneshwar-kannan/" target="_blank" class="btn-secondary">
+          <a href="https://www.linkedin.com/in/vigneshwarkannan" target="_blank" class="btn-secondary">
             Connect on LinkedIn ↗
           </a>
         </div>
