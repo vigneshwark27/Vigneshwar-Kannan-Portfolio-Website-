@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CURRENT STATE — CASHLESS INSURANCE DISCHARGE | Process Flowchart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --border-dark: #cbd5e1;
+      --text: #0f172a;
+      --text-sub: #64748b;
+      
+      --blue: #2563eb;
+      --blue-bg: #eff6ff;
+      --blue-border: #93c5fd;
+      
+      --amber: #d97706;
+      --amber-bg: #fffbe6;
+      --amber-border: #fef08a;
+      
+      --red: #dc2626;
+      --red-bg: #fef2f2;
+      --red-border: #fca5a5;
+      
+      --green: #16a34a;
+      --green-bg: #f0fdf4;
+      --green-border: #86efac;
+      
+      --purple: #7c3aed;
+      --purple-bg: #f5f3ff;
+      --purple-border: #c4b5fd;
+      
+      --radius: 12px;
+      --shadow: 0 4px 12px rgba(15,23,42,.05);
+      --transition: all .2s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px 32px 60px;
+      line-height: 1.5;
+    }
+
+    /* ─── HEADER ─────────────────────────────────────────────────── */
+    .header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px; background: var(--card-bg); padding: 18px 24px;
+      border: 1px solid var(--border); border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .header-badge {
+      font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+      padding: 3px 9px; border-radius: 6px; background: #e0f2fe; color: #0369a1;
+      margin-bottom: 4px; display: inline-block;
+    }
+    .header-title { font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -.4px; }
+    .header-sub { font-size: 13px; color: var(--text-sub); }
+
+    .header-controls { display: flex; align-items: center; gap: 12px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 16px; border-radius: 8px; font-size: 12.5px; font-weight: 700;
+      cursor: pointer; border: 1px solid var(--border-dark); background: var(--card-bg);
+      color: var(--text); transition: var(--transition);
+    }
+    .btn:hover { background: #f1f5f9; }
+    .btn-primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .btn-primary:hover { background: #1d4ed8; }
+
+    /* ─── KPI SUMMARY BAR ────────────────────────────────────────── */
+    .kpi-row {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px;
+    }
+    .kpi-box {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 18px; box-shadow: var(--shadow);
+    }
+    .kpi-num { font-size: 22px; font-weight: 800; color: var(--text); }
+    .kpi-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-sub); margin-top: 2px; }
+    .kpi-tag { font-size: 10px; color: var(--text-sub); font-style: italic; font-weight: 500; }
+
+    /* ─── FLOWCHART SWIMLANE BOARD ────────────────────────────────── */
+    .flow-board {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow);
+      display: flex; flex-direction: column; gap: 20px; min-width: 1240px;
+    }
+
+    .swimlane {
+      display: grid; grid-template-columns: 200px 1fr;
+      border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+      background: #fafafa; transition: var(--transition);
+    }
+    .swimlane.dimmed { opacity: 0.35; filter: grayscale(50%); }
+
+    .lane-label {
+      padding: 20px; background: #f1f5f9; border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .lane-title { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; }
+    .lane-sub { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
+
+    .lane-track {
+      padding: 18px 24px; display: flex; align-items: center; gap: 16px;
+      position: relative; overflow-x: auto;
+    }
+
+    /* ─── FLOWCHART STEP CARD ─────────────────────────────────────── */
+    .step-card {
+      width: 190px; flex-shrink: 0; background: var(--card-bg);
+      border: 1.5px solid var(--border-dark); border-radius: 10px;
+      padding: 14px 16px; cursor: pointer; transition: var(--transition);
+      position: relative; box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    }
+    .step-card:hover {
+      transform: translateY(-3px); border-color: var(--blue);
+      box-shadow: 0 6px 16px rgba(37,99,235,.15);
+    }
+    .step-card.active-play {
+      border-color: var(--blue)!important; background: var(--blue-bg)!important;
+      box-shadow: 0 0 0 3px rgba(37,99,235,.25)!important; transform: scale(1.04);
+    }
+
+    .step-num { font-size: 10px; font-weight: 800; color: var(--blue); text-transform: uppercase; margin-bottom: 4px; }
+    .step-title { font-size: 12.5px; font-weight: 700; color: var(--text); line-height: 1.35; margin-bottom: 6px; }
+    .step-actor { font-size: 11px; color: var(--text-sub); }
+
+    .step-card.is-waiting { border-color: var(--amber-border); background: var(--amber-bg); }
+    .step-card.is-delay   { border-color: var(--red-border);   background: var(--red-bg); }
+    .step-card.is-done    { border-color: var(--green-border); background: var(--green-bg); }
+
+    .arrow { font-size: 16px; font-weight: 800; color: var(--border-dark); flex-shrink: 0; }
+
+    /* ─── DISCHARGE DELAY ZONE (5 CARDS WITH TAGS) ───────────────── */
+    .delay-zone {
+      background: linear-gradient(135deg, #fef2f2, #fff7ed);
+      border: 2px dashed var(--red-border); border-radius: 12px;
+      padding: 20px 24px; margin: 6px 0; display: flex; flex-direction: column; gap: 12px;
+    }
+    .delay-zone-title {
+      font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--red); display: flex; align-items: center; justify-content: space-between;
+    }
+    .delay-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .delay-item {
+      background: var(--card-bg); border: 1px solid var(--red-border);
+      border-radius: 8px; padding: 12px 14px; cursor: pointer; transition: var(--transition);
+      display: flex; flex-direction: column; justify-content: space-between; gap: 8px;
+    }
+    .delay-item:hover { transform: translateY(-2px); border-color: var(--red); box-shadow: var(--shadow); }
+    .delay-item-header { display: flex; flex-direction: column; gap: 4px; }
+    .delay-item-title { font-size: 12px; font-weight: 800; color: var(--red); line-height: 1.3; }
+    .delay-item-desc { font-size: 11px; color: var(--text-sub); line-height: 1.4; }
+
+    /* TAGS & CUSTOM PATH NOTIFICATIONS */
+    .delay-tag {
+      font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px;
+      padding: 2px 7px; border-radius: 4px; width: fit-content; margin-top: 4px;
+    }
+    .tag-readiness { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    .tag-tower     { background: #ede9fe; color: #5b21b6; border: 1px solid #c4b5fd; }
+
+    .delay-flow-path {
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600;
+      color: #7c2d12; background: #ffedd5; padding: 4px 6px; border-radius: 4px;
+      border: 1px solid #fed7aa; line-height: 1.4; margin-top: 4px;
+    }
+    .delay-note {
+      font-size: 10.5px; font-weight: 700; color: #991b1b; background: #fee2e2;
+      padding: 4px 6px; border-radius: 4px; border: 1px solid #fca5a5; margin-top: 4px;
+    }
+
+    /* ─── DRAWER ─────────────────────────────────────────────────── */
+    .drawer-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(15,23,42,.4); backdrop-filter: blur(2px);
+    }
+    .drawer-overlay.open { display: block; }
+    .drawer {
+      position: fixed; top: 0; right: -520px; bottom: 0; width: 520px;
+      background: var(--card-bg); border-left: 1px solid var(--border);
+      z-index: 201; display: flex; flex-direction: column;
+      transition: right .3s cubic-bezier(.4,0,.2,1);
+      box-shadow: -8px 0 32px rgba(15,23,42,.15);
+    }
+    .drawer.open { right: 0; }
+    .drawer-header {
+      padding: 20px 24px; border-bottom: 1px solid var(--border);
+      background: #f8fafc; display: flex; align-items: center; justify-content: space-between;
+    }
+    .drawer-title { font-size: 16px; font-weight: 800; }
+    .close-btn {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--card-bg); border: 1px solid var(--border);
+      color: var(--text-sub); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .drawer-body { padding: 24px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 18px; }
+    .d-group { display: flex; flex-direction: column; gap: 4px; }
+    .d-label { font-size: 10.5px; font-weight: 800; text-transform: uppercase; color: var(--text-sub); letter-spacing: .5px; }
+    .d-val { font-size: 13px; color: var(--text); line-height: 1.5; }
+    .d-box { padding: 12px; border-radius: 8px; font-size: 12px; line-height: 1.5; }
+    .d-box-warn { background: var(--amber-bg); border: 1px solid var(--amber-border); color: #92400e; }
+    .d-box-danger { background: var(--red-bg); border: 1px solid var(--red-border); color: #991b1b; }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div>
+    <span class="header-badge">Process Flowchart</span>
+    <h1 class="header-title">CURRENT STATE — CASHLESS INSURANCE DISCHARGE</h1>
+    <p class="header-sub">Simplified Process Flowchart &amp; Discharge Bottleneck Analysis</p>
+  </div>
+  <div class="header-controls">
+    <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">
+      <span id="play-icon">▶</span> <span id="play-text">Play Flowchart Journey</span>
+    </button>
+  </div>
+</header>
+
+<!-- KPI SUMMARY BAR (LABELED AS ILLUSTRATIVE EXAMPLES) -->
+<section class="kpi-row">
+  <div class="kpi-box">
+    <div class="kpi-num" style="color:var(--green)">10:30 AM</div>
+    <div class="kpi-label">Doctor Discharge Flag</div>
+    <div class="kpi-tag">(Illustrative Example)</div>
+  </div>
+  <div class="kpi-box">
+    <div class="kpi-num" style="color:var(--amber)">4.2 Hours</div>
+    <div class="kpi-label">Insurance Audit &amp; Prep TAT</div>
+    <div class="kpi-tag">(Illustrative Example)</div>
+  </div>
+  <div class="kpi-box">
+    <div class="kpi-num" style="color:var(--red)">68% Cases</div>
+    <div class="kpi-label">Discharge Delay Risk</div>
+    <div class="kpi-tag">(Illustrative Example)</div>
+  </div>
+  <div class="kpi-box">
+    <div class="kpi-num" style="color:var(--blue)">04:45 PM</div>
+    <div class="kpi-label">Actual Patient Bed Exit</div>
+    <div class="kpi-tag">(Illustrative Example)</div>
+  </div>
+</section>
+
+<!-- MAIN FLOWCHART BOARD -->
+<main class="flow-board">
+
+  <!-- LANE 1: PATIENT / ATTENDANT -->
+  <div class="swimlane">
+    <div class="lane-label">
+      <div class="lane-title">1. Patient / Attendant</div>
+      <div class="lane-sub">Intake &amp; Discharge Exit</div>
+    </div>
+    <div class="lane-track">
+      <div class="step-card" data-step="1" onclick="openStepDrawer(1)">
+        <div class="step-num">Step 01</div>
+        <div class="step-title">Patient Admission &amp; Insurance Registration</div>
+        <div class="step-actor">👤 Front Desk</div>
+      </div>
+
+      <div style="width: 440px; flex-shrink:0;"></div>
+
+      <div class="step-card is-done" data-step="8" onclick="openStepDrawer(8)">
+        <div class="step-num">Step 08 (Final)</div>
+        <div class="step-title">Co-Pay Settlement &amp; Patient Exits Bed</div>
+        <div class="step-actor">👤 Patient Attendant</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LANE 2: CLINICAL / DOCTOR -->
+  <div class="swimlane">
+    <div class="lane-label">
+      <div class="lane-title">2. Clinical / Doctor</div>
+      <div class="lane-sub">Treatment &amp; Discharge Summary</div>
+    </div>
+    <div class="lane-track">
+      <div class="step-card" data-step="2" onclick="openStepDrawer(2)">
+        <div class="step-num">Step 02</div>
+        <div class="step-title">Treatment Administered &amp; EMR Logged</div>
+        <div class="step-actor">👨‍⚕️ Consultant Physician</div>
+      </div>
+
+      <div class="arrow">→</div>
+
+      <div class="step-card is-done" data-step="3" onclick="openStepDrawer(3)">
+        <div class="step-num">Step 03 (Milestone)</div>
+        <div class="step-title">Doctor Marks Medically Ready (10:30 AM)</div>
+        <div class="step-actor">👨‍⚕️ Primary Doctor</div>
+      </div>
+
+      <div class="arrow">→</div>
+
+      <div class="step-card is-waiting" data-step="4" onclick="openStepDrawer(4)">
+        <div class="step-num">Step 04</div>
+        <div class="step-title">Discharge Summary Finalized &amp; Signed</div>
+        <div class="step-actor">👨‍⚕️ RMO / Resident Doctor</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISCHARGE DELAY ZONE (EXACT 5 DELAY CARDS WITH TAGS) -->
+  <div class="delay-zone">
+    <div class="delay-zone-title">
+      <span>⚠️ DISCHARGE DELAY ZONE (Gap between Doctor Readiness &amp; Actual Discharge)</span>
+      <span style="font-size:11px;font-weight:600;color:var(--red)">Potential Delay Points to Validate</span>
+    </div>
+
+    <div class="delay-grid">
+
+      <!-- DELAY CARD 1 -->
+      <div class="delay-item" onclick="openDelayInsight(1)">
+        <div class="delay-item-header">
+          <div class="delay-item-title">⏳ Clinical documentation delay</div>
+          <div class="delay-item-desc">Delay in typing &amp; signing discharge summary by attending consultants.</div>
+        </div>
+        <span class="delay-tag tag-readiness">Claim Readiness</span>
+      </div>
+
+      <!-- DELAY CARD 2 -->
+      <div class="delay-item" onclick="openDelayInsight(2)">
+        <div class="delay-item-header">
+          <div class="delay-item-title">📄 Missing / incomplete claim documents</div>
+          <div class="delay-item-desc">Absence of mandatory pre-op lab reports, implant stickers, or lab invoices.</div>
+        </div>
+        <span class="delay-tag tag-readiness">Claim Readiness</span>
+      </div>
+
+      <!-- DELAY CARD 3 -->
+      <div class="delay-item" onclick="openDelayInsight(3)">
+        <div class="delay-item-header">
+          <div class="delay-item-title">📋 Payer-specific requirement gap</div>
+          <div class="delay-item-desc">Non-compliance with insurer's pre-defined procedure clinical guidelines or formatting.</div>
+        </div>
+        <span class="delay-tag tag-readiness">Claim Readiness</span>
+      </div>
+
+      <!-- DELAY CARD 4 -->
+      <div class="delay-item" onclick="openDelayInsight(4)">
+        <div class="delay-item-header">
+          <div class="delay-item-title">🔄 TPA query + hospital coordination</div>
+          <div class="delay-item-desc">Multi-stage query loop between insurer and hospital team.</div>
+          <div class="delay-flow-path">TPA → Insurance Desk → Hospital Team → Insurance Desk → TPA</div>
+        </div>
+        <span class="delay-tag tag-tower">Claim Control Tower</span>
+      </div>
+
+      <!-- DELAY CARD 5 -->
+      <div class="delay-item" onclick="openDelayInsight(5)">
+        <div class="delay-item-header">
+          <div class="delay-item-title">👁️ TPA review / authorization visibility</div>
+          <div class="delay-item-desc">Lack of real-time tracking on insurer queue status &amp; adjudication ownership.</div>
+          <div class="delay-note">Current stage + Owner + TAT visibility is missing in the current process.</div>
+        </div>
+        <span class="delay-tag tag-tower">Claim Control Tower</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LANE 3: HOSPITAL INSURANCE & BILLING -->
+  <div class="swimlane">
+    <div class="lane-label">
+      <div class="lane-title">3. Insurance &amp; Billing</div>
+      <div class="lane-sub">Claim Prep &amp; Bill Finalization</div>
+    </div>
+    <div class="lane-track">
+      <div style="width: 440px; flex-shrink:0;"></div>
+
+      <div class="step-card is-waiting" data-step="5" onclick="openStepDrawer(5)">
+        <div class="step-num">Step 05</div>
+        <div class="step-title">Final Bill Frozen &amp; Claim Package Assembled</div>
+        <div class="step-actor">💳 Billing &amp; Insurance Desk</div>
+      </div>
+
+      <div class="arrow">→</div>
+
+      <div class="step-card" data-step="6" onclick="openStepDrawer(6)">
+        <div class="step-num">Step 06</div>
+        <div class="step-title">Final Claim Uploaded to TPA Portal</div>
+        <div class="step-actor">🏢 Insurance Operations</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LANE 4: TPA / INSURER -->
+  <div class="swimlane">
+    <div class="lane-label">
+      <div class="lane-title">4. TPA / Insurer</div>
+      <div class="lane-sub">Adjudication &amp; Approval</div>
+    </div>
+    <div class="lane-track">
+      <div style="width: 660px; flex-shrink:0;"></div>
+
+      <div class="step-card is-delay" data-step="7" onclick="openStepDrawer(7)">
+        <div class="step-num">Step 07</div>
+        <div class="step-title">TPA Medical Audit &amp; Final Approval Sanctioned</div>
+        <div class="step-actor">🏦 TPA Adjudicator</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- SIDE DRAWER -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div>
+      <div class="drawer-title" id="d-title">Step Specifications</div>
+      <div style="font-size:11.5px;color:var(--text-sub)" id="d-sub">Flowchart Node Breakdown</div>
+    </div>
+    <button class="close-btn" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body" id="d-body">
+  </div>
+</div>
+
+<script>
+const STEP_SPECS = {
+  1: { title: "Patient Admission & Insurance Registration", actor: "Front Desk & Attendant", what: "Patient intake registered in HMS, insurance policy card scanned and pre-auth form initialized.", info: "ID proof, Policy Card, Pre-Auth Form 301", delay: "Incomplete policy numbers or missing photo ID." },
+  2: { title: "Treatment Administered & EMR Logged", actor: "Consultant Physician & Nursing", what: "Patient undergoes active treatment. Doctor notes, pharmacy charts, and lab results are entered into EMR.", info: "Daily SOAP notes, OT notes, Lab orders", delay: "Late entry of progress notes by attending consultants." },
+  3: { title: "Doctor Marks Medically Ready", actor: "Primary Consultant Doctor", what: "Doctor conducts morning rounds (10:30 AM) and marks patient 'Medically Fit for Discharge' in EMR.", info: "EMR Clinical Discharge Clearance Flag", delay: "Doctor rounds delayed until late afternoon." },
+  4: { title: "Discharge Summary Finalized & Signed", actor: "Resident Medical Officer / Consultant", what: "RMO drafts clinical summary. Primary doctor reviews and physically/digitally signs summary document.", info: "Signed Clinical Discharge Summary", delay: "Potential delay: Doctor stuck in OT/ICU emergency unable to sign summary." },
+  5: { title: "Final Bill Frozen & Claim Package Assembled", actor: "Billing & Insurance Operations Desk", what: "Billing audits unbilled pharmacy returns, applies tariff rules, and packages final bill with discharge summary.", info: "Itemized Final Bill (₹4.12L) + 11 Docket Files", delay: "Unbilled lab tests or pharmacy return delays." },
+  6: { title: "Final Claim Uploaded to TPA Portal", actor: "Insurance Desk Executive", what: "Digital docket package uploaded to TPA provider portal for adjudication.", info: "Portal Submission Ticket & Docket PDF", delay: "TPA server portal upload timeouts." },
+  7: { title: "TPA Medical Audit & Final Approval Sanctioned", actor: "TPA Medical Auditor", what: "TPA verifies bill itemization against policy coverage, handles any doctor clarifications, and issues final sanction letter.", info: "Final Cashless Sanction Letter", delay: "TPA queue backlog & query clarification rounds." },
+  8: { title: "Co-Pay Settlement & Patient Exits Bed", actor: "Patient Attendant & Ward Staff", what: "Attendant clears non-covered balance/co-pay at billing desk, receives gate pass, and patient leaves bed.", info: "Gate Pass & Final Payment Receipt", delay: "Disagreements over non-payable items at payment counter." }
+};
+
+const DELAY_DETAILS = {
+  1: { title: "Clinical documentation delay", tag: "Claim Readiness", root: "Junior doctors (RMOs) busy managing ward emergencies before sitting down to type & sign discharge summary.", affected: "Patient, Nursing Ward, Insurance Desk", owner: "Resident Medical Officer / Consultant Doctor", why: "Claim preparation cannot begin without signed discharge summary." },
+  2: { title: "Missing / incomplete claim documents", tag: "Claim Readiness", root: "Absence of mandatory pre-op investigation lab reports, implant invoice stickers, or signed consent forms.", affected: "Hospital Billing Team, Insurance Desk", owner: "Medical Records Dept / Ward Pharmacy", why: "Triggers immediate rejection or audit queries from TPA." },
+  3: { title: "Payer-specific requirement gap", tag: "Claim Readiness", root: "Non-compliance with insurer's pre-defined procedure clinical guidelines or document formatting rules.", affected: "Insurance Desk Executive, TPA Auditor", owner: "Hospital Insurance Operations Desk", why: "Requires docket re-compilation and re-upload." },
+  4: { title: "TPA query + hospital coordination", tag: "Claim Control Tower", root: "Multi-stage query loop: TPA → Insurance Desk → Hospital Team → Insurance Desk → TPA.", affected: "Treating Doctor, Insurance Desk, TPA", owner: "Treating Consultant & Insurance Executive", why: "Multi-handoff query exchange adds hours to discharge processing." },
+  5: { title: "TPA review / authorization visibility", tag: "Claim Control Tower", root: "Current stage + Owner + TAT visibility is missing in the current process.", affected: "Patient Attendant, Insurance Ops", owner: "TPA Operations Team / Insurer System", why: "Hospital & patient have zero visibility into TPA review queue status." }
+};
+
+let playTimer = null;
+let currentStep = 1;
+
+function openStepDrawer(id) {
+  const d = STEP_SPECS[id];
+  if (!d) return;
+
+  document.getElementById('d-title').textContent = `Step 0${id}: ${d.title}`;
+  document.getElementById('d-sub').textContent = `Actor: ${d.actor}`;
+
+  document.getElementById('d-body').innerHTML = `
+    <div class="d-group">
+      <div class="d-label">What Happens at this Step?</div>
+      <div class="d-val">${d.what}</div>
+    </div>
+    <div class="d-group">
+      <div class="d-label">Responsible Actor</div>
+      <div class="d-val" style="color:var(--blue);font-weight:700">👤 ${d.actor}</div>
+    </div>
+    <div class="d-group">
+      <div class="d-label">Key Information / Documents</div>
+      <div class="d-box d-box-warn">📄 ${d.info}</div>
+    </div>
+    <div class="d-group">
+      <div class="d-label">Potential Bottleneck / Delay Risk</div>
+      <div class="d-box d-box-danger">⚠️ ${d.delay}</div>
+    </div>
+  `;
+
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+}
+
+function openDelayInsight(id) {
+  const d = DELAY_DETAILS[id];
+  if (!d) return;
+
+  document.getElementById('d-title').textContent = d.title;
+  document.getElementById('d-sub').textContent = `Category: ${d.tag} · Potential Delay Point to Validate`;
+
+  document.getElementById('d-body').innerHTML = `
+    <div class="d-group">
+      <div class="d-label">Category Tag</div>
+      <div class="d-val" style="font-weight:800;color:var(--red)">${d.tag}</div>
+    </div>
+    <div class="d-group">
+      <div class="d-label">Potential Root Cause</div>
+      <div class="d-box d-box-danger">${d.root}</div>
+    </div>
+    <div class="d-group">
+      <div class="d-label">Who is Affected?</div>
+      <div class="d-val">👥 ${d.affected}</div>
+    </div>
+    <div class="d-group">
+      <div class="d-label">Action Owner</div>
+      <div class="d-val" style="color:var(--amber);font-weight:700">👉 ${d.owner}</div>
+    </div>
+    <div class="d-group">
+      <div class="d-label">Impact on Discharge TAT</div>
+      <div class="d-box d-box-warn">⏱️ ${d.why}</div>
+    </div>
+  `;
+
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+}
+
+function closeDrawer() {
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+}
+
+function togglePlay() {
+  if (playTimer) {
+    stopPlay();
+  } else {
+    startPlay();
+  }
+}
+
+function startPlay() {
+  currentStep = 1;
+  document.getElementById('play-icon').textContent = "⏸";
+  document.getElementById('play-text').textContent = "Pause Flowchart Journey";
+
+  highlightStep(currentStep);
+
+  playTimer = setInterval(() => {
+    currentStep++;
+    if (currentStep > 8) {
+      stopPlay();
+    } else {
+      highlightStep(currentStep);
+    }
+  }, 1600);
+}
+
+function stopPlay() {
+  clearInterval(playTimer);
+  playTimer = null;
+  document.getElementById('play-icon').textContent = "▶";
+  document.getElementById('play-text').textContent = "Play Flowchart Journey";
+  document.querySelectorAll('.step-card').forEach(c => c.classList.remove('active-play'));
+}
+
+function highlightStep(step) {
+  document.querySelectorAll('.step-card').forEach(c => c.classList.remove('active-play'));
+  const card = document.querySelector(`.step-card[data-step="${step}"]`);
+  if (card) {
+    card.classList.add('active-play');
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+}
+</script>
+</body>
+</html>

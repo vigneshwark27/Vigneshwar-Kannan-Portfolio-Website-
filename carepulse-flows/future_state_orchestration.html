@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Future State — Insurance Discharge Orchestration</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --ink:#0A1120;
+  --surface:#121B2E;
+  --surface-2:#161F35;
+  --surface-3:#1D2B45;
+  --line:#28344E;
+  --line-soft:#1B2740;
+  --text:#EAF0FA;
+  --text-dim:#9FADC7;
+  --text-faint:#657095;
+  --teal:#3FD1BE;
+  --teal-dim:#173B37;
+  --amber:#F5A623;
+  --amber-dim:#3F310E;
+  --violet:#93A5FF;
+  --violet-dim:#232A52;
+  --green:#54D68A;
+  --red:#F0546B;
+  --red-dim:#3E1B24;
+  --font-body:'IBM Plex Sans',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--ink);color:var(--text);font-family:var(--font-body);}
+body{padding-bottom:96px;}
+h1,h2,h3,h4{font-family:var(--font-body);margin:0;letter-spacing:-0.01em;}
+p{margin:0;color:var(--text-dim);line-height:1.55;}
+button{font-family:var(--font-body);cursor:pointer;}
+.mono{font-family:var(--font-mono);}
+.wrap{max-width:900px;margin:0 auto;padding:0 24px;}
+
+/* ---------- TOPBAR ---------- */
+.topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 28px;background:rgba(10,17,32,0.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line-soft);}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(145deg,var(--teal),var(--violet));
+  display:flex;align-items:center;justify-content:center;color:var(--ink);font-weight:700;font-size:15px;}
+.brand-text{display:flex;flex-direction:column;line-height:1.2;}
+.brand-eyebrow{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-faint);}
+.brand-title{font-weight:600;font-size:14px;letter-spacing:.01em;}
+.state-nav{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px;}
+.nav-tab{background:transparent;border:none;color:var(--text-faint);font-size:12.5px;font-weight:600;letter-spacing:.05em;
+  text-transform:uppercase;padding:8px 16px;border-radius:7px;transition:.2s;}
+.nav-tab.active{background:var(--surface-3);color:var(--text);box-shadow:inset 0 0 0 1px var(--line);}
+.nav-tab.active[data-state="future"]{color:var(--teal);}
+.topbar-meta{display:none;}
+@media(min-width:720px){.topbar-meta{display:flex;}}
+.meta-chip{font-family:var(--font-mono);font-size:11px;color:var(--text-faint);display:flex;align-items:center;gap:6px;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+.dot-live{animation:pulse 1.8s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+/* ---------- VIEW SWITCH ---------- */
+.view{display:none;}
+.view.active{display:block;}
+
+/* ---------- INTRO ---------- */
+.intro{padding:56px 0 28px;}
+.eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:14px;display:block;}
+.intro h1{font-size:34px;line-height:1.18;font-weight:700;max-width:680px;}
+.intro h1 span{color:var(--text-faint);}
+.intro p.lead{margin-top:16px;max-width:560px;font-size:15px;}
+.tat-counter{margin-top:26px;display:inline-flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;padding:12px 18px;}
+.tat-counter .lbl{font-family:var(--font-mono);font-size:10.5px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.1em;}
+.tat-counter .val{font-family:var(--font-mono);font-size:20px;font-weight:600;color:var(--teal);}
+
+/* current state hero */
+.intro.current h1{color:var(--text);}
+.delay-banner{margin-top:26px;display:flex;align-items:center;gap:16px;background:var(--red-dim);border:1px solid #5A2331;
+  border-radius:12px;padding:16px 20px;max-width:520px;}
+.delay-banner .big{font-family:var(--font-mono);font-size:26px;font-weight:600;color:var(--red);}
+.delay-banner .small{font-size:12px;color:#E8B0BA;}
+
+/* ---------- BEFORE/AFTER SWITCH ---------- */
+.baswitch-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin:8px 0 32px;}
+.baswitch-head{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.baswitch-head h3{font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);flex:1;}
+.switch{width:44px;height:24px;border-radius:20px;background:var(--surface-3);border:1px solid var(--line);position:relative;transition:.25s;}
+.switch.on{background:var(--teal-dim);border-color:var(--teal);}
+.switch-knob{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--text-faint);transition:.25s;}
+.switch.on .switch-knob{transform:translateX(20px);background:var(--teal);}
+.switch-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;color:var(--text-faint);width:48px;}
+.ba-list{list-style:none;margin:0;padding:0;display:grid;gap:9px;}
+.ba-list li{display:flex;align-items:baseline;gap:10px;font-size:13.5px;color:var(--text-dim);}
+.ba-list li::before{content:'—';color:var(--red);font-family:var(--font-mono);flex-shrink:0;}
+.ba-after li::before{content:'✓';color:var(--teal);}
+.ba-after li{color:var(--text);}
+
+/* ---------- LINEAGE TOGGLE ---------- */
+.lineage-toggle{margin-bottom:44px;}
+.lineage-btn{background:var(--surface);border:1px solid var(--line);color:var(--text-dim);font-size:12.5px;font-weight:600;
+  padding:10px 16px;border-radius:10px;display:inline-flex;align-items:center;gap:8px;transition:.2s;}
+.lineage-btn:hover{border-color:var(--teal);color:var(--text);}
+.lineage-btn .chev{transition:.2s;font-family:var(--font-mono);}
+.lineage-btn.open .chev{transform:rotate(90deg);}
+.lineage-diagram{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;overflow-x:auto;}
+.lineage-diagram svg{display:block;margin:0 auto;}
+.flow-dash{stroke-dasharray:6 6;animation:dashmove 1.4s linear infinite;}
+@keyframes dashmove{to{stroke-dashoffset:-24;}}
+
+/* ---------- PIPELINE ---------- */
+.pipeline{display:flex;flex-direction:column;align-items:center;padding-top:8px;}
+.pill{background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:14px 26px;text-align:center;
+  font-weight:600;font-size:13.5px;letter-spacing:.03em;}
+.pill.start{color:var(--text-dim);}
+.pill.end{background:linear-gradient(135deg,var(--teal-dim),var(--surface-2));border-color:var(--teal);color:var(--teal);font-size:15px;}
+
+.arrow{position:relative;padding:14px 0;display:flex;flex-direction:column;align-items:center;cursor:help;}
+.arrow .line{width:1.5px;height:26px;background:var(--line);}
+.arrow .arrowhead{font-family:var(--font-mono);color:var(--text-faint);font-size:13px;line-height:1;}
+.arrow .tip{position:absolute;top:-6px;left:50%;transform:translate(-50%,-100%);width:250px;background:var(--surface-3);
+  border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:11.5px;color:var(--text-dim);opacity:0;
+  pointer-events:none;transition:.15s;z-index:20;box-shadow:0 10px 30px rgba(0,0,0,.4);}
+.arrow:hover .tip{opacity:1;transform:translate(-50%,-108%);}
+.arrow .tip b{color:var(--text);}
+
+.stage-card{width:100%;max-width:640px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.stage-card .name{font-size:13.5px;font-weight:600;}
+.stage-card .meta{font-family:var(--font-mono);font-size:10.5px;color:var(--text-faint);margin-top:3px;}
+
+/* big capability cards */
+.cap-card{width:100%;max-width:640px;border-radius:18px;padding:26px 28px;cursor:pointer;transition:.2s;position:relative;
+  border:1px solid var(--line);background:var(--surface);}
+.cap-card:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(0,0,0,.35);}
+.cap-card.teal{background:linear-gradient(160deg,var(--surface) 55%,var(--teal-dim));border-color:#2A5A54;}
+.cap-card.amber{background:linear-gradient(160deg,var(--surface) 55%,var(--amber-dim));border-color:#5A4A20;}
+.cap-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.badge{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:6px;font-weight:600;}
+.badge.prevent{background:rgba(63,209,190,.15);color:var(--teal);border:1px solid rgba(63,209,190,.4);}
+.badge.monitor{background:rgba(245,166,35,.15);color:var(--amber);border:1px solid rgba(245,166,35,.4);}
+.badge.inform{background:rgba(147,165,255,.15);color:var(--violet);border:1px solid rgba(147,165,255,.4);}
+.cap-open{font-family:var(--font-mono);font-size:11px;color:var(--text-faint);}
+.cap-card h3{font-size:19px;margin-bottom:6px;}
+.cap-card p.purpose{font-size:13.5px;color:var(--text-dim);margin-bottom:16px;max-width:480px;}
+.cap-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 20px;}
+@media(min-width:520px){.cap-grid{grid-template-columns:repeat(4,1fr);}}
+.cap-field .lbl{font-family:var(--font-mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);margin-bottom:3px;}
+.cap-field .val{font-size:12.5px;font-weight:600;}
+
+/* decision block */
+.decision-label{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:12px;color:var(--text-dim);
+  margin:6px 0 12px;cursor:help;position:relative;}
+.decision-diamond{width:11px;height:11px;background:var(--surface-3);border:1px solid var(--line);transform:rotate(45deg);flex-shrink:0;}
+.decision-wrap{width:100%;max-width:640px;display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:6px;}
+@media(max-width:600px){.decision-wrap{grid-template-columns:1fr;}}
+.branch{border-radius:12px;padding:16px;border:1px dashed;}
+.branch.no{border-color:#5A3A24;background:var(--amber-dim);}
+.branch.yes{border-color:#245A50;background:var(--teal-dim);display:flex;flex-direction:column;justify-content:center;}
+.branch-head{font-family:var(--font-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;}
+.branch.no .branch-head{color:var(--amber);}
+.branch.yes .branch-head{color:var(--teal);}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:11.5px;color:var(--text-dim);}
+.chain .chip{background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:4px 8px;white-space:nowrap;}
+.chain .sep{color:var(--text-faint);}
+.loop-back{margin-top:10px;font-family:var(--font-mono);font-size:10.5px;color:var(--amber);}
+.yes-action{font-size:13.5px;font-weight:600;color:var(--text);}
+.yes-sub{font-family:var(--font-mono);font-size:10.5px;color:var(--text-faint);margin-top:4px;}
+
+/* ---------- DOCK (patient communication) ---------- */
+.dock{position:fixed;bottom:0;left:0;right:0;z-index:35;background:linear-gradient(0deg,rgba(35,42,82,.97),rgba(18,27,46,.9));
+  border-top:1px solid #33397A;backdrop-filter:blur(8px);padding:12px 24px;display:flex;align-items:center;gap:16px;cursor:pointer;}
+.dock:hover{background:linear-gradient(0deg,rgba(42,50,98,.97),rgba(18,27,46,.9));}
+.dock-ecg{width:64px;height:24px;flex-shrink:0;}
+.dock-ecg path{stroke:var(--violet);stroke-width:1.6;fill:none;}
+.dock-text{flex:1;display:flex;flex-direction:column;gap:2px;}
+.dock-title{font-size:12.5px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px;}
+.dock-sub{font-family:var(--font-mono);font-size:10.5px;color:#B7C0EE;}
+.dock-cta{font-family:var(--font-mono);font-size:11px;color:var(--violet);white-space:nowrap;}
+@media(max-width:600px){.dock-sub{display:none;}}
+
+/* ---------- DRAWER ---------- */
+.overlay{position:fixed;inset:0;background:rgba(4,7,14,.6);z-index:49;opacity:0;pointer-events:none;transition:.25s;}
+.overlay.open{opacity:1;pointer-events:auto;}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--surface);border-left:1px solid var(--line);
+  z-index:50;transform:translateX(100%);transition:.3s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;}
+.drawer.open{transform:translateX(0);}
+@media(max-width:600px){.drawer{width:100%;top:auto;height:88vh;border-left:none;border-top:1px solid var(--line);border-radius:18px 18px 0 0;
+  transform:translateY(100%);} .drawer.open{transform:translateY(0);}}
+.drawer-head{padding:22px 24px 16px;border-bottom:1px solid var(--line);}
+.drawer-close{position:absolute;top:20px;right:20px;background:var(--surface-3);border:1px solid var(--line);color:var(--text-dim);
+  width:30px;height:30px;border-radius:8px;font-size:15px;}
+.drawer-head h2{font-size:18px;margin:10px 0 6px;}
+.drawer-head p{font-size:12.5px;}
+.drawer-tabs{display:flex;gap:4px;margin-top:16px;background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:3px;width:fit-content;}
+.d-tab{background:transparent;border:none;font-size:12px;font-weight:600;color:var(--text-faint);padding:7px 14px;border-radius:6px;}
+.d-tab.active{background:var(--surface-3);color:var(--text);}
+.drawer-body{flex:1;overflow-y:auto;padding:22px 24px 40px;}
+.d-panel{display:none;}
+.d-panel.active{display:block;}
+
+.section-title{font-family:var(--font-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-faint);
+  margin:22px 0 10px;}
+.section-title:first-child{margin-top:0;}
+.check-list{list-style:none;margin:0;padding:0;display:grid;gap:8px;}
+.check-list li{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;background:var(--surface-2);
+  border:1px solid var(--line);border-radius:8px;padding:9px 12px;}
+.status-tag{font-family:var(--font-mono);font-size:10px;padding:2px 7px;border-radius:5px;white-space:nowrap;}
+.status-tag.ok{background:rgba(84,214,138,.15);color:var(--green);}
+.status-tag.warn{background:rgba(245,166,35,.15);color:var(--amber);}
+.status-tag.pending{background:rgba(147,165,255,.15);color:var(--violet);}
+
+.issue-card{background:var(--red-dim);border:1px solid #5A2331;border-radius:10px;padding:11px 13px;margin-bottom:8px;}
+.issue-card .t{font-size:12.5px;font-weight:600;color:#F6B6C1;}
+.issue-card .m{font-family:var(--font-mono);font-size:10.5px;color:#D89AA6;margin-top:4px;display:flex;justify-content:space-between;}
+
+.dash-table{width:100%;border-collapse:collapse;font-size:11.5px;}
+.dash-table th{text-align:left;font-family:var(--font-mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--text-faint);padding:0 8px 8px 0;font-weight:500;border-bottom:1px solid var(--line);}
+.dash-table td{padding:9px 8px 9px 0;border-bottom:1px solid var(--line-soft);vertical-align:middle;}
+.dash-table tr:last-child td{border-bottom:none;}
+.pulse-tag{display:inline-flex;align-items:center;gap:5px;}
+.pulse-tag .d{width:6px;height:6px;border-radius:50%;}
+.pulse-tag .d.g{background:var(--green);}
+.pulse-tag .d.a{background:var(--amber);animation:pulse 1.6s infinite;}
+.pulse-tag .d.r{background:var(--red);animation:pulse 1.2s infinite;}
+
+.timeline{display:flex;flex-direction:column;gap:0;margin-top:6px;}
+.tl-row{display:flex;gap:12px;padding:9px 0;border-left:1.5px solid var(--line);margin-left:5px;padding-left:16px;position:relative;}
+.tl-row::before{content:'';position:absolute;left:-5.5px;top:12px;width:9px;height:9px;border-radius:50%;background:var(--surface-3);border:1.5px solid var(--amber);}
+.tl-row:last-child{border-left-color:transparent;}
+.tl-time{font-family:var(--font-mono);font-size:10px;color:var(--text-faint);width:52px;flex-shrink:0;}
+.tl-txt{font-size:12px;color:var(--text-dim);}
+.tl-txt b{color:var(--text);}
+
+.chat-preview{display:flex;flex-direction:column;gap:10px;}
+.bubble{background:var(--violet-dim);border:1px solid #34397A;border-radius:14px 14px 14px 4px;padding:11px 14px;max-width:88%;}
+.bubble .txt{font-size:12.5px;color:var(--text);line-height:1.5;}
+.bubble .time{font-family:var(--font-mono);font-size:9.5px;color:#9AA4E6;margin-top:5px;}
+
+.why-grid{display:grid;gap:18px;}
+.why-item .lbl{font-family:var(--font-mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-faint);margin-bottom:6px;}
+.why-item .txt{font-size:13.5px;color:var(--text);line-height:1.6;}
+
+/* current state simple chain */
+.cs-chain{display:flex;flex-direction:column;align-items:center;gap:0;padding-bottom:20px;}
+.cs-card{width:100%;max-width:600px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:16px 20px;
+  display:flex;align-items:center;gap:14px;}
+.cs-flag{background:var(--red-dim);color:#F5AAB6;font-family:var(--font-mono);font-size:10px;padding:4px 8px;border-radius:6px;white-space:nowrap;border:1px solid #5A2331;}
+.cs-card .cs-name{font-size:13px;font-weight:600;flex:1;}
+.cs-arrow{padding:10px 0;color:var(--text-faint);font-family:var(--font-mono);}
+.cs-flags-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:26px 0 8px;max-width:600px;}
+.cs-flags-row .tag{font-size:11.5px;color:#E8B0BA;border:1px solid #5A2331;background:var(--red-dim);padding:6px 12px;border-radius:999px;}
+
+footer.note{max-width:640px;margin:40px auto 0;padding:0 24px;text-align:center;}
+footer.note p{font-size:11.5px;color:var(--text-faint);}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark">◈</div>
+    <div class="brand-text">
+      <span class="brand-eyebrow">Product Concept</span>
+      <span class="brand-title">Insurance Discharge Orchestration</span>
+    </div>
+  </div>
+  <nav class="state-nav">
+    <button class="nav-tab" data-state="current">Current State</button>
+    <button class="nav-tab active" data-state="future">Future State</button>
+  </nav>
+  <div class="topbar-meta"><span class="meta-chip"><span class="dot dot-live"></span> Live simulation</span></div>
+</header>
+
+<!-- ========== FUTURE STATE ========== -->
+<main class="view active" id="view-future">
+  <div class="wrap">
+    <section class="intro">
+      <span class="eyebrow">Future State</span>
+      <h1>From <span>medically ready</span> to <span>actually discharged</span> — without the wait nobody can explain.</h1>
+      <p class="lead">Claim Readiness stops bad claims before they leave the hospital. The Control Tower keeps every submitted claim visible and owned. Patient Communication keeps the family informed the whole time. Click any card below to see how it works.</p>
+      <div class="tat-counter">
+        <div><span class="lbl">Time since medically ready</span><br><span class="val mono" id="tatCounter">00:00:00</span></div>
+      </div>
+    </section>
+
+    <section class="baswitch-card">
+      <div class="baswitch-head">
+        <h3>Before vs After</h3>
+        <div class="switch on" id="baSwitch"><span class="switch-knob"></span></div>
+        <span class="switch-label" id="baLabel">AFTER</span>
+      </div>
+      <div class="baswitch-body">
+        <ul class="ba-list ba-before" id="baBefore" hidden>
+          <li>Fragmented coordination across EMR, billing and insurance</li>
+          <li>Manual phone/email follow-up with the TPA</li>
+          <li>Unclear ownership when a claim stalls</li>
+          <li>Limited visibility into where time is being lost</li>
+        </ul>
+        <ul class="ba-list ba-after" id="baAfter">
+          <li>Claim validated before it ever reaches the insurer</li>
+          <li>Single connected workflow, start to discharge</li>
+          <li>Visible ownership at every stage</li>
+          <li>TAT transparency against SLA, in real time</li>
+          <li>Structured resolution when a query comes back</li>
+          <li>Patient and family kept informed throughout</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="lineage-toggle">
+      <button class="lineage-btn" id="lineageBtn"><span class="chev">▸</span> View data lineage</button>
+      <div class="lineage-diagram" id="lineageDiagram" hidden>
+        <svg viewBox="0 0 640 260" width="100%" style="max-width:640px">
+          <g font-family="IBM Plex Mono" font-size="10" fill="#9FADC7">
+            <rect x="10" y="6" width="130" height="30" rx="6" fill="#161F35" stroke="#28344E"/><text x="75" y="25" text-anchor="middle" fill="#EAF0FA">EMR</text>
+            <rect x="170" y="6" width="130" height="30" rx="6" fill="#161F35" stroke="#28344E"/><text x="235" y="25" text-anchor="middle" fill="#EAF0FA">Billing</text>
+            <rect x="330" y="6" width="130" height="30" rx="6" fill="#161F35" stroke="#28344E"/><text x="395" y="25" text-anchor="middle" fill="#EAF0FA">Insurance</text>
+            <rect x="490" y="6" width="140" height="30" rx="6" fill="#161F35" stroke="#28344E"/><text x="560" y="25" text-anchor="middle" fill="#EAF0FA">Medical Records</text>
+          </g>
+          <path class="flow-dash" d="M75,36 L75,70 L320,70" stroke="#3FD1BE" fill="none"/>
+          <path class="flow-dash" d="M235,36 L235,70" stroke="#3FD1BE" fill="none"/>
+          <path class="flow-dash" d="M395,36 L395,70 L320,70" stroke="#3FD1BE" fill="none"/>
+          <path class="flow-dash" d="M560,36 L560,70 L320,70" stroke="#3FD1BE" fill="none"/>
+          <rect x="220" y="70" width="200" height="34" rx="7" fill="#173B37" stroke="#3FD1BE"/>
+          <text x="320" y="91" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#3FD1BE">Claim Readiness</text>
+          <path class="flow-dash" d="M320,104 L320,128" stroke="#3FD1BE" fill="none"/>
+          <rect x="200" y="128" width="240" height="34" rx="7" fill="#3F310E" stroke="#F5A623"/>
+          <text x="320" y="149" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#F5A623">Control Tower</text>
+          <path class="flow-dash" d="M320,162 L320,186" stroke="#F5A623" fill="none"/>
+          <rect x="220" y="186" width="200" height="30" rx="7" fill="#161F35" stroke="#28344E"/>
+          <text x="320" y="205" text-anchor="middle" font-family="IBM Plex Mono" font-size="10.5" fill="#EAF0FA">TPA / Insurer</text>
+          <path class="flow-dash" d="M320,216 L320,236" stroke="#93A5FF" fill="none"/>
+          <rect x="200" y="236" width="240" height="22" rx="6" fill="#161F35" stroke="#28344E" display="none"/>
+        </svg>
+        <p style="text-align:center;font-size:11px;margin-top:6px;color:#657095">Authorization → Discharge continues below in the main flow.</p>
+      </div>
+    </section>
+
+    <section class="pipeline">
+
+      <div class="pill start">MEDICALLY READY FOR DISCHARGE</div>
+      <div class="arrow"><div class="line"></div><div class="arrowhead">↓</div>
+        <div class="tip"><b>Auto-trigger.</b> The moment discharge criteria are marked met in the EMR, a claim-preparation task is created automatically — no manual handoff.</div>
+      </div>
+
+      <div class="stage-card">
+        <div><div class="name">Claim Preparation</div><div class="meta">OWNER: INSURANCE DESK · TAT ~20 MIN · SRC: EMR + BILLING</div></div>
+        <div class="mono" style="font-size:11px;color:var(--text-faint)">Auto-pulled</div>
+      </div>
+      <div class="arrow"><div class="line"></div><div class="arrowhead">↓</div>
+        <div class="tip"><b>System sync.</b> Diagnosis, procedure and itemized charge data sync from EMR and billing into the claim without re-entry.</div>
+      </div>
+
+      <div class="cap-card teal" onclick="openDrawer('readiness')">
+        <div class="cap-top"><span class="badge prevent">Prevent</span><span class="cap-open">Open →</span></div>
+        <h3>Claim Readiness</h3>
+        <p class="purpose">Validates every field against payer rules before the claim ever leaves the hospital.</p>
+        <div class="cap-grid">
+          <div class="cap-field"><div class="lbl">Status</div><div class="val" style="color:var(--teal)">Validating</div></div>
+          <div class="cap-field"><div class="lbl">Owner</div><div class="val">Case Manager</div></div>
+          <div class="cap-field"><div class="lbl">TAT</div><div class="val">15–30 min</div></div>
+          <div class="cap-field"><div class="lbl">Source</div><div class="val">EMR · Billing · Payer</div></div>
+        </div>
+      </div>
+
+      <div class="arrow"><div class="line"></div><div class="arrowhead">↓</div>
+        <div class="tip"><b>Rule engine.</b> Every field is checked against payer-specific requirements before the decision is made.</div>
+      </div>
+      <div class="decision-label"><span class="decision-diamond"></span> READY?
+        <span style="color:var(--text-faint);font-size:11px;">— all payer requirements satisfied?</span>
+      </div>
+      <div class="decision-wrap">
+        <div class="branch no">
+          <div class="branch-head">No — blocking issue found</div>
+          <div class="chain">
+            <span class="chip">Blocking issue</span><span class="sep">→</span>
+            <span class="chip">Review</span><span class="sep">→</span>
+            <span class="chip">Correct</span><span class="sep">→</span>
+            <span class="chip">Re-check</span>
+          </div>
+          <div class="loop-back">↺ returns to Claim Readiness for re-validation</div>
+        </div>
+        <div class="branch yes">
+          <div class="branch-head">Yes — continue</div>
+          <div class="yes-action">Submit to insurer</div>
+          <div class="yes-sub">Package is complete — sent as-is, first time</div>
+        </div>
+      </div>
+
+      <div class="arrow"><div class="line"></div><div class="arrowhead">↓</div>
+        <div class="tip"><b>Handoff.</b> A validated claim moves into the Control Tower the instant it's submitted — no separate tracking step.</div>
+      </div>
+
+      <div class="cap-card amber" onclick="openDrawer('tower')">
+        <div class="cap-top"><span class="badge monitor">Monitor + Act</span><span class="cap-open">Open →</span></div>
+        <h3>Insurance Claim Control Tower</h3>
+        <p class="purpose">One live view of every claim's stage, owner and time-against-SLA — with automatic escalation.</p>
+        <div class="cap-grid">
+          <div class="cap-field"><div class="lbl">Status</div><div class="val" style="color:var(--amber)">3 active claims</div></div>
+          <div class="cap-field"><div class="lbl">Owner</div><div class="val">Ops Manager</div></div>
+          <div class="cap-field"><div class="lbl">TAT</div><div class="val">Continuous</div></div>
+          <div class="cap-field"><div class="lbl">Source</div><div class="val">TPA Portal</div></div>
+        </div>
+      </div>
+
+      <div class="arrow"><div class="line"></div><div class="arrowhead">↓</div>
+        <div class="tip"><b>SLA clock starts.</b> Every claim gets an expected response window the moment it reaches the insurer.</div>
+      </div>
+
+      <div class="stage-card">
+        <div><div class="name">TPA / Insurer Review</div><div class="meta">OWNER: TPA · SLA 2–6 HRS · SRC: TPA PORTAL</div></div>
+        <div class="mono" style="font-size:11px;color:var(--amber)">In review</div>
+      </div>
+
+      <div class="arrow"><div class="line"></div><div class="arrowhead">↓</div>
+        <div class="tip"><b>Decision point.</b> The insurer either raises a query or clears the claim to move forward.</div>
+      </div>
+      <div class="decision-label"><span class="decision-diamond"></span> QUERY RAISED?</div>
+      <div class="decision-wrap">
+        <div class="branch no">
+          <div class="branch-head">Yes — query raised</div>
+          <div class="chain">
+            <span class="chip">Insurance Exec reviews</span><span class="sep">→</span>
+            <span class="chip">Manual assignment</span><span class="sep">→</span>
+            <span class="chip">Response sent</span>
+          </div>
+          <div class="loop-back">↺ returns to TPA for re-review</div>
+        </div>
+        <div class="branch yes">
+          <div class="branch-head">No — clean pass</div>
+          <div class="yes-action">Continue</div>
+          <div class="yes-sub">No further input needed</div>
+        </div>
+      </div>
+
+      <div class="arrow"><div class="line"></div><div class="arrowhead">↓</div></div>
+      <div class="stage-card">
+        <div><div class="name">Final Authorization</div><div class="meta">OWNER: TPA / INSURER · SRC: TPA PORTAL</div></div>
+        <div class="mono" style="font-size:11px;color:var(--green)">Approved</div>
+      </div>
+      <div class="arrow"><div class="line"></div><div class="arrowhead">↓</div>
+        <div class="tip"><b>Parallel close-out.</b> Billing reconciles the final bill against the authorized amount.</div>
+      </div>
+      <div class="stage-card">
+        <div><div class="name">Billing Clearance</div><div class="meta">OWNER: BILLING TEAM · TAT 15–20 MIN · SRC: BILLING</div></div>
+        <div class="mono" style="font-size:11px;color:var(--green)">Cleared</div>
+      </div>
+      <div class="arrow"><div class="line"></div><div class="arrowhead">↓</div></div>
+
+      <div class="pill end">DISCHARGE</div>
+    </section>
+
+    <footer class="note"><p>Card data shown is illustrative, for demonstrating the product concept end to end.</p></footer>
+  </div>
+</main>
+
+<!-- ========== CURRENT STATE ========== -->
+<main class="view" id="view-current">
+  <div class="wrap">
+    <section class="intro current">
+      <span class="eyebrow" style="color:var(--red)">Current State</span>
+      <h1>The claim disappears into a black box the moment it's submitted.</h1>
+      <p class="lead">Nobody owns the wait between "medically ready" and "actually discharged." It's chased by phone, tracked in spreadsheets, and explained to families after the fact — if at all.</p>
+      <div class="delay-banner">
+        <div class="big mono">~2.5 days</div>
+        <div class="small">average avoidable delay from medically ready to actual discharge</div>
+      </div>
+    </section>
+
+    <div class="cs-flags-row">
+      <span class="tag">Fragmented coordination</span>
+      <span class="tag">Manual follow-up</span>
+      <span class="tag">Unclear ownership</span>
+      <span class="tag">Limited visibility</span>
+    </div>
+
+    <section class="cs-chain">
+      <div class="cs-card"><div class="cs-name">Medically ready for discharge</div></div>
+      <div class="cs-arrow">↓</div>
+      <div class="cs-card"><div class="cs-name">Coordinator manually gathers EMR + billing data</div><span class="cs-flag">No shared checklist</span></div>
+      <div class="cs-arrow">↓</div>
+      <div class="cs-card"><div class="cs-name">Claim submitted, often incomplete</div><span class="cs-flag">Caught only after rejection</span></div>
+      <div class="cs-arrow">↓</div>
+      <div class="cs-card"><div class="cs-name">Sits with TPA — status unknown</div><span class="cs-flag">No TAT visibility</span></div>
+      <div class="cs-arrow">↓</div>
+      <div class="cs-card"><div class="cs-name">Query comes back — nobody notices for hours</div><span class="cs-flag">No owner</span></div>
+      <div class="cs-arrow">↓</div>
+      <div class="cs-card"><div class="cs-name">Phone calls to chase a response</div><span class="cs-flag">Manual</span></div>
+      <div class="cs-arrow">↓</div>
+      <div class="cs-card"><div class="cs-name">Family calls the front desk repeatedly</div><span class="cs-flag">No updates sent</span></div>
+      <div class="cs-arrow">↓</div>
+      <div class="cs-card"><div class="cs-name">Authorization + billing clearance</div></div>
+      <div class="cs-arrow">↓</div>
+      <div class="pill end" style="border-color:var(--red);color:var(--red);background:var(--red-dim)">DISCHARGE — delayed</div>
+    </section>
+    <footer class="note"><p>Switch to Future State above to see how the product closes each of these gaps.</p></footer>
+  </div>
+</main>
+
+<!-- ========== PERSISTENT DOCK ========== -->
+<div class="dock" id="dockBtn">
+  <svg class="dock-ecg" viewBox="0 0 64 24"><path d="M0,12 L14,12 L18,4 L22,20 L26,12 L64,12"/></svg>
+  <div class="dock-text">
+    <div class="dock-title"><span class="badge inform">Inform</span> Patient Communication Layer</div>
+    <div class="dock-sub">Runs underneath every stage above · notified via app + SMS</div>
+  </div>
+  <div class="dock-cta">Open preview →</div>
+</div>
+
+<!-- ========== DRAWER ========== -->
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    <span class="badge" id="drawerBadge"></span>
+    <h2 id="drawerTitle"></h2>
+    <p id="drawerSub"></p>
+    <div class="drawer-tabs">
+      <button class="d-tab active" data-tab="overview" onclick="setTab('overview')">Overview</button>
+      <button class="d-tab" data-tab="why" onclick="setTab('why')">Why this matters</button>
+    </div>
+  </div>
+  <div class="drawer-body">
+
+    <!-- CLAIM READINESS -->
+    <div class="d-panel active" data-owner="readiness" data-kind="overview">
+      <div class="section-title">EMR Data</div>
+      <ul class="check-list">
+        <li>Discharge summary <span class="status-tag ok">Complete</span></li>
+        <li>Diagnosis & procedure codes <span class="status-tag ok">Complete</span></li>
+        <li>Clinical notes attached <span class="status-tag warn">Pending sign-off</span></li>
+      </ul>
+      <div class="section-title">Billing Data</div>
+      <ul class="check-list">
+        <li>Itemized charges <span class="status-tag ok">Matched</span></li>
+        <li>Room class vs. package tariff <span class="status-tag ok">Matched</span></li>
+      </ul>
+      <div class="section-title">Insurance Data</div>
+      <ul class="check-list">
+        <li>Policy & sum insured verified <span class="status-tag ok">Verified</span></li>
+        <li>Pre-authorization reference <span class="status-tag warn">Expiring in 2 hrs</span></li>
+      </ul>
+      <div class="section-title">Document Package</div>
+      <ul class="check-list">
+        <li>Investigation reports <span class="status-tag ok">Attached</span></li>
+        <li>Consent forms <span class="status-tag ok">Attached</span></li>
+        <li>Original prescription scan <span class="status-tag pending">Missing</span></li>
+      </ul>
+      <div class="section-title">Payer Requirements</div>
+      <ul class="check-list">
+        <li>Payer-specific rule set applied <span class="status-tag ok">Loaded</span></li>
+      </ul>
+      <div class="section-title">Blocking Issue Examples</div>
+      <div class="issue-card"><div class="t">Missing pre-authorization extension</div><div class="m"><span>Owner: Insurance Desk</span><span>ETA 40 min</span></div></div>
+      <div class="issue-card"><div class="t">Original prescription not scanned</div><div class="m"><span>Owner: Nursing Station</span><span>ETA 15 min</span></div></div>
+      <div class="issue-card"><div class="t">Room class mismatch vs. policy tier</div><div class="m"><span>Owner: Billing</span><span>ETA 20 min</span></div></div>
+    </div>
+    <div class="d-panel" data-owner="readiness" data-kind="why">
+      <div class="why-grid">
+        <div class="why-item"><div class="lbl">Problem addressed</div><div class="txt">Claims with missing or mismatched data are the single largest cause of TPA queries and resubmission delay.</div></div>
+        <div class="why-item"><div class="lbl">User</div><div class="txt">Insurance desk coordinator, case manager.</div></div>
+        <div class="why-item"><div class="lbl">Product intervention</div><div class="txt">Automatically cross-checks EMR, billing and insurance data against payer-specific rules before submission, surfacing blocking issues in real time instead of after a TPA rejection.</div></div>
+        <div class="why-item"><div class="lbl">Expected outcome</div><div class="txt">Fewer first-pass queries, fewer resubmission cycles, faster time-to-submit.</div></div>
+      </div>
+    </div>
+
+    <!-- CONTROL TOWER -->
+    <div class="d-panel" data-owner="tower" data-kind="overview">
+      <div class="section-title">Current Claims</div>
+      <table class="dash-table">
+        <tr><th>Claim</th><th>Stage</th><th>TAT</th><th>Owner</th><th>Status</th></tr>
+        <tr><td>#4471</td><td>TPA Review</td><td>1h 40m</td><td>Ops · R. Nair</td><td><span class="pulse-tag"><span class="d g"></span>On track</span></td></tr>
+        <tr><td>#4468</td><td>Query Response</td><td>3h 05m</td><td>Ins. Exec · S. Rao</td><td><span class="pulse-tag"><span class="d a"></span>Approaching SLA</span></td></tr>
+        <tr><td>#4460</td><td>Final Authorization</td><td>5h 50m</td><td>Ops · R. Nair</td><td><span class="pulse-tag"><span class="d r"></span>Escalated</span></td></tr>
+      </table>
+      <div class="section-title">Timeline — Claim #4460</div>
+      <div class="timeline">
+        <div class="tl-row"><div class="tl-time">09:02</div><div class="tl-txt"><b>Submitted</b> to insurer after readiness check passed</div></div>
+        <div class="tl-row"><div class="tl-time">10:15</div><div class="tl-txt">Query raised — missing itemized bill</div></div>
+        <div class="tl-row"><div class="tl-time">10:20</div><div class="tl-txt">Auto-assigned to <b>Insurance Executive</b></div></div>
+        <div class="tl-row"><div class="tl-time">11:05</div><div class="tl-txt">Response sent, TPA re-review in progress</div></div>
+        <div class="tl-row"><div class="tl-time">14:52</div><div class="tl-txt" style="color:var(--red)"><b>SLA breached</b> — auto-escalated to Ops Manager</div></div>
+      </div>
+    </div>
+    <div class="d-panel" data-owner="tower" data-kind="why">
+      <div class="why-grid">
+        <div class="why-item"><div class="lbl">Problem addressed</div><div class="txt">Once submitted, claims disappear into a TPA/insurer black box with no visibility into where time is being lost.</div></div>
+        <div class="why-item"><div class="lbl">User</div><div class="txt">Insurance operations manager, hospital finance and admin leadership.</div></div>
+        <div class="why-item"><div class="lbl">Product intervention</div><div class="txt">Tracks every claim's stage, owner and time-against-SLA in one live view, with automatic escalation when a threshold is breached.</div></div>
+        <div class="why-item"><div class="lbl">Expected outcome</div><div class="txt">Ownership is always visible, delays are caught while still fixable, and leadership gets objective TAT data instead of anecdote.</div></div>
+      </div>
+    </div>
+
+    <!-- PATIENT COMMUNICATION -->
+    <div class="d-panel" data-owner="comm" data-kind="overview">
+      <div class="section-title">Patient-Facing Preview</div>
+      <div class="chat-preview">
+        <div class="bubble"><div class="txt">Your discharge is being prepared. We're putting together your insurance claim.</div><div class="time">09:00</div></div>
+        <div class="bubble"><div class="txt">Your claim has been sent to Star Health. Expected response: 2–4 hrs.</div><div class="time">09:02</div></div>
+        <div class="bubble"><div class="txt">Your insurer has a small query on your claim. Our team is handling it — no action needed from you.</div><div class="time">10:15</div></div>
+        <div class="bubble"><div class="txt">Good news — your claim is approved. We're finalizing your bill.</div><div class="time">14:58</div></div>
+        <div class="bubble"><div class="txt">You're cleared for discharge. Please collect your documents at the discharge desk.</div><div class="time">15:20</div></div>
+      </div>
+    </div>
+    <div class="d-panel" data-owner="comm" data-kind="why">
+      <div class="why-grid">
+        <div class="why-item"><div class="lbl">Problem addressed</div><div class="txt">Patients and families experience the claim and discharge wait as a black box, which drives anxiety and repeated calls to the front desk.</div></div>
+        <div class="why-item"><div class="lbl">User</div><div class="txt">Patient and family.</div></div>
+        <div class="why-item"><div class="lbl">Product intervention</div><div class="txt">Sends automatic, stage-linked notifications that translate internal claim status into plain-language updates.</div></div>
+        <div class="why-item"><div class="lbl">Expected outcome</div><div class="txt">Fewer "what's happening" calls to nursing and the front desk, higher patient satisfaction, and a shorter felt wait even when actual TAT is unchanged.</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ---- nav switch ----
+document.querySelectorAll('.nav-tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const s = btn.dataset.state;
+    document.getElementById('view-future').classList.toggle('active', s==='future');
+    document.getElementById('view-current').classList.toggle('active', s==='current');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+// ---- before/after switch ----
+const baSwitch=document.getElementById('baSwitch'), baLabel=document.getElementById('baLabel'),
+      baBefore=document.getElementById('baBefore'), baAfter=document.getElementById('baAfter');
+baSwitch.addEventListener('click',()=>{
+  const on = baSwitch.classList.toggle('on');
+  baLabel.textContent = on ? 'AFTER' : 'BEFORE';
+  baBefore.hidden = on; baAfter.hidden = !on;
+});
+
+// ---- lineage toggle ----
+const lineageBtn=document.getElementById('lineageBtn'), lineageDiagram=document.getElementById('lineageDiagram');
+lineageBtn.addEventListener('click',()=>{
+  const open = lineageDiagram.hidden;
+  lineageDiagram.hidden = !open;
+  lineageBtn.classList.toggle('open', open);
+  lineageBtn.innerHTML = (open? '<span class="chev">▸</span> Hide data lineage' : '<span class="chev">▸</span> View data lineage');
+});
+
+// ---- drawer ----
+const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+const drawerMeta={
+  readiness:{badge:'Prevent',badgeClass:'prevent',title:'Claim Readiness & Validation',
+    sub:'Confirms every payer requirement is satisfied before the claim ever leaves the hospital.'},
+  tower:{badge:'Monitor + Act',badgeClass:'monitor',title:'Insurance Claim Control Tower',
+    sub:'One live view of every submitted claim — stage, owner, TAT and escalation.'},
+  comm:{badge:'Inform',badgeClass:'inform',title:'Patient Communication',
+    sub:'Plain-language updates sent automatically as the claim moves through each stage.'}
+};
+function openDrawer(id){
+  const m=drawerMeta[id];
+  document.getElementById('drawerBadge').textContent=m.badge;
+  document.getElementById('drawerBadge').className='badge '+m.badgeClass;
+  document.getElementById('drawerTitle').textContent=m.title;
+  document.getElementById('drawerSub').textContent=m.sub;
+  document.querySelectorAll('.d-panel').forEach(p=>{
+    p.classList.toggle('active', p.dataset.owner===id && p.dataset.kind==='overview');
+  });
+  setTabButtons('overview');
+  drawer.classList.add('open'); overlay.classList.add('open');
+  drawer.dataset.current=id;
+}
+function closeDrawer(){ drawer.classList.remove('open'); overlay.classList.remove('open'); }
+function setTab(kind){
+  const id=drawer.dataset.current;
+  document.querySelectorAll('.d-panel').forEach(p=>{
+    p.classList.toggle('active', p.dataset.owner===id && p.dataset.kind===kind);
+  });
+  setTabButtons(kind);
+}
+function setTabButtons(kind){
+  document.querySelectorAll('.d-tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===kind));
+}
+document.getElementById('dockBtn').addEventListener('click',()=>openDrawer('comm'));
+
+// ---- TAT counter ----
+let secs=0;
+setInterval(()=>{
+  secs++;
+  const h=String(Math.floor(secs/3600)).padStart(2,'0');
+  const m=String(Math.floor((secs%3600)/60)).padStart(2,'0');
+  const s=String(secs%60).padStart(2,'0');
+  const el=document.getElementById('tatCounter');
+  if(el) el.textContent=`${h}:${m}:${s}`;
+},1000);
+</script>
+</body>
+</html>

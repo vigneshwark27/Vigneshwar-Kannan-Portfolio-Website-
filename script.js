@@ -306,11 +306,11 @@ const caseStudyData = {
   carepulse: {
     title: "CarePulse — Cashless Hospital Discharge Automation Overview",
     badge: "Project Overview",
-    extUrl: "https://www.notion.so/Fabri-Play-PM-Assignment-3bd22c713ac980faaf21e6c2f9790d25",
+    extUrl: "https://www.notion.so/Cashless-Hospital-Discharge-Orchestration-3bd22c713ac980faaf21e6c2f9790d25",
     html: `
       <div class="case-study-drawer">
         <div class="cs-callout-box">
-          📋 <strong>Full PRD & Process Flow Available:</strong> Click <em>"Open in Notion"</em> above to read the complete public PRD with detailed user stories and acceptance criteria, or click <em>Figma Flow</em> to view the workflow process diagram!
+          📋 <strong>Full PRD, 5 Process Flow Diagrams & Live HMS Prototype Available:</strong> Click the <em>"Process Flows (5 Diagrams)"</em> button to explore the interactive workflow suite, or launch the <em>HMS Live Prototype</em> directly from the project card!
         </div>
         <div class="cs-section">
           <h3 class="cs-h3">1. Executive Summary & Business Problem</h3>
@@ -448,7 +448,7 @@ function initModalEngine() {
   };
 
   // Open In-App PDF / Figma / Web Prototype Pop-up Viewer
-  window.openModal = function(type, title, url, extUrl) {
+  window.openModal = function(type, title, url, extUrl, customDescription) {
     const targetExtUrl = extUrl || url || '#';
 
     modalTitle.textContent = title || 'Project Preview';
@@ -463,7 +463,7 @@ function initModalEngine() {
 
     // If the URL is known to block iframe embedding, show a styled fallback panel
     if (isEmbedBlocked(url)) {
-      showTextContainer(buildEmbedBlockedPanel(type, title, targetExtUrl));
+      showTextContainer(buildEmbedBlockedPanel(type, title, targetExtUrl, customDescription));
       return;
     }
 
@@ -492,34 +492,119 @@ function initModalEngine() {
   };
 
   // Build a rich "Can't embed" fallback panel for X-Frame-Options blocked content
-  function buildEmbedBlockedPanel(type, title, extUrl) {
+  function buildEmbedBlockedPanel(type, title, extUrl, customDescription) {
     const icons = {
       'Interactive Prototype': '⚡',
       'AI Studio App': '🤖',
-      'Claude AI App': '🤖',
+      'Claude AI App': '⚖️',
       'Notion PRD': '📋',
       'PDF Teardown': '📄',
     };
-    const icon = icons[type] || '🔗';
+    const icon = icons[type] || '⚡';
 
-    let description = '';
-    if (type === 'Interactive Prototype' || type === 'AI Studio App' || type === 'Claude AI App') {
-      description = 'This interactive prototype is hosted on an external platform that prevents embedding for security reasons. Click the button below to launch it directly in a new browser tab — it works best in full screen!';
+    // Specific Rich Prototype Contexts
+    const isChargebee = (extUrl && extUrl.includes('csb.app')) || (title && title.toLowerCase().includes('chargebee'));
+    const isVisionFlow = (extUrl && extUrl.includes('ai.studio')) || (title && title.toLowerCase().includes('visionflow'));
+    const isPatentAI = (extUrl && extUrl.includes('claude.ai')) || (title && title.toLowerCase().includes('patent'));
+
+    let tagHtml = `<span class="embed-blocked-tag">${type}</span>`;
+    let descText = customDescription || '';
+    let cardHtml = '';
+
+    if (isChargebee) {
+      tagHtml = `<span class="embed-blocked-tag">B2B SaaS • AI Extraction Web Prototype</span>`;
+      descText = `Interactive CodeSandbox prototype simulating Chargebee's automated contract-to-subscription ingestion pipeline with live side-by-side verification.`;
+      cardHtml = `
+        <div class="embed-blocked-card">
+          <div>
+            <div class="embed-blocked-section-title">✨ UX & UI Architecture Highlights</div>
+            <ul class="embed-blocked-list">
+              <li><strong>Side-by-Side Dual Pane:</strong> Raw enterprise PDF contract viewer on left synchronized with AI-extracted billing fields on right.</li>
+              <li><strong>Confidence-Scored Fields:</strong> Visual green/amber tags highlight high vs low confidence extractions for instant human auditing.</li>
+              <li><strong>Zero-Risk Draft Guardrail:</strong> AI extractions strictly generate "Draft" subscriptions — zero automated billing activation without human sign-off.</li>
+              <li><strong>Complex Pricing Handlers:</strong> Built-in workflows for tiered volume pricing, custom renewal clauses, and multi-currency billing.</li>
+            </ul>
+          </div>
+          <div class="embed-blocked-actions-guide">
+            <strong>What you can test in the prototype:</strong> Upload or view sample enterprise contracts, review AI-parsed line items, edit extracted fields inline, and approve draft subscriptions into the billing ledger.
+          </div>
+        </div>
+      `;
+    } else if (isVisionFlow) {
+      tagHtml = `<span class="embed-blocked-tag">Productivity • Gemini 1.5 Pro AI App</span>`;
+      descText = `Live working application built on Google AI Studio that anchors daily task execution to long-term life vision cards through Gemini AI.`;
+      cardHtml = `
+        <div class="embed-blocked-card">
+          <div>
+            <div class="embed-blocked-section-title">✨ UX & UI Architecture Highlights</div>
+            <ul class="embed-blocked-list">
+              <li><strong>Chromatic Goal Visualization:</strong> Black-and-white vision imagery progressively bursts into full vibrant color as linked micro-tasks are finished.</li>
+              <li><strong>Gemini Peak Focus Engine:</strong> AI velocity analysis detects high-cognition time windows to proactively schedule deep work.</li>
+              <li><strong>Guilt-Free Rest Token System:</strong> 4 built-in monthly rest tokens freeze streaks without guilt, preventing motivation fatigue and churn.</li>
+              <li><strong>Vision Ring Progression:</strong> Circular micro-progress rings turn high-level vision tracking into a continuous visual feedback loop.</li>
+            </ul>
+          </div>
+          <div class="embed-blocked-actions-guide">
+            <strong>What you can test in the prototype:</strong> Create life vision cards, test Gemini's automatic natural language task decomposition, inspect peak focus recommendations, and trigger streak protection tokens.
+          </div>
+        </div>
+      `;
+    } else if (isPatentAI) {
+      tagHtml = `<span class="embed-blocked-tag">LegalTech • Dual-Pane AI Workspace</span>`;
+      descText = `Functional Claude AI workspace prototype designed for patent attorneys and technical analysts to accelerate claim chart critique by 8x.`;
+      cardHtml = `
+        <div class="embed-blocked-card">
+          <div>
+            <div class="embed-blocked-section-title">✨ UX & UI Architecture Highlights</div>
+            <ul class="embed-blocked-list">
+              <li><strong>Dual-Pane Workspace UX:</strong> Left-hand conversational critique feed paired with a persistent right-hand claim element tracker (1.a through 2.b).</li>
+              <li><strong>Non-Hallucination Hard Stop:</strong> AI explicitly halts and flags "Pending Evidence" whenever uploaded source specifications lack direct proof.</li>
+              <li><strong>Audit Confidence Scores:</strong> Tri-level confidence ratings with direct passage anchors linking legal claim language to technical specs.</li>
+              <li><strong>Litigation-Ready Export:</strong> Formats claim charts directly for court submission with element-by-element citations.</li>
+            </ul>
+          </div>
+          <div class="embed-blocked-actions-guide">
+            <strong>What you can test in the prototype:</strong> Step through claim elements (1.a - 2.b), run automated diagnostic critique scans, trigger missing citation audits, and test evidence deficiency alerts.
+          </div>
+        </div>
+      `;
     } else if (type === 'Notion PRD') {
-      description = 'This PRD is hosted on Notion. Click below to open the full public document with all user stories, acceptance criteria, and product specifications.';
-    } else {
-      description = 'This content is hosted externally. Click below to view it in a new tab.';
+      tagHtml = `<span class="embed-blocked-tag">Product Requirements Document • Public Notion</span>`;
+      if (!descText) {
+        descText = `Comprehensive Product Requirements Document containing user personas, architecture workflows, complete user stories, and acceptance criteria.`;
+      }
+      cardHtml = `
+        <div class="embed-blocked-card">
+          <div>
+            <div class="embed-blocked-section-title">📋 What's Inside This PRD</div>
+            <ul class="embed-blocked-list">
+              <li><strong>Product Vision & Problem Statement:</strong> Market context, root cause analysis, and quantifiable business objectives.</li>
+              <li><strong>Detailed User Stories:</strong> Role-based stories with Gherkin acceptance criteria (Given / When / Then).</li>
+              <li><strong>System Workflow Architecture:</strong> Data models, error states, and cross-functional operational guardrails.</li>
+              <li><strong>Success & Guardrail Metrics:</strong> North Star metrics, efficiency gains, and risk mitigation thresholds.</li>
+            </ul>
+          </div>
+        </div>
+      `;
+    } else if (!cardHtml && descText) {
+      cardHtml = `
+        <div class="embed-blocked-card">
+          <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.6; margin:0;">${descText}</p>
+        </div>
+      `;
     }
 
     return `
       <div class="embed-blocked-panel">
         <div class="embed-blocked-icon">${icon}</div>
+        ${tagHtml}
         <h3 class="embed-blocked-title">${title}</h3>
-        <p class="embed-blocked-desc">${description}</p>
+        <p class="embed-blocked-desc">${descText}</p>
+        ${cardHtml}
         <a href="${extUrl}" target="_blank" rel="noopener noreferrer" class="embed-blocked-cta">
           Launch ${type} ↗
         </a>
-        <p class="embed-blocked-hint">Opens in a new tab • No sign-in required</p>
+        <p class="embed-blocked-hint">Opens in a new browser tab • Zero lag • Full-screen experience</p>
       </div>
     `;
   }

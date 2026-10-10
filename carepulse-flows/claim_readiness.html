@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claim Readiness & Validation — Interactive Process Flowchart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-base: #060913;
+      --bg-surface: #0b1120;
+      --bg-card: #10192e;
+      --bg-card2: #16223b;
+      --bg-hover: #1c2b4a;
+      --border: #1e3054;
+      --border-light: #2a416e;
+      --text-primary: #f0f4fc;
+      --text-secondary: #94a3b8;
+      --text-muted: #475569;
+      --accent: #3b82f6;
+      --accent-glow: rgba(59,130,246,.35);
+      --green: #10b981;
+      --green-dim: #064e3b;
+      --green-glow: rgba(16,185,129,.35);
+      --amber: #f59e0b;
+      --amber-dim: #78350f;
+      --amber-glow: rgba(245,158,11,.3);
+      --red: #ef4444;
+      --red-dim: #7f1d1d;
+      --red-glow: rgba(239,68,68,.35);
+      --purple: #a855f7;
+      --indigo: #6366f1;
+      --teal: #14b8a6;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --transition: all .25s cubic-bezier(.4,0,.2,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 14px; scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-base);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-surface); }
+    ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 99px; }
+
+    .topbar {
+      height: 56px; padding: 0 24px;
+      background: rgba(11,17,32,.95);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 14px; }
+    .logo-badge {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--indigo));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .topbar-title { font-size: 15px; font-weight: 800; letter-spacing: -.3px; }
+    .breadcrumb { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+    .breadcrumb span { color: var(--text-secondary); }
+    .breadcrumb strong { color: var(--text-primary); font-weight: 600; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: var(--radius-sm);
+      font-size: 12.5px; font-weight: 700; cursor: pointer;
+      border: 1px solid transparent; transition: var(--transition);
+      font-family: inherit; white-space: nowrap;
+    }
+    .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-primary:hover { background: #2563eb; box-shadow: 0 0 20px var(--accent-glow); transform: translateY(-1px); }
+    .btn-ghost { background: var(--bg-card); color: var(--text-secondary); border-color: var(--border); }
+    .btn-ghost:hover { background: var(--bg-hover); color: var(--text-primary); border-color: var(--border-light); }
+    .btn-success { background: var(--green); color: #fff; border-color: var(--green); }
+    .btn-success:hover { background: #059669; box-shadow: 0 0 20px var(--green-glow); }
+
+    .sim-banner {
+      display: none; padding: 10px 24px;
+      background: linear-gradient(90deg, rgba(59,130,246,.15), rgba(99,102,241,.15));
+      border-bottom: 1px solid rgba(59,130,246,.3);
+      font-size: 12.5px; color: #93c5fd; font-weight: 600;
+      align-items: center; justify-content: space-between;
+    }
+    .sim-banner.active { display: flex; animation: fadeIn .3s ease; }
+    .sim-status { display: flex; align-items: center; gap: 10px; }
+    .sim-spinner {
+      width: 14px; height: 14px; border: 2px solid var(--accent);
+      border-top-color: transparent; border-radius: 50%;
+      animation: spin .6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .controls-bar {
+      padding: 12px 24px; background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .flow-legend { display: flex; align-items: center; gap: 16px; font-size: 11.5px; color: var(--text-secondary); }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot-input { background: var(--indigo); }
+    .dot-fetch { background: var(--teal); }
+    .dot-val { background: var(--amber); }
+    .dot-blocking { background: var(--red); }
+    .dot-ready { background: var(--green); }
+
+    .flow-canvas {
+      flex: 1; padding: 32px 24px 80px;
+      display: flex; flex-direction: column; align-items: center;
+      position: relative; overflow-y: auto;
+    }
+
+    .flow-tree {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0; width: 100%; max-width: 900px; position: relative;
+    }
+
+    .flow-node {
+      width: 100%; max-width: 720px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px; position: relative;
+      cursor: pointer; transition: var(--transition);
+      box-shadow: 0 4px 24px rgba(0,0,0,.3);
+    }
+    .flow-node:hover {
+      border-color: var(--accent); transform: translateY(-2px);
+      box-shadow: 0 8px 32px var(--accent-glow);
+    }
+    .flow-node.active-step {
+      border-color: var(--accent)!important;
+      background: var(--bg-card2)!important;
+      box-shadow: 0 0 32px var(--accent-glow)!important;
+      transform: scale(1.02);
+    }
+    .flow-node.step-completed {
+      border-color: rgba(16,185,129,.4);
+      box-shadow: 0 0 16px rgba(16,185,129,.1);
+    }
+
+    .node-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+    .node-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--bg-surface); border: 1.5px solid var(--border-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11.5px; font-weight: 800; color: var(--text-secondary);
+      flex-shrink: 0; transition: var(--transition);
+    }
+    .flow-node.active-step .node-num { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .flow-node.step-completed .node-num { background: var(--green-dim); color: var(--green); border-color: var(--green); }
+
+    .node-title { font-size: 14.5px; font-weight: 800; color: var(--text-primary); flex: 1; }
+    .node-tag {
+      font-size: 10px; padding: 3px 9px; border-radius: 99px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+    }
+    .tag-input { background: rgba(99,102,241,.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,.3); }
+    .tag-fetch { background: rgba(20,184,166,.15); color: #2dd4bf; border: 1px solid rgba(20,184,166,.3); }
+    .tag-rule  { background: rgba(245,158,11,.15); color: #fde047; border: 1px solid rgba(245,158,11,.3); }
+    .tag-val   { background: rgba(168,85,247,.15); color: #c084fc; border: 1px solid rgba(168,85,247,.3); }
+
+    .node-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+    .node-status-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 700; margin-top: 8px;
+      padding: 2px 8px; border-radius: 99px; background: rgba(255,255,255,.05);
+      color: var(--text-muted);
+    }
+
+    .connector-line {
+      width: 3px; height: 38px; background: var(--border);
+      position: relative; transition: var(--transition);
+    }
+    .connector-line::after {
+      content: ''; position: absolute; bottom: -1px; left: -4px;
+      width: 0; height: 0;
+      border-left: 5.5px solid transparent;
+      border-right: 5.5px solid transparent;
+      border-top: 7px solid var(--border);
+      transition: var(--transition);
+    }
+    .connector-line.active-conn {
+      background: linear-gradient(180deg, var(--accent), var(--indigo));
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .connector-line.active-conn::after { border-top-color: var(--indigo); }
+
+    .fetch-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px;
+    }
+    .fetch-card {
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 10px 12px;
+      font-size: 11.5px; transition: var(--transition);
+    }
+    .fetch-card.done { border-color: rgba(16,185,129,.4); background: rgba(16,185,129,.05); }
+    .fetch-card-title { font-weight: 700; color: var(--text-primary); margin-bottom: 2px; display: flex; align-items: center; justify-content: space-between; }
+    .fetch-card-sub { font-size: 10.5px; color: var(--text-muted); }
+
+    .layer-matrix { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+    .layer-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 14px; background: var(--bg-surface);
+      border: 1px solid var(--border); border-radius: var(--radius-md);
+      font-size: 12px; transition: var(--transition);
+    }
+    .layer-bar-track { flex: 1; height: 4px; background: var(--border); border-radius: 99px; margin: 0 14px; overflow: hidden; }
+    .layer-bar-fill { height: 100%; border-radius: 99px; width: 0; transition: width .6s ease; }
+    .layer-name { font-weight: 600; color: var(--text-primary); width: 190px; flex-shrink: 0; }
+    .layer-pct { font-size: 11px; font-weight: 800; width: 42px; text-align: right; flex-shrink: 0; }
+
+    .decision-branch-container {
+      width: 100%; max-width: 860px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+      margin-top: 14px; position: relative;
+    }
+    .branch-card {
+      background: var(--bg-card); border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); padding: 22px; text-align: left;
+      transition: var(--transition); position: relative;
+    }
+    .branch-card.not-ready { border-color: rgba(239,68,68,.4); background: rgba(239,68,68,.03); }
+    .branch-card.not-ready.active-branch {
+      border-color: var(--red); background: rgba(239,68,68,.08);
+      box-shadow: 0 0 32px var(--red-glow); transform: scale(1.02);
+    }
+    .branch-card.ready { border-color: rgba(16,185,129,.4); background: rgba(16,185,129,.03); }
+    .branch-card.ready.active-branch {
+      border-color: var(--green); background: rgba(16,185,129,.08);
+      box-shadow: 0 0 32px var(--green-glow); transform: scale(1.02);
+    }
+
+    .branch-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+      padding: 4px 10px; border-radius: 99px; margin-bottom: 12px;
+    }
+    .branch-badge.nr { background: rgba(239,68,68,.15); color: var(--red); border: 1px solid rgba(239,68,68,.3); }
+    .branch-badge.r  { background: rgba(16,185,129,.15); color: var(--green); border: 1px solid rgba(16,185,129,.3); }
+
+    .issue-pill-list { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+    .issue-pill {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 11px 13px; border-radius: var(--radius-md);
+      background: var(--bg-surface); border: 1px solid var(--border);
+      font-size: 12px; cursor: pointer; transition: var(--transition);
+    }
+    .issue-pill:hover { border-color: var(--red); background: var(--bg-hover); transform: translateX(3px); }
+    .issue-pill.resolved { border-color: rgba(16,185,129,.3); opacity: .7; }
+    .issue-pill-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+
+    .drawer-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,.6); backdrop-filter: blur(4px);
+    }
+    .drawer-overlay.open { display: block; }
+    .drawer {
+      position: fixed; top: 0; right: -580px; bottom: 0; width: 580px;
+      background: var(--bg-card); border-left: 1px solid var(--border);
+      z-index: 201; display: flex; flex-direction: column;
+      transition: right .35s cubic-bezier(.4,0,.2,1);
+      box-shadow: -10px 0 40px rgba(0,0,0,.6);
+    }
+    .drawer.open { right: 0; }
+    .drawer-header {
+      padding: 20px 24px; border-bottom: 1px solid var(--border);
+      background: var(--bg-card2);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .drawer-title { font-size: 15px; font-weight: 800; }
+    .close-btn {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--bg-surface); border: 1px solid var(--border);
+      color: var(--text-muted); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; transition: var(--transition);
+    }
+    .close-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+    .drawer-body { padding: 22px 24px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 18px; }
+    .drawer-footer {
+      padding: 16px 24px; border-top: 1px solid var(--border);
+      background: var(--bg-card2); display: flex; gap: 10px; justify-content: flex-end;
+    }
+
+    .detail-group { display: flex; flex-direction: column; gap: 6px; }
+    .detail-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+    .detail-val { font-size: 12.5px; color: var(--text-primary); line-height: 1.6; }
+    .detail-box-warn {
+      background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.25);
+      border-radius: var(--radius-sm); padding: 10px 12px; color: #fde047; font-size: 12px;
+    }
+
+    .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+    .comp-col { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; }
+    .comp-title { font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; }
+    .comp-text { font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.7; color: var(--text-secondary); white-space: pre-wrap; }
+    .mismatch-highlight { background: rgba(239,68,68,.25); color: #fca5a5; padding: 1px 4px; border-radius: 3px; font-weight: 600; }
+    .match-ok { color: var(--green); }
+
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,.7); backdrop-filter: blur(6px);
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); width: 680px; max-height: 85vh;
+      display: flex; flex-direction: column; overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,.7);
+    }
+    .modal-header {
+      padding: 18px 24px; border-bottom: 1px solid var(--border); background: var(--bg-card2);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .modal-body { padding: 20px 24px; overflow-y: auto; flex: 1; }
+    .doc-preview-content {
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 18px;
+      font-family: 'JetBrains Mono', monospace; font-size: 11.5px;
+      color: var(--text-secondary); line-height: 1.8; white-space: pre-wrap;
+    }
+
+    @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+  </style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-left">
+    <div class="logo-badge">🏥</div>
+    <div>
+      <div class="topbar-title">CLAIM READINESS &amp; VALIDATION</div>
+      <div class="breadcrumb">
+        <span>Insurance Ops</span> &rsaquo;
+        <span>Claims</span> &rsaquo;
+        <span>Claim Preparation</span> &rsaquo;
+        <strong>Process Flow Simulation</strong>
+      </div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button class="btn btn-ghost" onclick="resetFlow()">↺ Reset Diagram</button>
+    <button class="btn btn-primary" onclick="runSimulationSequence()">⚡ Run Live Process Simulation</button>
+  </div>
+</nav>
+
+<div class="sim-banner" id="sim-banner">
+  <div class="sim-status">
+    <div class="sim-spinner"></div>
+    <span id="sim-banner-text">Running Process Simulation: Step 1 of 5 — Patient Identifier Entry</span>
+  </div>
+  <button class="btn btn-ghost" style="padding:3px 10px;font-size:11px" onclick="stopSimulation()">Stop Simulation</button>
+</div>
+
+<div class="controls-bar">
+  <div class="flow-legend">
+    <span class="legend-item"><span class="legend-dot dot-input"></span> Step 1: Entry Point</span>
+    <span class="legend-item"><span class="legend-dot dot-fetch"></span> Step 2–4: Data Integration &amp; Rules</span>
+    <span class="legend-item"><span class="legend-dot dot-val"></span> Step 5: 5-Layer Engine</span>
+    <span class="legend-item"><span class="legend-dot dot-blocking"></span> Step 6: Decision (Not Ready)</span>
+    <span class="legend-item"><span class="legend-dot dot-ready"></span> Final: Submission</span>
+  </div>
+  <div style="font-size:11.5px;color:var(--text-muted)">💡 Click "Run Live Process Simulation" to watch automated execution step-by-step</div>
+</div>
+
+<main class="flow-canvas">
+  <div class="flow-tree">
+
+    <!-- NODE 1: Patient ID Entry -->
+    <div class="flow-node" id="node-1" onclick="selectNode(1)">
+      <div class="node-header">
+        <div class="node-num" id="num-1">1</div>
+        <div class="node-title">Enter Patient ID / UHID</div>
+        <span class="node-tag tag-input">Entry Point</span>
+      </div>
+      <div class="node-desc">Hospital Insurance Operations Executive inputs patient UHID (<code style="color:#93c5fd">UHID-2024-089341</code>) or admission number to initiate readiness evaluation.</div>
+      <div class="node-status-badge" id="stat-1">Waiting to run…</div>
+    </div>
+
+    <div class="connector-line" id="conn-1"></div>
+
+    <!-- NODE 2: Multi-System Data Fetch -->
+    <div class="flow-node" id="node-2" onclick="selectNode(2)">
+      <div class="node-header">
+        <div class="node-num" id="num-2">2</div>
+        <div class="node-title">Fetch Multi-System Data (EMR, Billing, Insurance)</div>
+        <span class="node-tag tag-fetch">Data Integration</span>
+      </div>
+      <div class="node-desc">Parallel API fetch querying hospital data sources to pull clinical notes, bill statements, and pre-authorization limits.</div>
+      <div class="fetch-grid">
+        <div class="fetch-card" id="fc-0">
+          <div class="fetch-card-title"><span>👤 Patient Data</span><span id="fcs-0">⏳</span></div>
+          <div class="fetch-card-sub">Demographics, Policy SH-CORP</div>
+        </div>
+        <div class="fetch-card" id="fc-1">
+          <div class="fetch-card-title"><span>📋 EMR Data</span><span id="fcs-1">⏳</span></div>
+          <div class="fetch-card-sub">Discharge, Operative, Lab</div>
+        </div>
+        <div class="fetch-card" id="fc-2">
+          <div class="fetch-card-title"><span>💳 Billing &amp; Ins.</span><span id="fcs-2">⏳</span></div>
+          <div class="fetch-card-sub">Final bill ₹4.12L, Pre-auth</div>
+        </div>
+      </div>
+      <div class="node-status-badge" id="stat-2">Waiting for fetch…</div>
+    </div>
+
+    <div class="connector-line" id="conn-2"></div>
+
+    <!-- NODE 3: Assemble Claim Package -->
+    <div class="flow-node" id="node-3" onclick="selectNode(3)">
+      <div class="node-header">
+        <div class="node-num" id="num-3">3</div>
+        <div class="node-title">Assemble Claim Package</div>
+        <span class="node-tag tag-fetch">Document Indexing</span>
+      </div>
+      <div class="node-desc">Indexes 11 claim documents (Discharge Summary, Operative Note, Final Bill, Pre-Auth, Implant Invoice, Consents, ID Proofs).</div>
+      <div class="node-status-badge" id="stat-3">Waiting for assembly…</div>
+      <div style="margin-top:6px;font-size:11px;color:var(--accent);font-weight:600;cursor:pointer" onclick="event.stopPropagation(); openDocModal('discharge-summary')">📄 Click to inspect sample Discharge Summary content</div>
+    </div>
+
+    <div class="connector-line" id="conn-3"></div>
+
+    <!-- NODE 4: Identify Payer Requirements -->
+    <div class="flow-node" id="node-4" onclick="selectNode(4)">
+      <div class="node-header">
+        <div class="node-num" id="num-4">4</div>
+        <div class="node-title">Identify Payer-Specific Requirements</div>
+        <span class="node-tag tag-rule">Rules Engine</span>
+      </div>
+      <div class="node-desc">Evaluates claim metadata against Star Health Insurance CABG Protocol Checklist rules.</div>
+      <div class="node-status-badge" id="stat-4">Waiting for rules engine…</div>
+    </div>
+
+    <div class="connector-line" id="conn-4"></div>
+
+    <!-- NODE 5: Run 5-Layer Validation -->
+    <div class="flow-node" id="node-5" onclick="selectNode(5)">
+      <div class="node-header">
+        <div class="node-num" id="num-5">5</div>
+        <div class="node-title">Execute 5-Layer Validation Engine</div>
+        <span class="node-tag tag-val">Validation Engine</span>
+      </div>
+      <div class="node-desc">Executes strict validation layers across clinical, billing, and document completeness rules:</div>
+      <div class="layer-matrix">
+        <div class="layer-item">
+          <span class="layer-name">1. Document Completeness</span>
+          <div class="layer-bar-track"><div class="layer-bar-fill" id="lfill-0" style="background:var(--red)"></div></div>
+          <span class="layer-pct" id="lpct-0" style="color:var(--red)">0%</span>
+        </div>
+        <div class="layer-item">
+          <span class="layer-name">2. Payer Requirements</span>
+          <div class="layer-bar-track"><div class="layer-bar-fill" id="lfill-1" style="background:var(--amber)"></div></div>
+          <span class="layer-pct" id="lpct-1" style="color:var(--amber)">0%</span>
+        </div>
+        <div class="layer-item">
+          <span class="layer-name">3. Cross-Document Consistency</span>
+          <div class="layer-bar-track"><div class="layer-bar-fill" id="lfill-2" style="background:var(--red)"></div></div>
+          <span class="layer-pct" id="lpct-2" style="color:var(--red)">0%</span>
+        </div>
+        <div class="layer-item">
+          <span class="layer-name">4. Document Quality</span>
+          <div class="layer-bar-track"><div class="layer-bar-fill" id="lfill-3" style="background:var(--green)"></div></div>
+          <span class="layer-pct" id="lpct-3" style="color:var(--green)">0%</span>
+        </div>
+        <div class="layer-item">
+          <span class="layer-name">5. Claim Data Validation</span>
+          <div class="layer-bar-track"><div class="layer-bar-fill" id="lfill-4" style="background:var(--green)"></div></div>
+          <span class="layer-pct" id="lpct-4" style="color:var(--green)">0%</span>
+        </div>
+      </div>
+      <div class="node-status-badge" id="stat-5">Waiting for validation…</div>
+    </div>
+
+    <div class="connector-line" id="conn-5"></div>
+
+    <!-- NODE 6: Decision Hub -->
+    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-muted);margin-bottom:8px">STEP 6: READINESS DECISION</div>
+
+    <div class="decision-branch-container">
+
+      <div class="branch-card not-ready" id="branch-not-ready">
+        <div class="branch-badge nr">⛔ CLAIM NOT READY</div>
+        <div style="font-size:15px;font-weight:800;color:var(--text-primary);margin-bottom:4px">Blocking Issues: <span id="cnt-blocking">2</span> · Warnings: 1</div>
+        <div style="font-size:11.5px;color:var(--text-secondary)">Claim cannot be submitted to Star Health until blocking issues are cleared.</div>
+
+        <div class="issue-pill-list">
+          <div class="issue-pill" id="pill-1" onclick="openDrawer('issue1')">
+            <span class="issue-pill-icon" id="picon-1">🚫</span>
+            <div>
+              <div style="font-weight:700;color:var(--text-primary)" id="ptitle-1">Issue 1: Investigation Report missing</div>
+              <div style="font-size:10.5px;color:var(--text-muted)" id="psub-1">Click to open detail &amp; resolve drawer ›</div>
+            </div>
+          </div>
+          <div class="issue-pill" id="pill-2" onclick="openDrawer('issue2')">
+            <span class="issue-pill-icon" id="picon-2">🚫</span>
+            <div>
+              <div style="font-weight:700;color:var(--text-primary)" id="ptitle-2">Issue 2: Procedure description differs (EMR vs Billing)</div>
+              <div style="font-size:10.5px;color:var(--text-muted)" id="psub-2">Click to open comparison &amp; resolve drawer ›</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="branch-card ready" id="branch-ready">
+        <div class="branch-badge r">✅ CLAIM READY</div>
+        <div style="font-size:15px;font-weight:800;color:var(--green);margin-bottom:4px">All Blockers Resolved</div>
+        <div style="font-size:11.5px;color:var(--text-secondary);margin-bottom:14px">Claim package verified &amp; ready for cashless submission to Star Health.</div>
+        <button class="btn btn-success" id="btn-submit" style="width:100%;justify-content:center" onclick="submitFinalClaim()">
+          📤 SUBMIT FINAL CLAIM
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</main>
+
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div>
+      <div class="drawer-title" id="drawer-title">Issue Detail</div>
+      <div style="font-size:11px;color:var(--text-muted)" id="drawer-subtitle">Validation Finding</div>
+    </div>
+    <div class="close-btn" onclick="closeDrawer()">✕</div>
+  </div>
+  <div class="drawer-body" id="drawer-body">
+  </div>
+  <div class="drawer-footer" id="drawer-footer">
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-overlay" onclick="closeDocModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div style="font-weight:700;font-size:14px" id="modal-title">Document Preview</div>
+      <div class="close-btn" onclick="closeDocModal()">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="doc-preview-content" id="modal-content"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let issue1Resolved = false;
+let issue2Resolved = false;
+
+function selectNode(id) {
+  for (let i = 1; i <= 5; i++) {
+    const el = document.getElementById('node-' + i);
+    if (el) el.classList.toggle('active-step', i === id);
+  }
+}
+
+function runSimulationSequence() {
+  resetFlow();
+  document.getElementById('sim-banner').classList.add('active');
+
+  const bannerText = document.getElementById('sim-banner-text');
+
+  bannerText.textContent = "Simulation Step 1 of 5: Validating Patient Identifier (UHID-2024-089341)…";
+  selectNode(1);
+  document.getElementById('stat-1').textContent = "⚡ Active";
+  document.getElementById('stat-1').style.color = "#93c5fd";
+
+  setTimeout(() => {
+    document.getElementById('stat-1').textContent = "✓ Patient Found (Rajesh Kumar Sharma)";
+    document.getElementById('stat-1').style.color = "var(--green)";
+    document.getElementById('node-1').classList.add('step-completed');
+    document.getElementById('conn-1').classList.add('active-conn');
+
+    bannerText.textContent = "Simulation Step 2 of 5: Fetching EMR, Billing & Pre-Auth Records…";
+    selectNode(2);
+    document.getElementById('stat-2').textContent = "⚡ Fetching from APIs…";
+    document.getElementById('stat-2').style.color = "#93c5fd";
+
+    setTimeout(() => {
+      document.getElementById('fc-0').classList.add('done'); document.getElementById('fcs-0').textContent = "✓";
+    }, 400);
+    setTimeout(() => {
+      document.getElementById('fc-1').classList.add('done'); document.getElementById('fcs-1').textContent = "✓";
+    }, 800);
+    setTimeout(() => {
+      document.getElementById('fc-2').classList.add('done'); document.getElementById('fcs-2').textContent = "✓";
+      document.getElementById('stat-2').textContent = "✓ All Data Streams Loaded";
+      document.getElementById('stat-2').style.color = "var(--green)";
+      document.getElementById('node-2').classList.add('step-completed');
+      document.getElementById('conn-2').classList.add('active-conn');
+
+      bannerText.textContent = "Simulation Step 3 of 5: Indexing Claim Document Package…";
+      selectNode(3);
+      document.getElementById('stat-3').textContent = "⚡ Indexing 11 Documents…";
+      document.getElementById('stat-3').style.color = "#93c5fd";
+
+      setTimeout(() => {
+        document.getElementById('stat-3').textContent = "✓ Package Assembled (11 Documents)";
+        document.getElementById('stat-3').style.color = "var(--green)";
+        document.getElementById('node-3').classList.add('step-completed');
+        document.getElementById('conn-3').classList.add('active-conn');
+
+        bannerText.textContent = "Simulation Step 4 of 5: Matching Payer Rules (Star Health CABG Checklist)…";
+        selectNode(4);
+        document.getElementById('stat-4').textContent = "⚡ Evaluating Payer Protocol…";
+        document.getElementById('stat-4').style.color = "#93c5fd";
+
+        setTimeout(() => {
+          document.getElementById('stat-4').textContent = "✓ Protocol Matched (Star Health CABG v3.2)";
+          document.getElementById('stat-4').style.color = "var(--green)";
+          document.getElementById('node-4').classList.add('step-completed');
+          document.getElementById('conn-4').classList.add('active-conn');
+
+          bannerText.textContent = "Simulation Step 5 of 5: Running 5-Layer Validation Engine…";
+          selectNode(5);
+          document.getElementById('stat-5').textContent = "⚡ Running Layer Rules…";
+          document.getElementById('stat-5').style.color = "#93c5fd";
+
+          const pcts = [82, 80, 70, 100, 95];
+          pcts.forEach((p, idx) => {
+            setTimeout(() => {
+              document.getElementById('lfill-' + idx).style.width = p + '%';
+              document.getElementById('lpct-' + idx).textContent = p + '%';
+            }, idx * 250);
+          });
+
+          setTimeout(() => {
+            document.getElementById('stat-5').textContent = "⚠️ Validation Complete — 2 Blocking Issues";
+            document.getElementById('stat-5').style.color = "var(--amber)";
+            document.getElementById('node-5').classList.add('step-completed');
+            document.getElementById('conn-5').classList.add('active-conn');
+
+            bannerText.textContent = "Simulation Complete! Result: CLAIM NOT READY (2 Blocking Issues). Click issues below to resolve.";
+            document.getElementById('branch-not-ready').classList.add('active-branch');
+            document.getElementById('sim-banner').style.background = "linear-gradient(90deg, rgba(239,68,68,.2), rgba(245,158,11,.2))";
+
+          }, 1500);
+
+        }, 1200);
+
+      }, 1000);
+
+    }, 1200);
+
+  }, 1000);
+}
+
+function stopSimulation() {
+  document.getElementById('sim-banner').classList.remove('active');
+  selectNode(0);
+}
+
+function resetFlow() {
+  stopSimulation();
+  issue1Resolved = false;
+  issue2Resolved = false;
+
+  for (let i = 1; i <= 5; i++) {
+    const n = document.getElementById('node-' + i);
+    const c = document.getElementById('conn-' + i);
+    const s = document.getElementById('stat-' + i);
+    if (n) n.classList.remove('active-step', 'step-completed');
+    if (c) c.classList.remove('active-conn');
+    if (s) { s.textContent = "Waiting to run…"; s.style.color = "var(--text-muted)"; }
+  }
+
+  for (let j = 0; j < 3; j++) {
+    const fc = document.getElementById('fc-' + j);
+    const fcs = document.getElementById('fcs-' + j);
+    if (fc) fc.classList.remove('done');
+    if (fcs) fcs.textContent = "⏳";
+  }
+
+  for (let k = 0; k < 5; k++) {
+    const lf = document.getElementById('lfill-' + k);
+    const lp = document.getElementById('lpct-' + k);
+    if (lf) lf.style.width = "0%";
+    if (lp) lp.textContent = "0%";
+  }
+
+  document.getElementById('branch-not-ready').classList.remove('active-branch');
+  document.getElementById('branch-ready').classList.remove('active-branch');
+  document.getElementById('branch-not-ready').style.opacity = '1';
+  document.getElementById('cnt-blocking').textContent = '2';
+
+  document.getElementById('pill-1').classList.remove('resolved');
+  document.getElementById('picon-1').textContent = '🚫';
+  document.getElementById('ptitle-1').textContent = 'Issue 1: Investigation Report missing';
+  document.getElementById('psub-1').textContent = 'Click to open detail & resolve drawer ›';
+
+  document.getElementById('pill-2').classList.remove('resolved');
+  document.getElementById('picon-2').textContent = '🚫';
+  document.getElementById('ptitle-2').textContent = 'Issue 2: Procedure description differs (EMR vs Billing)';
+  document.getElementById('psub-2').textContent = 'Click to open comparison & resolve drawer ›';
+}
+
+function openDrawer(issueId) {
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+
+  const body = document.getElementById('drawer-body');
+  const footer = document.getElementById('drawer-footer');
+
+  if (issueId === 'issue1') {
+    document.getElementById('drawer-title').textContent = 'Investigation Report Missing';
+    document.getElementById('drawer-subtitle').textContent = 'Blocking Issue #1 · Document Completeness';
+
+    body.innerHTML = `
+      <div class="detail-group">
+        <div class="detail-label">Issue Finding</div>
+        <div class="detail-val">The Investigation Report (ECG, Echocardiogram, CBC, LFT, RFT) is absent from the assembled claim package.</div>
+      </div>
+      <div class="detail-group">
+        <div class="detail-label">Rule Source</div>
+        <div class="detail-val" style="color:var(--indigo);font-weight:700">Payer Engine · Star Health CABG Protocol v3.2</div>
+      </div>
+      <div class="detail-group">
+        <div class="detail-label">Why It Matters</div>
+        <div class="detail-box-warn">Star Health requires pre-operative lab/cardiology test reports to verify surgical indication. Without this, the claim will be rejected immediately during adjudication.</div>
+      </div>
+      <div class="detail-group">
+        <div class="detail-label">Suggested Action</div>
+        <div class="detail-val">Request Lab / Cardiology team to upload pre-op investigation reports for admission date 04 Aug 2024.</div>
+      </div>
+      <div class="detail-group">
+        <div class="detail-label">Responsible Team</div>
+        <div style="font-size:12px;color:#a5b4fc;font-weight:700">👥 Cardiology Lab · Medical Records Department (MRD)</div>
+      </div>
+    `;
+
+    footer.innerHTML = `
+      <button class="btn btn-ghost" onclick="closeDrawer()">Cancel</button>
+      <button class="btn btn-primary" onclick="resolveIssue(1)">✓ Resolve &amp; Upload Report</button>
+    `;
+  } else if (issueId === 'issue2') {
+    document.getElementById('drawer-title').textContent = 'Procedure Description Mismatch';
+    document.getElementById('drawer-subtitle').textContent = 'Blocking Issue #2 · Cross-Document Consistency';
+
+    body.innerHTML = `
+      <div class="detail-group">
+        <div class="detail-label">Issue Finding</div>
+        <div class="detail-val">The procedure description in the EMR Discharge Summary does not match the procedure itemized in the Final Bill.</div>
+      </div>
+      <div class="detail-group">
+        <div class="detail-label">Cross-Record Comparison View</div>
+        <div class="comparison-grid">
+          <div class="comp-col">
+            <div class="comp-title">EMR Discharge Summary</div>
+            <div class="comp-text">
+Procedure: CABG
+Type: <span class="match-ok">Off-pump, 3-vessel</span>
+Grafts: <span class="mismatch-highlight">LIMA + 2 SVGs</span>
+CPT: 33533 + 33534
+            </div>
+          </div>
+          <div class="comp-col">
+            <div class="comp-title">Billing Final Bill</div>
+            <div class="comp-text">
+Procedure: CABG
+Type: <span class="mismatch-highlight">On-pump, 2-vessel</span>
+Grafts: <span class="mismatch-highlight">SVG only</span>
+CPT: <span class="mismatch-highlight">33510</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="detail-group">
+        <div class="detail-label">Why It Matters</div>
+        <div class="detail-box-warn">Payers run automated CPT code consistency algorithms. A discrepancy between clinical surgical notes and billing line items triggers claim suspension or audit.</div>
+      </div>
+      <div class="detail-group">
+        <div class="detail-label">Suggested Action</div>
+        <div class="detail-val">Update the billing record to match surgeon's operative note (Off-pump 3-vessel CABG, CPT 33533+33534).</div>
+      </div>
+    `;
+
+    footer.innerHTML = `
+      <button class="btn btn-ghost" onclick="closeDrawer()">Review Later</button>
+      <button class="btn btn-primary" onclick="resolveIssue(2)">✓ Resolve &amp; Update Billing</button>
+    `;
+  }
+}
+
+function closeDrawer() {
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+}
+
+function resolveIssue(id) {
+  closeDrawer();
+  if (id === 1) {
+    issue1Resolved = true;
+    document.getElementById('pill-1').classList.add('resolved');
+    document.getElementById('picon-1').textContent = '✅';
+    document.getElementById('ptitle-1').textContent = 'Issue 1: Investigation Report uploaded (Resolved)';
+    document.getElementById('psub-1').textContent = 'Report attached · Pre-op ECG & Echo validated';
+  }
+  if (id === 2) {
+    issue2Resolved = true;
+    document.getElementById('pill-2').classList.add('resolved');
+    document.getElementById('picon-2').textContent = '✅';
+    document.getElementById('ptitle-2').textContent = 'Issue 2: Procedure description corrected (Resolved)';
+    document.getElementById('psub-2').textContent = 'Billing updated to CPT 33533 + 33534';
+  }
+
+  const remaining = (!issue1Resolved ? 1 : 0) + (!issue2Resolved ? 1 : 0);
+  document.getElementById('cnt-blocking').textContent = remaining;
+
+  if (issue1Resolved && issue2Resolved) {
+    document.getElementById('branch-not-ready').classList.remove('active-branch');
+    document.getElementById('branch-not-ready').style.opacity = '0.4';
+    document.getElementById('branch-ready').classList.add('active-branch');
+    document.getElementById('sim-banner-text').textContent = '🎉 All Blocking Validation Issues Resolved! Claim is now READY for final submission.';
+  }
+}
+
+function submitFinalClaim() {
+  if (!issue1Resolved || !issue2Resolved) {
+    alert('⚠️ Please click and resolve both blocking issues first to clear the claim for submission!');
+    return;
+  }
+  alert(`📤 FINAL CLAIM SUBMITTED SUCCESSFULLY!\nReference Number: SH-CLM-2024-091233\nSubmitted to Star Health Insurance.`);
+}
+
+function openDocModal(docType) {
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('modal-title').textContent = 'Sample Document: Discharge Summary';
+  document.getElementById('modal-content').textContent = `DISCHARGE SUMMARY (CLINICAL RECORD)
+==================================================
+Hospital: MedCore Cardiac Centre
+Patient: Rajesh Kumar Sharma  |  UHID: UHID-2024-089341
+Admission: 04 Aug 2024        |  Discharge: 11 Aug 2024
+
+PRIMARY DIAGNOSIS:
+  Coronary Artery Disease - Triple Vessel Disease (ICD-10: I25.10)
+
+PRIMARY PROCEDURE:
+  Coronary Artery Bypass Grafting (CABG) - Off-pump 3-vessel
+  Date: 05 Aug 2024 | Surgeon: Dr. Anil Mehta, M.Ch. (CVTS)
+  Grafts: Left Internal Mammary Artery (LIMA) to LAD, SVG to OM, SVG to RCA
+  CPT Codes: 33533 + 33534
+
+CONDITION AT DISCHARGE: Stable, afebrile, sternum stable.
+DISCHARGE ADVICE: Medications prescribed, follow up in OPD on 18 Aug 2024.`;
+}
+
+function closeDocModal(e) {
+  if (!e || e.target === document.getElementById('modal-overlay')) {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+}
+</script>
+</body>
+</html>

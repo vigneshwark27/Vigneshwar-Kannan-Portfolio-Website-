@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CarePulse — Interactive Process & Feature Flows (5 Diagrams + Live Prototype)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0A1120;
+      --card-bg: #121B2E;
+      --accent: #D97706;
+      --accent-teal: #3FD1BE;
+      --border: #243251;
+      --text-main: #F1F5F9;
+      --text-muted: #94A3B8;
+      --tab-bg: #162238;
+      --tab-active: #233554;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Header & Navigation Bar */
+    .flow-nav-header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      z-index: 10;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .badge-icon {
+      background: linear-gradient(135deg, #D97706, #F59E0B);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
+    }
+
+    .brand-titles h1 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .brand-titles p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Tabs list */
+    .flow-tabs-scroll {
+      display: flex;
+      gap: 0.4rem;
+      overflow-x: auto;
+      padding: 0.15rem 0;
+      scrollbar-width: thin;
+    }
+
+    .flow-tab-btn {
+      background: var(--tab-bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .flow-tab-btn:hover {
+      background: var(--tab-active);
+      color: #fff;
+      border-color: #3B82F6;
+    }
+
+    .flow-tab-btn.active {
+      background: #1E3A8A;
+      color: #93C5FD;
+      border-color: #3B82F6;
+      font-weight: 600;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .action-link-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s;
+    }
+
+    .action-link-btn:hover {
+      color: #fff;
+      border-color: var(--accent);
+      background: rgba(217, 119, 6, 0.1);
+    }
+
+    /* Viewer Stage */
+    .viewer-container {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background: #0B1120;
+    }
+
+    .viewer-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      background: #fff;
+    }
+
+    /* Mobile handling */
+    @media (max-width: 900px) {
+      .flow-nav-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .brand-section {
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="flow-nav-header">
+    <div class="brand-section">
+      <div class="badge-icon">CAREPULSE</div>
+      <div class="brand-titles">
+        <h1 id="current-flow-title">Future-State Workflow Orchestration</h1>
+        <p id="current-flow-desc">Proposed end-to-end hospital discharge workflow integrating 3 core capabilities</p>
+      </div>
+    </div>
+
+    <nav class="flow-tabs-scroll" id="tabs-container">
+      <button class="flow-tab-btn active" data-src="future_state_orchestration.html" data-title="Future-State Workflow Orchestration" data-desc="Proposed end-to-end hospital discharge workflow integrating 3 core capabilities">
+        🚀 Future-State Flow
+      </button>
+      <button class="flow-tab-btn" data-src="current_state_swimlane.html" data-title="Current-State Swimlane" data-desc="Existing cashless discharge bottleneck workflow mapping with 4-8 hour delay points">
+        🌊 Current-State Swimlane
+      </button>
+      <button class="flow-tab-btn" data-src="claim_readiness.html" data-title="Claim Readiness Validation" data-desc="Pre-submission document verification and missing-item resolution flow">
+        📋 Claim Readiness
+      </button>
+      <button class="flow-tab-btn" data-src="claim_control_tower.html" data-title="Insurance Control Tower" data-desc="Post-submission monitoring, query management, owner assignment, TAT & escalations">
+        🗼 Control Tower
+      </button>
+      <button class="flow-tab-btn" data-src="patient_communication.html" data-title="Patient Communication Layer" data-desc="Patient-safe WhatsApp & SMS updates translating complex internal insurance stages">
+        💬 Patient Updates
+      </button>
+      <button class="flow-tab-btn" data-src="preview_all_features.html" data-title="CareFlow HMS Interactive Prototype" data-desc="Full interactive Hospital Management System application with live simulation">
+        ⚡ Live HMS App
+      </button>
+    </nav>
+
+    <div class="header-actions">
+      <a id="btn-open-tab" href="future_state_orchestration.html" target="_blank" rel="noopener noreferrer" class="action-link-btn">
+        Open Current ↗
+      </a>
+      <a href="https://www.notion.so/Cashless-Hospital-Discharge-Orchestration-3bd22c713ac980faaf21e6c2f9790d25" target="_blank" rel="noopener noreferrer" class="action-link-btn">
+        Notion PRD ↗
+      </a>
+    </div>
+  </header>
+
+  <main class="viewer-container">
+    <iframe id="flow-iframe" class="viewer-iframe" src="future_state_orchestration.html" title="CarePulse Process Flow Viewer"></iframe>
+  </main>
+
+  <script>
+    const iframe = document.getElementById('flow-iframe');
+    const titleEl = document.getElementById('current-flow-title');
+    const descEl = document.getElementById('current-flow-desc');
+    const openTabBtn = document.getElementById('btn-open-tab');
+    const tabs = document.querySelectorAll('.flow-tab-btn');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        const src = tab.getAttribute('data-src');
+        const title = tab.getAttribute('data-title');
+        const desc = tab.getAttribute('data-desc');
+
+        iframe.src = src;
+        titleEl.textContent = title;
+        descEl.textContent = desc;
+        openTabBtn.href = src;
+      });
+    });
+  </script>
+
+</body>
+</html>

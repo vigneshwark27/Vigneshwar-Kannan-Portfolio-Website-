@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient Insurance Status &amp; Discharge Updates</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+:root{
+  /* Ops (internal) tokens */
+  --ops-bg:#0F1C18;
+  --ops-panel:#152621;
+  --ops-panel-raised:#1B322B;
+  --ops-line:#2A3F37;
+  --ops-text:#DCE8E2;
+  --ops-text-dim:#8FA69C;
+  --ops-accent:#5EEAD4;
+  --ops-amber:#E0A458;
+  --ops-red:#E2725B;
+  --ops-green:#7FC79E;
+
+  /* Patient tokens */
+  --paper:#F1F4EF;
+  --card:#FFFFFF;
+  --moss:#3E6259;
+  --moss-deep:#2A463F;
+  --moss-soft:#E7EFE9;
+  --ink:#23322C;
+  --muted:#6B7A73;
+  --amber-soft:#F4E3CC;
+  --amber-text:#8A5A22;
+  --whatsapp:#25D366;
+  --whatsapp-bubble:#DCF8C6;
+  --line:#DEE5DE;
+
+  --radius-lg:20px;
+  --radius-md:14px;
+  --radius-sm:9px;
+
+  --font-display:'Fraunces', serif;
+  --font-body:'Inter', sans-serif;
+  --font-mono:'JetBrains Mono', monospace;
+  --font-ops:'IBM Plex Sans', sans-serif;
+}
+
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{
+  font-family:var(--font-body);
+  background:var(--paper);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* ============ TOP BAR ============ */
+.topbar{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 28px;
+  background:linear-gradient(180deg,#0F1C18 0%, #14261F 100%);
+  border-bottom:1px solid var(--ops-line);
+  gap:16px; flex-wrap:wrap;
+}
+.brand{display:flex; align-items:center; gap:12px;}
+.brand-mark{
+  width:38px; height:38px; border-radius:10px;
+  background:linear-gradient(135deg, var(--ops-accent), var(--moss));
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-display); font-weight:600; color:#0F1C18; font-size:17px;
+  flex-shrink:0;
+}
+.brand-text h1{
+  font-family:var(--font-ops); font-size:13.5px; letter-spacing:0.09em;
+  color:#EAF3EF; text-transform:uppercase; font-weight:600;
+}
+.brand-text p{
+  font-family:var(--font-mono); font-size:10.5px; color:var(--ops-text-dim);
+  letter-spacing:0.04em; margin-top:2px;
+}
+.toggle-wrap{display:flex; align-items:center; gap:10px;}
+.view-toggle{
+  display:flex; background:#0B1512; border:1px solid var(--ops-line);
+  border-radius:999px; padding:4px; gap:2px;
+}
+.view-toggle button{
+  font-family:var(--font-ops); font-size:11.5px; font-weight:600; letter-spacing:0.05em;
+  padding:8px 16px; border-radius:999px; border:none; background:transparent;
+  color:var(--ops-text-dim); cursor:pointer; transition:all .25s ease; text-transform:uppercase;
+}
+.view-toggle button.active.internal{background:var(--ops-accent); color:#0B1512;}
+.view-toggle button.active.patient{background:var(--moss); color:#fff;}
+
+/* ============ LAYOUT ============ */
+.stage{
+  display:grid;
+  grid-template-columns: 1fr 46px 1fr;
+  min-height:calc(100vh - 78px);
+}
+.panel{padding:30px 26px 60px; overflow:hidden;}
+.ops-panel{background:var(--ops-bg);}
+.patient-panel{background:var(--paper);}
+
+/* bridge */
+.bridge{
+  position:relative; background:linear-gradient(180deg,#0F1C18, var(--paper) 92%);
+  display:flex; align-items:center; justify-content:center;
+}
+.bridge-label{
+  position:absolute; top:26px; left:50%; transform:translateX(-50%) rotate(180deg);
+  writing-mode:vertical-rl; font-family:var(--font-mono); font-size:9px;
+  letter-spacing:0.18em; color:var(--ops-text-dim); text-transform:uppercase;
+  opacity:0.7;
+}
+.bridge-track{
+  width:2px; height:76%; background:repeating-linear-gradient(
+    180deg, rgba(94,234,212,0.55) 0 4px, transparent 4px 11px
+  );
+  position:relative;
+}
+.bridge-dot{
+  position:absolute; left:50%; transform:translateX(-50%);
+  width:9px; height:9px; border-radius:50%;
+  background:var(--ops-accent); box-shadow:0 0 12px 2px rgba(94,234,212,0.6);
+  animation: flow 3.6s linear infinite;
+}
+@keyframes flow{
+  0%{top:2%; opacity:0;}
+  8%{opacity:1;}
+  92%{opacity:1;}
+  100%{top:96%; opacity:0;}
+}
+.bridge-icon{
+  position:relative; z-index:2; background:var(--card); border:1px solid var(--line);
+  width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:14px; box-shadow:0 4px 14px rgba(0,0,0,0.08);
+}
+
+/* section headings shared */
+.eyebrow{
+  font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase;
+}
+.ops-panel .eyebrow{color:var(--ops-accent); margin-bottom:4px;}
+.patient-panel .eyebrow{color:var(--moss); margin-bottom:4px;}
+.panel-title{font-family:var(--font-ops); font-size:16px; font-weight:600; color:#EAF3EF; margin-bottom:22px;}
+.patient-panel .panel-title{font-family:var(--font-display); font-size:23px; font-weight:500; color:var(--ink);}
+
+/* ============ OPS: patient identity strip ============ */
+.identity-strip{
+  display:flex; justify-content:space-between; align-items:center;
+  background:var(--ops-panel); border:1px solid var(--ops-line); border-radius:var(--radius-md);
+  padding:14px 18px; margin-bottom:22px;
+}
+.identity-strip .name{font-family:var(--font-ops); font-weight:600; color:#EAF3EF; font-size:14.5px;}
+.identity-strip .meta{font-family:var(--font-mono); font-size:10.5px; color:var(--ops-text-dim); margin-top:3px;}
+.pill{
+  font-family:var(--font-mono); font-size:10px; letter-spacing:0.05em; padding:5px 10px;
+  border-radius:999px; text-transform:uppercase; font-weight:600;
+}
+.pill.live{background:rgba(94,234,212,0.14); color:var(--ops-accent); border:1px solid rgba(94,234,212,0.35);}
+
+/* ============ OPS: stage cards ============ */
+.ops-list{display:flex; flex-direction:column; gap:10px;}
+.ops-card{
+  background:var(--ops-panel); border:1px solid var(--ops-line); border-radius:var(--radius-md);
+  padding:15px 16px; cursor:pointer; transition:all .2s ease; position:relative;
+}
+.ops-card:hover{border-color:var(--ops-accent); transform:translateY(-1px);}
+.ops-card.selected{border-color:var(--ops-accent); box-shadow:0 0 0 1px var(--ops-accent), 0 8px 24px rgba(94,234,212,0.08);}
+.ops-card.status-done{opacity:0.62;}
+.ops-card.status-current{background:var(--ops-panel-raised); border-color:rgba(94,234,212,0.4);}
+.ops-card.status-branch{margin-left:22px; border-left:2px dashed var(--ops-line); border-radius:0 var(--radius-md) var(--radius-md) 0;}
+.ops-card.status-upcoming{opacity:0.55;}
+
+.ops-card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:10px;}
+.ops-card-name{font-family:var(--font-ops); font-weight:600; font-size:13.5px; color:#EAF3EF;}
+.ops-card-owner{font-family:var(--font-mono); font-size:10.5px; color:var(--ops-text-dim); margin-top:4px;}
+.status-tag{
+  font-family:var(--font-mono); font-size:9.5px; padding:3px 8px; border-radius:5px;
+  letter-spacing:0.04em; text-transform:uppercase; white-space:nowrap; font-weight:600;
+}
+.tag-done{background:rgba(127,199,158,0.14); color:var(--ops-green);}
+.tag-current{background:rgba(94,234,212,0.16); color:var(--ops-accent);}
+.tag-approaching{background:rgba(224,164,88,0.16); color:var(--ops-amber);}
+.tag-risk{background:rgba(226,114,91,0.18); color:var(--ops-red);}
+.tag-upcoming{background:rgba(143,166,156,0.14); color:var(--ops-text-dim);}
+
+.ops-card-metrics{display:flex; gap:18px; margin-top:11px;}
+.metric{font-family:var(--font-mono);}
+.metric .k{font-size:9px; color:var(--ops-text-dim); text-transform:uppercase; letter-spacing:0.06em;}
+.metric .v{font-size:13px; color:var(--ops-text); font-weight:600; margin-top:2px;}
+.metric .v.warn{color:var(--ops-amber);}
+.metric .v.risk{color:var(--ops-red);}
+
+.branch-hint{font-family:var(--font-mono); font-size:9.5px; color:var(--ops-text-dim); margin:2px 0 8px 22px; letter-spacing:0.03em;}
+
+/* ============ PATIENT VIEW ============ */
+.status-hero{
+  background:var(--card); border-radius:var(--radius-lg); padding:26px 24px;
+  border:1px solid var(--line); box-shadow:0 10px 30px rgba(43,70,63,0.06); margin-bottom:20px;
+}
+.status-hero .badge-row{display:flex; align-items:center; gap:10px; margin-bottom:14px;}
+.status-dot{width:8px; height:8px; border-radius:50%; background:var(--moss); box-shadow:0 0 0 4px var(--moss-soft);}
+.status-hero .badge-row span{font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--moss); font-weight:600;}
+.status-hero h2{font-family:var(--font-display); font-weight:500; font-size:21px; line-height:1.4; color:var(--ink); margin-bottom:14px;}
+.status-hero .updated{font-family:var(--font-body); font-size:12.5px; color:var(--muted);}
+.expected-chip{
+  display:inline-flex; align-items:center; gap:7px; margin-top:14px;
+  background:var(--moss-soft); color:var(--moss-deep); font-size:12px; font-weight:600;
+  padding:8px 13px; border-radius:999px;
+}
+
+.info-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;}
+.info-card{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius-md);
+  padding:16px; 
+}
+.info-card .lbl{font-family:var(--font-mono); font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:8px;}
+.info-card .txt{font-size:13.5px; line-height:1.5; color:var(--ink);}
+.info-card.need-action{background:var(--amber-soft); border-color:#E9CB9E;}
+.info-card.need-action .txt{color:var(--amber-text); font-weight:500;}
+
+/* whatsapp bubble */
+.wa-preview{
+  background:#E9EBE3 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><rect width="60" height="60" fill="none"/></svg>');
+  border-radius:var(--radius-md); padding:16px; border:1px solid var(--line);
+}
+.wa-header{display:flex; align-items:center; gap:9px; margin-bottom:12px;}
+.wa-avatar{width:30px; height:30px; border-radius:50%; background:var(--moss); display:flex; align-items:center; justify-content:center; color:#fff; font-size:13px; font-weight:600; font-family:var(--font-ops);}
+.wa-header .h-name{font-family:var(--font-ops); font-weight:600; font-size:12.5px; color:var(--ink);}
+.wa-header .h-sub{font-family:var(--font-mono); font-size:9.5px; color:var(--muted);}
+.wa-bubble{
+  background:var(--whatsapp-bubble); border-radius:10px 10px 10px 2px; padding:10px 12px;
+  max-width:88%; font-size:13px; line-height:1.5; color:#1B2E20; position:relative;
+  box-shadow:0 1px 1px rgba(0,0,0,0.06);
+}
+.wa-meta{display:flex; align-items:center; gap:4px; justify-content:flex-end; margin-top:6px;}
+.wa-time{font-family:var(--font-body); font-size:10px; color:#6b7a73;}
+.wa-check{color:#4FC3E8; font-size:11px;}
+
+/* preferences card */
+.pref-card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius-md); padding:18px; margin-top:20px;}
+.pref-row{display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--line);}
+.pref-row:last-child{border-bottom:none;}
+.pref-row .lbl{font-size:12.5px; color:var(--ink); font-weight:500;}
+.chip-group{display:flex; gap:8px; flex-wrap:wrap;}
+.chip{
+  font-family:var(--font-body); font-size:11.5px; padding:6px 11px; border-radius:999px;
+  border:1px solid var(--line); background:var(--paper); color:var(--muted); cursor:pointer;
+  transition:all .15s ease; display:flex; align-items:center; gap:5px; font-weight:500;
+}
+.chip.on{background:var(--moss); color:#fff; border-color:var(--moss);}
+select.lang-select{
+  font-family:var(--font-body); font-size:12.5px; padding:7px 10px; border-radius:8px;
+  border:1px solid var(--line); background:var(--paper); color:var(--ink); font-weight:500;
+}
+.consent-check{display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--moss-deep); font-weight:600;}
+.consent-check .tick{width:16px; height:16px; border-radius:5px; background:var(--moss); color:#fff; display:flex; align-items:center; justify-content:center; font-size:10px;}
+
+/* timeline */
+.timeline{margin-top:20px;}
+.timeline-item{display:flex; gap:12px; padding:10px 0;}
+.timeline-item .t-dot{width:7px; height:7px; border-radius:50%; background:var(--moss); margin-top:6px; flex-shrink:0;}
+.timeline-item .t-line{position:relative;}
+.timeline-item:not(:last-child)::before{
+  content:''; position:absolute; left:3.5px; margin-top:14px; width:1px; height:calc(100% + 4px); background:var(--line);
+}
+.timeline-item .t-time{font-family:var(--font-mono); font-size:10.5px; color:var(--muted); min-width:64px;}
+.timeline-item .t-text{font-size:12.5px; color:var(--ink);}
+
+/* ============ MODAL / DRAWER ============ */
+.overlay{
+  position:fixed; inset:0; background:rgba(10,18,15,0.55); backdrop-filter:blur(2px);
+  display:none; align-items:center; justify-content:center; z-index:50; padding:20px;
+}
+.overlay.show{display:flex;}
+.drawer{
+  background:var(--card); border-radius:22px; width:100%; max-width:620px; max-height:88vh;
+  overflow-y:auto; box-shadow:0 30px 80px rgba(0,0,0,0.35); animation:pop .22s ease;
+}
+@keyframes pop{from{opacity:0; transform:translateY(14px) scale(0.98);} to{opacity:1; transform:translateY(0) scale(1);}}
+.drawer-head{
+  display:flex; justify-content:space-between; align-items:flex-start; padding:22px 24px 16px;
+  border-bottom:1px solid var(--line);
+}
+.drawer-head h3{font-family:var(--font-ops); font-size:16px; font-weight:600; color:var(--ink);}
+.drawer-head .sub{font-family:var(--font-mono); font-size:10.5px; color:var(--muted); margin-top:4px; text-transform:uppercase; letter-spacing:0.05em;}
+.close-btn{
+  background:var(--paper); border:none; width:30px; height:30px; border-radius:50%; cursor:pointer;
+  font-size:14px; color:var(--muted); flex-shrink:0;
+}
+.drawer-body{padding:20px 24px 26px;}
+.compare-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:18px;}
+.compare-box{border-radius:var(--radius-md); padding:15px;}
+.compare-box.internal-box{background:#12211D; border:1px solid var(--ops-line);}
+.compare-box.internal-box .lbl{color:var(--ops-accent);}
+.compare-box.internal-box .txt{color:#DCE8E2; font-family:var(--font-ops); font-size:12.5px;}
+.compare-box.patient-box{background:var(--moss-soft); border:1px solid #CFE0D6;}
+.compare-box.patient-box .lbl{color:var(--moss-deep);}
+.compare-box.patient-box .txt{color:var(--ink); font-size:12.5px; line-height:1.5;}
+.compare-box .lbl{font-family:var(--font-mono); font-size:9.5px; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:8px; font-weight:600;}
+
+.meta-row{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px;}
+.meta-badge{
+  font-family:var(--font-mono); font-size:10.5px; padding:6px 11px; border-radius:8px;
+  background:var(--paper); border:1px solid var(--line); color:var(--ink); font-weight:600;
+}
+.meta-badge.auto{color:var(--moss-deep); background:var(--moss-soft); border-color:#CFE0D6;}
+.meta-badge.manual{color:var(--amber-text); background:var(--amber-soft); border-color:#E9CB9E;}
+
+.section-label{font-family:var(--font-mono); font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin:18px 0 10px; font-weight:600;}
+
+.approval-banner{
+  display:flex; gap:12px; align-items:flex-start; background:#FBEDE8; border:1px solid #EFC3B6;
+  border-radius:var(--radius-md); padding:14px 16px; margin-bottom:6px;
+}
+.approval-banner .icon{font-size:16px;}
+.approval-banner .txt{flex:1;}
+.approval-banner .txt strong{display:block; font-size:12.5px; color:#8A3A26; margin-bottom:3px;}
+.approval-banner .txt span{font-size:12px; color:#8A5344; line-height:1.5;}
+.approve-btn{
+  font-family:var(--font-body); font-size:11.5px; font-weight:600; padding:8px 13px; border-radius:8px;
+  border:1px solid #C9553A; background:#fff; color:#C9553A; cursor:pointer; white-space:nowrap;
+}
+.approve-btn.approved{background:var(--moss); color:#fff; border-color:var(--moss);}
+
+.action-row{display:flex; gap:10px; margin-top:20px; flex-wrap:wrap;}
+.btn{
+  font-family:var(--font-body); font-size:12.5px; font-weight:600; padding:10px 16px; border-radius:10px;
+  border:1px solid var(--line); background:var(--paper); color:var(--ink); cursor:pointer; transition:all .15s ease;
+}
+.btn.primary{background:var(--moss); color:#fff; border-color:var(--moss);}
+.btn.primary:disabled{background:#B9C6BF; border-color:#B9C6BF; cursor:not-allowed;}
+.btn.ghost{background:#fff;}
+.btn:hover:not(:disabled){transform:translateY(-1px);}
+.send-note{font-size:11px; color:var(--muted); margin-top:8px;}
+
+/* footer credit */
+.footer-note{
+  text-align:center; padding:16px; font-family:var(--font-mono); font-size:10px;
+  color:var(--ops-text-dim); background:var(--ops-bg); letter-spacing:0.04em;
+}
+
+/* responsive */
+@media (max-width: 980px){
+  .stage{grid-template-columns:1fr;}
+  .bridge{display:none;}
+  .panel{display:none;}
+  .panel.active-mobile{display:block;}
+  .info-grid{grid-template-columns:1fr;}
+  .compare-grid{grid-template-columns:1fr;}
+}
+@media (min-width: 981px){
+  .panel{display:block !important;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-mark">i</div>
+    <div class="brand-text">
+      <h1>Patient Insurance Status &amp; Discharge Updates</h1>
+      <p>Connected to Hospital Insurance Workflow · Read-only patient communication layer</p>
+    </div>
+  </div>
+  <div class="toggle-wrap">
+    <div class="view-toggle">
+      <button class="active internal" id="btnInternal" onclick="setMobileView('ops')">Internal</button>
+      <button class="patient" id="btnPatient" onclick="setMobileView('patient')">Patient</button>
+    </div>
+  </div>
+</div>
+
+<div class="stage">
+
+  <!-- ================= OPS PANEL ================= -->
+  <div class="panel ops-panel active-mobile" id="opsPanel">
+    <div class="eyebrow">Hospital Operations View</div>
+    <div class="panel-title">Insurance &amp; Discharge Pipeline</div>
+
+    <div class="identity-strip">
+      <div>
+        <div class="name">Bed 214 · Cardiology Ward</div>
+        <div class="meta">Admission Day 3 · Cashless · Policy on file</div>
+      </div>
+      <div class="pill live">● Live workflow</div>
+    </div>
+
+    <div id="opsList" class="ops-list"></div>
+  </div>
+
+  <!-- ================= BRIDGE ================= -->
+  <div class="bridge">
+    <div class="bridge-label">Translation Layer</div>
+    <div class="bridge-track">
+      <div class="bridge-dot" style="animation-delay:0s;"></div>
+      <div class="bridge-dot" style="animation-delay:1.2s;"></div>
+      <div class="bridge-dot" style="animation-delay:2.4s;"></div>
+    </div>
+    <div class="bridge-icon">⇄</div>
+  </div>
+
+  <!-- ================= PATIENT PANEL ================= -->
+  <div class="panel patient-panel" id="patientPanel">
+    <div class="eyebrow">Patient View</div>
+    <div class="panel-title">Your Insurance &amp; Discharge Update</div>
+
+    <div class="status-hero">
+      <div class="badge-row"><span class="status-dot"></span><span id="heroEyebrow">Update in progress</span></div>
+      <h2 id="heroMessage">Loading…</h2>
+      <div class="updated">Last updated: <strong id="heroTime">—</strong></div>
+      <div class="expected-chip">🕒 <span id="heroExpected">Insurance review in progress</span></div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="lbl">What happened</div>
+        <div class="txt" id="whatHappened">—</div>
+      </div>
+      <div class="info-card">
+        <div class="lbl">What's happening now</div>
+        <div class="txt" id="whatNow">—</div>
+      </div>
+      <div class="info-card" id="actionCard">
+        <div class="lbl">Do I need to do anything?</div>
+        <div class="txt" id="actionNeeded">—</div>
+      </div>
+      <div class="info-card">
+        <div class="lbl">Hospital coordination</div>
+        <div class="txt">Our team is actively coordinating with your insurer on your behalf. You don't need to contact the insurer directly.</div>
+      </div>
+    </div>
+
+    <div class="section-label">Latest message</div>
+    <div class="wa-preview">
+      <div class="wa-header">
+        <div class="wa-avatar">🏥</div>
+        <div>
+          <div class="h-name">City Care Hospital</div>
+          <div class="h-sub">via WhatsApp Business</div>
+        </div>
+      </div>
+      <div class="wa-bubble" id="mainWaBubble">—</div>
+      <div class="wa-meta"><span class="wa-time" id="mainWaTime">3:10 PM</span><span class="wa-check">✓✓</span></div>
+    </div>
+
+    <div class="pref-card">
+      <div class="pref-row">
+        <div class="lbl">Communication channel</div>
+        <div class="chip-group">
+          <div class="chip on" id="chipWA" onclick="toggleChip('WA')">WhatsApp ✓</div>
+          <div class="chip on" id="chipSMS" onclick="toggleChip('SMS')">SMS ✓</div>
+          <div class="chip" id="chipPortal" onclick="toggleChip('Portal')">Patient Portal</div>
+        </div>
+      </div>
+      <div class="pref-row">
+        <div class="lbl">Language</div>
+        <select class="lang-select" id="langSelect" onchange="onLanguageChange()">
+          <option value="en">English</option>
+          <option value="ta">தமிழ் (Tamil)</option>
+          <option value="hi">हिंदी (Hindi)</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="pref-row">
+        <div class="lbl">Consent</div>
+        <div class="consent-check"><span class="tick">✓</span> Communication consent on file</div>
+      </div>
+    </div>
+
+    <div class="section-label">Notification history</div>
+    <div class="timeline" id="timeline"></div>
+  </div>
+</div>
+
+<div class="footer-note">HMS remains the source of truth · This layer only mirrors simplified, patient-safe status updates</div>
+
+<!-- ================= DRAWER / MODAL ================= -->
+<div class="overlay" id="overlay" onclick="closeDrawerOnBg(event)">
+  <div class="drawer">
+    <div class="drawer-head">
+      <div>
+        <h3 id="drawerTitle">—</h3>
+        <div class="sub" id="drawerSub">Status detail</div>
+      </div>
+      <button class="close-btn" onclick="closeDrawer()">✕</button>
+    </div>
+    <div class="drawer-body">
+
+      <div class="compare-grid">
+        <div class="compare-box internal-box">
+          <div class="lbl">Internal state (HMS)</div>
+          <div class="txt" id="drawerInternal">—</div>
+        </div>
+        <div class="compare-box patient-box">
+          <div class="lbl">Patient-facing state</div>
+          <div class="txt" id="drawerPatientText">—</div>
+        </div>
+      </div>
+
+      <div class="meta-row">
+        <div class="meta-badge" id="drawerAutoManual">—</div>
+        <div class="meta-badge" id="drawerChannel">—</div>
+      </div>
+
+      <div id="approvalArea"></div>
+
+      <div class="section-label">Message preview</div>
+      <div class="wa-preview">
+        <div class="wa-header">
+          <div class="wa-avatar">🏥</div>
+          <div>
+            <div class="h-name">City Care Hospital</div>
+            <div class="h-sub">via <span id="drawerChannelName">WhatsApp</span></div>
+          </div>
+        </div>
+        <div class="wa-bubble" id="drawerWaBubble">—</div>
+        <div class="wa-meta"><span class="wa-time" id="drawerWaTime">Now</span><span class="wa-check">✓✓</span></div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn ghost" onclick="alert('Preview shown above — this is exactly what the patient will see.')">Preview</button>
+        <button class="btn primary" id="sendBtn" onclick="handleSend()">Send</button>
+        <button class="btn" onclick="handleAutoNotify()">Auto-notify</button>
+      </div>
+      <div class="send-note" id="sendNote"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ================= DATA MODEL =================
+const MESSAGES = {
+  claim_submitted: {
+    en: "Your insurance documents have been submitted for review.",
+    ta: "உங்கள் காப்பீட்டு ஆவணங்கள் பரிசீலனைக்காக சமர்ப்பிக்கப்பட்டுள்ளன.",
+    hi: "आपके बीमा दस्तावेज़ समीक्षा के लिए जमा कर दिए गए हैं।"
+  },
+  tpa_review: {
+    en: "Insurance review is in progress. The hospital team is coordinating with the insurer.",
+    ta: "காப்பீட்டு பரிசீலனை நடைபெற்று வருகிறது. மருத்துவமனை குழு காப்பீட்டாளருடன் ஒருங்கிணைத்து செயல்படுகிறது.",
+    hi: "बीमा समीक्षा जारी है। अस्पताल टीम बीमाकर्ता के साथ समन्वय कर रही है।"
+  },
+  query_raised: {
+    en: "The insurer has requested additional information. Our hospital team is working on it.",
+    ta: "காப்பீட்டாளர் கூடுதல் தகவல்களை கோரியுள்ளார். எங்கள் மருத்துவமனை குழு அதில் பணியாற்றி வருகிறது.",
+    hi: "बीमाकर्ता ने अतिरिक्त जानकारी माँगी है। हमारी अस्पताल टीम इस पर काम कर रही है।"
+  },
+  tpa_delay: {
+    en: "Insurance authorization is taking longer than expected. The hospital team is following up with the insurer.",
+    ta: "காப்பீட்டு அங்கீகாரம் எதிர்பார்த்ததை விட அதிக நேரம் எடுக்கிறது. மருத்துவமனை குழு காப்பீட்டாளருடன் தொடர்பில் உள்ளது.",
+    hi: "बीमा प्राधिकरण अपेक्षा से अधिक समय ले रहा है। अस्पताल टीम बीमाकर्ता से संपर्क में है।"
+  },
+  final_auth: {
+    en: "Insurance authorization has been received. The hospital is completing the remaining discharge formalities.",
+    ta: "காப்பீட்டு அங்கீகாரம் பெறப்பட்டுள்ளது. மருத்துவமனை மீதமுள்ள டிஸ்சார்ஜ் நடைமுறைகளை முடித்து வருகிறது.",
+    hi: "बीमा प्राधिकरण प्राप्त हो गया है। अस्पताल शेष छुट्टी औपचारिकताएं पूरी कर रहा है।"
+  },
+  discharge: {
+    en: "Your insurance process is complete. The hospital is completing the final discharge formalities.",
+    ta: "உங்கள் காப்பீட்டு செயல்முறை முடிந்துவிட்டது. மருத்துவமனை இறுதி டிஸ்சார்ஜ் நடைமுறைகளை முடித்து வருகிறது.",
+    hi: "आपकी बीमा प्रक्रिया पूर्ण हो चुकी है। अस्पताल अंतिम छुट्टी औपचारिकताएं पूरी कर रहा है।"
+  }
+};
+const OTHER_NOTE = "Message will be prepared in your preferred language by our patient coordination team on request.";
+
+const STAGES = [
+  {
+    id:'claim_submitted', branch:false, phase:'done',
+    internal:{name:'Claim Submitted', owner:'Insurance Desk', elapsed:'—', tat:'—', riskLabel:'Complete', riskTag:'tag-done'},
+    auto:true, channels:['WhatsApp','SMS'], sensitive:false,
+    whatHappened:"Your insurance documents were received and logged.",
+    whatNow:"They have been forwarded to the insurer for review.",
+    action:"No action needed right now."
+  },
+  {
+    id:'tpa_review', branch:false, phase:'current',
+    internal:{name:'TPA Medical Review', owner:'TPA', elapsed:'2h 35m', tat:'3h', riskLabel:'Approaching TAT', riskTag:'tag-approaching'},
+    auto:true, channels:['WhatsApp','SMS'], sensitive:false,
+    whatHappened:"Your claim was submitted and accepted for processing.",
+    whatNow:"The insurer's medical team is reviewing your claim details.",
+    action:"No action needed — we'll update you as soon as there's progress."
+  },
+  {
+    id:'query_raised', branch:true, phase:'upcoming',
+    internal:{name:'Query Raised by TPA', owner:'TPA → Insurance Desk', elapsed:'0h 20m', tat:'1h', riskLabel:'Action needed', riskTag:'tag-risk'},
+    auto:false, channels:['WhatsApp','SMS','Patient Portal'], sensitive:true, sensitiveReason:'Patient action required',
+    whatHappened:"The insurer reviewed your claim and needs more information.",
+    whatNow:"Our hospital team is preparing the requested documents on your behalf.",
+    action:"Usually none — if we need something from you directly, we'll call you."
+  },
+  {
+    id:'tpa_delay', branch:true, phase:'upcoming',
+    internal:{name:'TPA Delay', owner:'TPA', elapsed:'4h 10m', tat:'3h', riskLabel:'TAT breached', riskTag:'tag-risk'},
+    auto:false, channels:['WhatsApp','SMS'], sensitive:true, sensitiveReason:'Major delay',
+    whatHappened:"Your claim review is taking longer than the usual timeframe.",
+    whatNow:"The hospital insurance team is actively following up with the insurer.",
+    action:"No action needed. We're pushing this forward on your behalf."
+  },
+  {
+    id:'final_auth', branch:false, phase:'upcoming',
+    internal:{name:'Final Authorization Received', owner:'TPA', elapsed:'—', tat:'—', riskLabel:'Cleared', riskTag:'tag-done'},
+    auto:true, channels:['WhatsApp','SMS'], sensitive:false,
+    whatHappened:"The insurer approved your claim.",
+    whatNow:"The hospital is finalizing paperwork for your discharge.",
+    action:"No action needed."
+  },
+  {
+    id:'discharge', branch:false, phase:'upcoming',
+    internal:{name:'Discharge Formalities', owner:'Front Office', elapsed:'—', tat:'—', riskLabel:'On track', riskTag:'tag-current'},
+    auto:true, channels:['WhatsApp','SMS'], sensitive:false,
+    whatHappened:"Insurance formalities are complete.",
+    whatNow:"The front office is preparing your final discharge documents.",
+    action:"A team member will guide you through the last steps in person."
+  }
+];
+
+const NOTIFICATIONS = [
+  {time:'3:10 PM', text:'Insurance review update sent'},
+  {time:'2:15 PM', text:'Insurance review update sent'},
+  {time:'1:40 PM', text:'Claim submission update sent'}
+];
+
+let currentLang = 'en';
+let currentDrawerStage = null;
+let approvedStages = {};
+let channelState = {WA:true, SMS:true, Portal:false};
+
+// ================= RENDER OPS LIST =================
+function renderOps(){
+  const list = document.getElementById('opsList');
+  list.innerHTML = '';
+  let lastWasCurrent = false;
+  STAGES.forEach(stage=>{
+    if(stage.branch && lastWasCurrent){
+      const hint = document.createElement('div');
+      hint.className = 'branch-hint';
+      hint.textContent = stage.id === 'query_raised' ? '↳ if insurer requests more info' : '↳ if review exceeds TAT';
+      list.appendChild(hint);
+    }
+    const card = document.createElement('div');
+    card.className = 'ops-card status-' + stage.phase + (stage.branch ? ' status-branch' : '');
+    card.onclick = ()=>openDrawer(stage.id);
+
+    const elapsedClass = stage.internal.riskTag === 'tag-risk' ? 'risk' : (stage.internal.riskTag === 'tag-approaching' ? 'warn' : '');
+
+    card.innerHTML = `
+      <div class="ops-card-top">
+        <div>
+          <div class="ops-card-name">${stage.internal.name}</div>
+          <div class="ops-card-owner">Owner: ${stage.internal.owner}</div>
+        </div>
+        <div class="status-tag ${stage.internal.riskTag}">${stage.internal.riskLabel}</div>
+      </div>
+      <div class="ops-card-metrics">
+        <div class="metric"><div class="k">Elapsed</div><div class="v ${elapsedClass}">${stage.internal.elapsed}</div></div>
+        <div class="metric"><div class="k">TAT</div><div class="v">${stage.internal.tat}</div></div>
+        <div class="metric"><div class="k">Auto-notify</div><div class="v">${stage.auto ? 'On' : 'Manual'}</div></div>
+      </div>
+    `;
+    list.appendChild(card);
+    lastWasCurrent = stage.phase === 'current';
+  });
+}
+
+// ================= RENDER PATIENT PANEL =================
+function getCurrentStage(){
+  return STAGES.find(s=>s.phase==='current') || STAGES[0];
+}
+function langText(stageId){
+  const m = MESSAGES[stageId];
+  if(currentLang === 'other') return OTHER_NOTE;
+  return m[currentLang] || m.en;
+}
+
+function renderPatient(){
+  const stage = getCurrentStage();
+  document.getElementById('heroMessage').textContent = langText(stage.id);
+  document.getElementById('heroTime').textContent = '3:10 PM';
+  document.getElementById('whatHappened').textContent = stage.whatHappened;
+  document.getElementById('whatNow').textContent = stage.whatNow;
+  document.getElementById('actionNeeded').textContent = stage.action;
+  document.getElementById('mainWaBubble').textContent = langText(stage.id);
+
+  const actionCard = document.getElementById('actionCard');
+  if(stage.sensitive){
+    actionCard.classList.add('need-action');
+    document.getElementById('heroExpected').textContent = 'We may need a quick confirmation from you shortly';
+  } else {
+    actionCard.classList.remove('need-action');
+    document.getElementById('heroExpected').textContent = 'Insurance review in progress · Expected update within the next hour';
+  }
+
+  const tl = document.getElementById('timeline');
+  tl.innerHTML = '';
+  NOTIFICATIONS.forEach(n=>{
+    const item = document.createElement('div');
+    item.className = 'timeline-item t-line';
+    item.innerHTML = `<span class="t-dot"></span><span class="t-time">${n.time}</span><span class="t-text">${n.text}</span>`;
+    tl.appendChild(item);
+  });
+}
+
+function onLanguageChange(){
+  currentLang = document.getElementById('langSelect').value;
+  renderPatient();
+  if(currentDrawerStage) fillDrawer(currentDrawerStage);
+}
+
+function toggleChip(which){
+  channelState[which] = !channelState[which];
+  const map = {WA:'chipWA', SMS:'chipSMS', Portal:'chipPortal'};
+  const labelMap = {WA:'WhatsApp', SMS:'SMS', Portal:'Patient Portal'};
+  const el = document.getElementById(map[which]);
+  el.classList.toggle('on', channelState[which]);
+  el.textContent = labelMap[which] + (channelState[which] ? ' ✓' : '');
+}
+
+// ================= DRAWER LOGIC =================
+function openDrawer(stageId){
+  currentDrawerStage = stageId;
+  fillDrawer(stageId);
+  document.getElementById('overlay').classList.add('show');
+}
+function closeDrawer(){
+  document.getElementById('overlay').classList.remove('show');
+  currentDrawerStage = null;
+}
+function closeDrawerOnBg(e){
+  if(e.target.id === 'overlay') closeDrawer();
+}
+
+function fillDrawer(stageId){
+  const stage = STAGES.find(s=>s.id===stageId);
+  document.getElementById('drawerTitle').textContent = stage.internal.name;
+  document.getElementById('drawerSub').textContent = 'Owner: ' + stage.internal.owner + ' · Elapsed ' + stage.internal.elapsed + ' · TAT ' + stage.internal.tat;
+  document.getElementById('drawerInternal').innerHTML =
+    `Status: ${stage.internal.riskLabel}<br>Elapsed: ${stage.internal.elapsed} &nbsp;·&nbsp; TAT: ${stage.internal.tat}<br>Owner: ${stage.internal.owner}`;
+  document.getElementById('drawerPatientText').textContent = langText(stage.id);
+
+  const autoBadge = document.getElementById('drawerAutoManual');
+  autoBadge.textContent = stage.auto ? '⚙ Automatic message' : '✋ Manual send required';
+  autoBadge.className = 'meta-badge ' + (stage.auto ? 'auto' : 'manual');
+
+  const channel = stage.channels[0];
+  document.getElementById('drawerChannel').textContent = 'via ' + stage.channels.join(' + ');
+  document.getElementById('drawerChannelName').textContent = channel;
+  document.getElementById('drawerWaBubble').textContent = langText(stage.id);
+  document.getElementById('drawerWaTime').textContent = 'Now';
+
+  const approvalArea = document.getElementById('approvalArea');
+  const sendBtn = document.getElementById('sendBtn');
+  const sendNote = document.getElementById('sendNote');
+  sendNote.textContent = '';
+
+  if(stage.sensitive){
+    const approved = !!approvedStages[stage.id];
+    approvalArea.innerHTML = `
+      <div class="approval-banner">
+        <div class="icon">⚠️</div>
+        <div class="txt">
+          <strong>Operations Executive approval required</strong>
+          <span>Reason: ${stage.sensitiveReason}. This message will not be sent to the patient until approved.</span>
+        </div>
+        <button class="approve-btn ${approved ? 'approved' : ''}" onclick="toggleApproval('${stage.id}')">
+          ${approved ? '✓ Approved' : 'Approve'}
+        </button>
+      </div>
+    `;
+    sendBtn.disabled = !approved;
+    sendNote.textContent = approved ? 'Approved for sending.' : 'Waiting on Operations Executive approval before this can be sent.';
+  } else {
+    approvalArea.innerHTML = '';
+    sendBtn.disabled = false;
+  }
+}
+
+function toggleApproval(stageId){
+  approvedStages[stageId] = !approvedStages[stageId];
+  fillDrawer(stageId);
+}
+
+function handleSend(){
+  const sendNote = document.getElementById('sendNote');
+  sendNote.textContent = '✓ Sent to patient via ' + STAGES.find(s=>s.id===currentDrawerStage).channels.join(' + ') + '.';
+}
+function handleAutoNotify(){
+  const sendNote = document.getElementById('sendNote');
+  sendNote.textContent = '⚙ Auto-notify enabled for this stage — future updates will send automatically once eligible.';
+}
+
+// ================= MOBILE VIEW TOGGLE =================
+function setMobileView(view){
+  document.getElementById('btnInternal').classList.toggle('active', view==='ops');
+  document.getElementById('btnPatient').classList.toggle('active', view==='patient');
+  document.getElementById('opsPanel').classList.toggle('active-mobile', view==='ops');
+  document.getElementById('patientPanel').classList.toggle('active-mobile', view==='patient');
+}
+
+// ================= INIT =================
+renderOps();
+renderPatient();
+</script>
+</body>
+</html>
